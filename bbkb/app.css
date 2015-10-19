@@ -149,6 +149,42 @@ li.ticket.internal > a:hover {
   background-color: #58AB59;
 }
 .alert {
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.btn-group-justified {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    /*clear: both;*/
+}
+
+.btn-kb {
+  text-decoration: none;
+  color: #fff;
+  background: #8DBE4F;
+  border-color: #FFF;
+  width: 43%;
+}
+.btn-kb.highlight {
+  background-color: #5D7F2F;
+}
+.btn-kb.full {
+  width: 92.5%;
+}
+.btn-kb:hover {
+  text-decoration: none;
+  background: #99CC56;
+  box-shadow: none;
+}
+.btn-kb.internal {
+  background-color: #981FB2;
+}
+.btn-kb.internal:hover {
+  background-color: #E35FFF;
+}
+.btn-kb .fa {
+  margin-right: 5px;
 }

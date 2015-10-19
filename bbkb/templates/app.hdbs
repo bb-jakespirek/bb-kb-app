@@ -1,25 +1,45 @@
 
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]" target="_blank" class="btn btn-kb full highlight" role="button"><span class="fa fa-search-plus fa-lg"></span>New Blank KB Search</a>
+</div>
+<div style="clear:both;"></div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="{{baseURLpkb}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12ProductsPKB}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-globe fa-lg"></span>Public KB Search</a>
+  <a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a>
+</div>
+<div style="clear:both;"></div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="https://blackbaudk12.ideas.aha.io/ideas/" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-lightbulb-o fa-lg"></span>Ideas Portal</a>
+  <a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-search fa-lg"></span>Search Ideas</a>
+</div>
+<div style="clear:both;"></div>
 
-<ul class="nav nav-pills">
-	<li class="ticket highlight"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]" target="_blank"><span class="fa fa-search fa-lg"></span>New Blank KB Search</a></li>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="https://community.blackbaud.com/products/k12" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-users fa-lg"></span>K-12 Community</a>
+  <a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{ticketSubject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-comments-o fa-lg"></span>Search Community</a>
+</div>
+<div style="clear:both;"></div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="{{baseURL}}&f:@articlefilters=[internal procedure]&f:@articlefilters:not=[archived]&f:@hproduct:not=[{{notApplicable}}]" target="_blank" class="btn btn-kb full internal" role="button"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a>
+</div>
 
-	<li class="ticket highlight"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a></li>
+<!-- <ul class="nav nav-pills"> -->
+	<!-- <li class="ticket highlight"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]" target="_blank"><span class="fa fa-search fa-lg"></span>New Blank KB Search</a></li> -->
 
-	<li class="ticket"><a href="{{baseURLpkb}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12ProductsPKB}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-globe fa-lg"></span>Public KB Search</a></li>
+	<!-- <li class="ticket highlight"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a></li> -->
 
-	<li class="ticket"><a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{ticketSubject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank"><span class="fa fa-comments-o fa-lg"></span>Search Community Discussions</a></li>  
+	<!-- <li class="ticket"><a href="{{baseURLpkb}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12ProductsPKB}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-globe fa-lg"></span>Public KB Search</a></li> -->
 
-	<li class="ticket"><a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{ticketSubject}}" target="_blank"><span class="fa fa-lightbulb-o fa-lg"></span>Search Ideas Portal</a></li>
+	<!-- <li class="ticket"><a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{ticketSubject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank"><span class="fa fa-comments-o fa-lg"></span>Search Community Discussions</a></li>   -->
+
+	<!-- <li class="ticket"><a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{ticketSubject}}" target="_blank"><span class="fa fa-lightbulb-o fa-lg"></span>Search Ideas Portal</a></li> -->
 
 	<!-- <li class="ticket"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{productName}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-tags fa-lg"></span>KB Search with Subject and Product</a></li> -->
 
-	<li class="ticket internal"><a href="{{baseURL}}&f:@articlefilters=[internal procedure]&f:@articlefilters:not=[archived]&f:@hproduct:not=[{{notApplicable}}]" target="_blank"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a></li>
+	<!-- <li class="ticket internal"><a href="{{baseURL}}&f:@articlefilters=[internal procedure]&f:@articlefilters:not=[archived]&f:@hproduct:not=[{{notApplicable}}]" target="_blank"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a></li> -->
 
 
-     
-
-
-</ul>
+<!-- </ul> -->
 <div style="clear:both"></div>
 
 {{#if no_kb_necessary}}
@@ -84,8 +104,23 @@
 
 {{/if}}
 
-<h5>Helpful links:</h5>
+
+<div style="clear:both;"></div>
+<!-- Single button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Helpful links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a></li>
+	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="https://community.blackbaud.com/blogs/46" target="_blank">Support &amp; Product News Blog</a></li>
+    <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
+  </ul>
+</div>
+<!-- <h5>Helpful links:</h5>
 <ul class="links">
 	<li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a>:  Style guide, training, tips, etc.</li>
 	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
-</ul>	
+</ul>	 -->

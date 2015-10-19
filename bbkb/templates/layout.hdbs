@@ -1,5 +1,6 @@
 <header>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
   <span class="logo"/>
   <h3>{{setting "name"}}</h3>
   <!-- <aside>Quick access to the new KB</aside> -->

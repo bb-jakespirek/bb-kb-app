@@ -100,13 +100,13 @@
 		var ticket = this.ticket();
 		kb_article_number = ticket.customField("custom_field_22930600");
 
-		ticket_about = ticket.customField("custom_field_22222564");
+		var ticket_about = ticket.customField("custom_field_22222564");
 
 
 		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
 		// var article_num_test = pattern.test(kb_article_number);
 		// console.log(article_num_test + " article_num_test");
-		no_kb_necessary_list = [
+		var no_kb_necessary_list = [
 		"data__chargeable",
 		"data__export",
 		"data__fix",
@@ -133,14 +133,14 @@
 		"support_programmer__css",
 		"support_programmer__custom_page_bug",
 		"support_programmer__redirect"
-		]
+		];
 
-		kb_needed = true;
+		var kb_needed = true;
 
 		for (var i = no_kb_necessary_list.length - 1; i >= 0; i--) {
 			if (ticket_about == no_kb_necessary_list[i]) {
 				kb_needed = false;
-				break
+				break;
 			}
 		}
 
