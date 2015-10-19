@@ -1,0 +1,556 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"file",
+				"filepath"
+			],
+			[
+				"table-c",
+				"table-cell"
+			],
+			[
+				"id",
+				"id_list"
+			],
+			[
+				"wr",
+				"write_to_textfile"
+			],
+			[
+				"co",
+				"columns"
+			],
+			[
+				"padding",
+				"padding-bottom"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"hel",
+				"help_topic_valid"
+			],
+			[
+				"num",
+				"number_to_open"
+			],
+			[
+				"open",
+				"open_each_id"
+			],
+			[
+				"assign",
+				"assignee_tag"
+			],
+			[
+				"ass",
+				"assignee_tag"
+			],
+			[
+				"core",
+				"coreTemp"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"margin-",
+				"margin-bottom"
+			],
+			[
+				"alig",
+				"text-align"
+			],
+			[
+				"font-",
+				"font-weight"
+			],
+			[
+				"backgr",
+				"background-color"
+			],
+			[
+				"feedback",
+				"feedbackButtons"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"backgrou",
+				"background-size"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"inline",
+				"inline-block"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "bbkb/app.js",
+			"settings":
+			{
+				"buffer_size": 7661,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bbkb/templates/app.hdbs",
+			"settings":
+			{
+				"buffer_size": 3867,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bbkb/templates/layout.hdbs",
+			"settings":
+			{
+				"buffer_size": 246,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bbkb/app.css",
+			"settings":
+			{
+				"buffer_size": 2037,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 267.0,
+		"last_filter": "Snippet: ",
+		"selected_items":
+		[
+			[
+				"Snippet: ",
+				"Snippet: html"
+			]
+		],
+		"width": 575.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/jake.spirek/GitHub/badges/html_to_convert.txt",
+		"/Users/jake.spirek/GitHub/badges/html_one_line.txt",
+		"/Users/jake.spirek/GitHub/badges/community_slider.html",
+		"/Users/jake.spirek/GitHub/bb-KB/pkb_Template.html",
+		"/Users/jake.spirek/GitHub/badges/styles.css",
+		"/Users/jake.spirek/GitHub/test/format_badge_html.py",
+		"/Applications/MAMP/htdocs/zendesk_api/demo_apps-master/reuseable_template_app/manifest.json",
+		"/Applications/MAMP/htdocs/zendesk_api/app/Zendesk KB App.sublime-project",
+		"/Applications/MAMP/htdocs/zendesk_api/app/app.css",
+		"/Applications/MAMP/htdocs/zendesk_api/app/app.js",
+		"/Users/jake.spirek/GitHub/bb-KB/pkb_css.css",
+		"/Users/jake.spirek/GitHub/bb-KB/pkb_home_featured.html",
+		"/Users/jake.spirek/Desktop/testfile.lg4",
+		"/Users/jake.spirek/GitHub/bb-C0V30/External/index.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/150929/pkb_Controller.js",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/150929/pkb_Controller.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/150929/pkb_Template.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/150928/pkb_Template.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/150928/pkb_css.css",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/150928/pkb_articleview.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/Coveo Dev BKUP/Sep 28/External/ext-index.html",
+		"/Applications/MAMP/htdocs/zendesk_api/app/bbkb/templates/app.hdbs",
+		"/Applications/MAMP/htdocs/zendesk_api/app/bbkb/app.js",
+		"/Applications/MAMP/htdocs/zendesk_api/app/bbkb/app.css",
+		"/Users/jake.spirek/Dropbox/Python Dev/open_tickets_browser.py",
+		"/Users/jake.spirek/Dropbox/Python Dev/browser.py",
+		"/Users/jake.spirek/Dropbox/Python Dev/snippets.py",
+		"/Users/jake.spirek/Dropbox/Python Dev/get_comments_spreadsheet.py",
+		"/Applications/MAMP/htdocs/zendesk_api/demo_apps-master/save_hook_sample_app/app.js",
+		"/Applications/MAMP/htdocs/zendesk_api/demo_apps-master/basic_ticket_sample_app/app.js",
+		"/Volumes/jake/index.html",
+		"/Applications/MAMP/htdocs/sfdc_internal/local_testing_tooltips.html",
+		"/Applications/MAMP/htdocs/sfdc_internal/local_testing_kbhome.html",
+		"/Applications/MAMP/htdocs/sfdc_internal/local_testing_helvetica.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/March 30/pkb_Controller.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/March 30/pkb_Controller_v2.html",
+		"/Applications/MAMP/htdocs/sfdc_internal/pkb_Template.html",
+		"/Applications/MAMP/htdocs/sfdc_internal/css/pkb_css.css",
+		"/Applications/MAMP/htdocs/sfdc_internal/local_testing_header.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Zendesk/HTML/zdcoveosearch.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/Current/indexDEVheader.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/Coveo Dev BKUP/Apr 8/External/1549/bb-kb-search-dev.css",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/Current/sample_overview.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/SFDC Styles/Current/sample_article.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/ Mockups/HTML/pkb_coveo/css/CoveoFullSearch.css",
+		"/Volumes/wwwroot/index.html",
+		"/Volumes/NewWebSite/index.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/Coveo Dev BKUP/Mar 30/Internal/10am/removedactiondropdown.html",
+		"/Volumes/NewWebSite/css/bb-kb-search.css",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/Coveo Dev BKUP/Mar 26/internal/3pm/index.html",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/Coveo Dev BKUP/Mar 26/internal/3pm/templates.js",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/Coveo Dev BKUP/Mar 25/External/5pm/index.html",
+		"/Volumes/wwwroot/internalDEV.html",
+		"/Volumes/wwwroot/css/bb-kb-search.css",
+		"/Users/jake.spirek/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/jake.spirek/Dropbox/BBWH/Knowledge/ Mockups/HTML/Coveo v2/Blackbaud External Search_files/CoveoFullSearch.css",
+		"/Users/jake.spirek/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"slideshows",
+			"headerBanner",
+			"btn-lg",
+			".btn",
+			"btn",
+			"</h2>",
+			"<h2>",
+			"</span></span></strong>",
+			"<strong><span style=\"font-size:18px;\"><span style=\"background-color:#FFFF00;\">",
+			"img",
+			".gray-bar.home",
+			".home",
+			"home",
+			"kb-home-tiles",
+			"home",
+			"warning",
+			"\\",
+			".article-body ",
+			"social",
+			"article-number",
+			"bread",
+			".CoveoFacet .coveo-value.coveo-selected .coveo-caption",
+			"nav.navbar.navbar-bb .secondary-nav a",
+			"article-body",
+			"font-weight: 300;",
+			"font-weight: 200;",
+			"letter-spacing: 0.6px;",
+			"subpixel-antialiased",
+			"arial",
+			"family",
+			".CoveoSearchBox .CoveoQueryBox",
+			"family",
+			"query",
+			"prag",
+			"b {",
+			"strong",
+			"prag",
+			"div#footer",
+			"#footer",
+			"h1",
+			"reload",
+			"home",
+			".gray-bar h1",
+			"home",
+			"h1",
+			".container.title.home h1",
+			"h1",
+			"home",
+			"h1",
+			"bold",
+			"#footerAc",
+			"window.load",
+			"link",
+			"png",
+			"background-size",
+			"open",
+			".CoveoSearchInterface .coveo-search-section .coveo-searchBox-column",
+			".CoveoResult",
+			"duration",
+			"icon",
+			"excerpt",
+			"actions",
+			"CoveoResultLink",
+			"animation",
+			"logo",
+			"date"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"</h1>",
+			"<h1>",
+			"</h2>",
+			"<h2>",
+			"/",
+			"",
+			"letter-spacing: 0.5px;"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "bbkb/app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7661,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "bbkb/templates/app.hdbs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3867,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "bbkb/templates/layout.hdbs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 246,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "bbkb/app.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2037,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ZD KB.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 161.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -22,6 +22,18 @@
 </ul>
 <div style="clear:both"></div>
 
+{{#if no_kb_necessary}}
+	<div class="alert alert-success">
+		<ul class="fa-ul">
+			<li>
+				<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom &nbsp;
+			</li>
+		</ul>
+	</div>		
+{{else}}
+
+{{/if}}
+
 
 {{#if kb_article_valid}}
 	{{#if is_special_code}}
@@ -46,6 +58,7 @@
 	
 {{else}}
 	{{#unless help_topic_valid}}
+		{{#unless no_kb_necessary}}
 		<div class="alert alert-warning">
 			<ul class="fa-ul">
 				<li>
@@ -53,6 +66,7 @@
 				</li>
 			</ul>
 		</div>
+		{{/unless}}
 	{{/unless}}
 {{/if}}
 

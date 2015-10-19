@@ -12,7 +12,9 @@
 
 	// test locally
 	// https://support.zendesk.com/hc/en-us/articles/203691236
-	// cd /Applications/MAMP/htdocs/zendesk_api/app/bbkb
+	// OLD: cd /Applications/MAMP/htdocs/zendesk_api/app/bbkb
+
+	// cd /Users/jake.spirek/Dropbox/BBWH/GitHub/zd-kb/bbkb
 	// zat server
 	// zat package
 
@@ -39,6 +41,7 @@
 
 	var help_topic = "";
 	var help_topic_valid = false;
+	var no_kb_necessary = false;
 
 	return {
 	events: {
@@ -48,6 +51,7 @@
 		},
 		'ticket.custom_field_22930600.changed' : 'kb_id_changed',
 		'ticket.custom_field_22790214.changed' : 'help_topic_changed',
+		'ticket.custom_field_22222564.changed' : 'kb_id_changed',
 		'ticket.subject.changed' : 'subject_changed'
 	},
 
@@ -87,10 +91,68 @@
 			ticket.customField("custom_field_22953480", "needs_kb_article");
 			kb_article_valid = false;
 		}
+
 		this.update_article_status();
 		this.update_app();
 	},
 
+	kb_needed_test: function () {
+		var ticket = this.ticket();
+		kb_article_number = ticket.customField("custom_field_22930600");
+
+		ticket_about = ticket.customField("custom_field_22222564");
+
+
+		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
+		// var article_num_test = pattern.test(kb_article_number);
+		// console.log(article_num_test + " article_num_test");
+		no_kb_necessary_list = [
+		"data__chargeable",
+		"data__export",
+		"data__fix",
+		"data__idc",
+		"data__other",
+		"data__refresh",
+		"data__research_question",
+		"product_owner__bug",
+		"product_owner__enhancement",
+		"product_owner__tech_research",
+		"r_d__bug_review",
+		"r_d__technical_research",
+		"success_coach__best_practice",
+		"success_coach__change_order",
+		"success_coach__jeopardy",
+		"success_coach__termination",
+		"success_coach__training",
+		"success_coach__transition",
+		"support__install_related",
+		"support_lead__advanced_case",
+		"support_lead__enhancement",
+		"support_lead__r_d_bug_review",
+		"support_programmer__change_order",
+		"support_programmer__css",
+		"support_programmer__custom_page_bug",
+		"support_programmer__redirect"
+		]
+
+		kb_needed = true;
+
+		for (var i = no_kb_necessary_list.length - 1; i >= 0; i--) {
+			if (ticket_about == no_kb_necessary_list[i]) {
+				kb_needed = false;
+				break
+			}
+		}
+
+		// if (ticket_about == "product_owner__enhancement") {
+		// 	kb_needed = false;
+		// 	console.log("kb not needed");
+
+		// } else {
+		// 	kb_needed = true;
+		// }
+		return kb_needed;
+	},
 
 	help_topic_changed: function () {
 		console.log("help topic changed");
@@ -119,6 +181,7 @@
 		var ticket = this.ticket();
 		console.log("Help Topic Valid? " + help_topic_valid);
 		console.log("KB Article Valid? " + kb_article_valid);
+		no_kb_necessary = false;
 		// subject = ticket.subject();
 		if (help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_and_help_topic_attached");
@@ -130,7 +193,14 @@
 			ticket.customField("custom_field_22953480", "help_topic_attached");
 		} 
 		else {
-			ticket.customField("custom_field_22953480", "needs_kb_article");
+			if(this.kb_needed_test()) {
+				ticket.customField("custom_field_22953480", "needs_kb_article");
+			}
+			else {
+				ticket.customField("custom_field_22953480", "no_kb_necessary");
+				no_kb_necessary = true;
+			}
+			
 		}
 		this.update_app();
 		console.log("subject changed / setup search");
@@ -226,7 +296,8 @@
 			is_special_code: is_special_code,
 			kb_article_valid: kb_article_valid,
 			help_topic: help_topic,
-			help_topic_valid: help_topic_valid
+			help_topic_valid: help_topic_valid,
+			no_kb_necessary: no_kb_necessary
 		});
 	},
 
