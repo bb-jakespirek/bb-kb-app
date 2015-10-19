@@ -1,0 +1,77 @@
+
+
+<ul class="nav nav-pills">
+	<li class="ticket highlight"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]" target="_blank"><span class="fa fa-search fa-lg"></span>New Blank KB Search</a></li>
+
+	<li class="ticket highlight"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a></li>
+
+	<li class="ticket"><a href="{{baseURLpkb}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12ProductsPKB}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-globe fa-lg"></span>Public KB Search</a></li>
+
+	<li class="ticket"><a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{ticketSubject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank"><span class="fa fa-comments-o fa-lg"></span>Search Community Discussions</a></li>  
+
+	<li class="ticket"><a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{ticketSubject}}" target="_blank"><span class="fa fa-lightbulb-o fa-lg"></span>Search Ideas Portal</a></li>
+
+	<!-- <li class="ticket"><a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{productName}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank"><span class="fa fa-tags fa-lg"></span>KB Search with Subject and Product</a></li> -->
+
+	<li class="ticket internal"><a href="{{baseURL}}&f:@articlefilters=[internal procedure]&f:@articlefilters:not=[archived]&f:@hproduct:not=[{{notApplicable}}]" target="_blank"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a></li>
+
+
+     
+
+
+</ul>
+<div style="clear:both"></div>
+
+
+{{#if kb_article_valid}}
+	{{#if is_special_code}}
+		<div class="alert alert-warning">
+			<ul class="fa-ul">
+				<li>
+					<i class="fa fa-exclamation-triangle fa-li fa-lg"></i> You've selected a special code, but we aren't using those anymore (yay!). Please remove the 00000 code. Thanks!
+				</li>
+			</ul>
+		</div>			
+	{{else}}
+		<div class="alert alert-success">
+			<ul class="fa-ul">
+				<li>
+					<i class="fa fa-check-circle fa-li fa-lg"></i> <b>KB Article attached:</b> {{articleNumber}} &nbsp;
+					<span class="label label-success"><a href='https://kb.blackbaud.com/articles/Article/{{articleNumber}}' target='_blank'>Open Article</a></span> 
+					<span class="label label-success"><a href='https://na14.salesforce.com/articles/Article/{{articleNumber}}' target='_blank'>Open in Salesforce</a></span>
+				</li>
+			</ul>
+		</div>
+	{{/if}}
+	
+{{else}}
+	{{#unless help_topic_valid}}
+		<div class="alert alert-warning">
+			<ul class="fa-ul">
+				<li>
+					<i class="fa fa-exclamation-triangle fa-li fa-lg"></i> Don't forget the KB Article or Help Topic
+				</li>
+			</ul>
+		</div>
+	{{/unless}}
+{{/if}}
+
+<!-- http://handlebarsjs.com/builtin_helpers.html -->
+{{#if help_topic_valid}}
+	<div class="alert alert-success">
+		<ul class="fa-ul">
+			<li>
+				<i class="fa fa-check-circle fa-li fa-lg"></i> <b>Help Topic attached</b> &nbsp;
+				<span class="label label-success"><a href='{{help_topic}}' target='_blank'>Open Help Topic</a></span>
+			</li>
+		</ul>
+	</div>
+{{else}}
+
+{{/if}}
+
+<h5>Helpful links:</h5>
+<ul class="links">
+	<li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a>:  Style guide, training, tips, etc.</li>
+	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
+</ul>	

@@ -1,0 +1,15 @@
+{
+  "name": "Knowledgebase",
+  "author": {
+    "name": "Jake Spirek",
+    "email": "jake.spirek@blackbaud.com",
+    "url": ""
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": ["ticket_sidebar", "new_ticket_sidebar"],
+  "version": "1.5",
+  "frameworkVersion": "1.0"
+}
+
+

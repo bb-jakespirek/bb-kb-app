@@ -1,0 +1,154 @@
+h4 {
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+h4, h5 {
+  border-bottom: 1px dotted #ccc;
+}
+
+h5 {
+  font-weight: bold;
+  line-height: 27px;
+  text-indent: 5px;
+}
+.text-warning {
+  color: #8a6d3b;
+}
+a.text-warning:hover {
+  color: #66512c;
+}
+.bg-warning {
+  background-color: #fcf8e3;
+}
+a.bg-warning:hover {
+  background-color: #f7ecb5;
+}
+
+.bg-success {
+  background-color: #dff0d8;
+}
+a.bg-success:hover {
+  background-color: #c1e2b3;
+}
+.bg-danger {
+  background-color: #f2dede;
+}
+.bg-info {
+  background-color: #d9edf7;
+}
+.text-info {
+  color: #31708f;
+}
+.text-danger {
+  color: #a94442;
+}
+
+.article_num {
+  padding: 10px;
+  margin: 5px 0;
+}
+.ccinstance {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  color: #333;
+  float: left;
+  line-height: 13px;
+  margin: 3px 3px 3px 0;
+  padding: 3px 6px 4px 6px;
+}
+
+.cccontainer {
+  display: inline;
+  margin-left: 0;
+  position: default;
+}
+
+.ccrole {
+  line-height: 28px;
+  vertical-align: middle;
+}
+
+.left_col {
+  float: left;
+}
+
+.left_col, .right_col {
+  margin-top: 8px;
+}
+
+
+.right_col {
+  float: right;
+  margin-top: 8px;
+}
+
+.subdomain {
+  text-decoration: underline;
+}
+
+.userroleget {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-left: 0;
+  padding: 0 6px;
+}
+
+.view_container {
+  background-color: #F7F7F7;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 0 5px 17px 5px;
+}
+
+.nav>li>a {
+  text-decoration: none;
+  color: #fff;
+  background: #8DBE4F;
+}
+
+.nav>li>a:hover {
+  text-decoration: none;
+  background: #99CC56;
+}
+
+
+.nav-pills>li {
+	float: none;
+	display: block;
+	margin-bottom: 4px;
+}
+
+.nav .fa {
+  margin-right: 5px;
+}
+
+.nav {
+	margin-bottom: 0;
+}
+ul.links {
+  padding: 5px 0;
+}
+li.ticket.highlight > a {
+  background-color: #5D7F2F;
+}
+li.ticket.highlight > a:hover {
+  background-color: #99CC56;
+}
+
+li.ticket.internal > a {
+  background-color: #981FB2;
+}
+li.ticket.internal > a:hover {
+  background-color: #E35FFF;
+}
+.label > a {
+  color: #FFF;
+}
+.label-success:hover {
+  background-color: #58AB59;
+}
+.alert {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
