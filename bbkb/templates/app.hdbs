@@ -69,8 +69,8 @@
 			<ul class="fa-ul">
 				<li>
 					<i class="fa fa-check-circle fa-li fa-lg"></i> <b>KB Article attached:</b> {{articleNumber}} &nbsp;
-					<span class="label label-success"><a href='https://kb.blackbaud.com/articles/Article/{{articleNumber}}' target='_blank'>Open Article</a></span> 
-					<span class="label label-success"><a href='https://na14.salesforce.com/articles/Article/{{articleNumber}}' target='_blank'>Open in Salesforce</a></span>
+					<a class="label label-success" href='https://kb.blackbaud.com/articles/Article/{{articleNumber}}' target='_blank'>Open Article</a>
+					<a class="label label-success" href='https://na14.salesforce.com/articles/Article/{{articleNumber}}' target='_blank'>Open in Salesforce</a>
 				</li>
 			</ul>
 		</div>
@@ -96,7 +96,7 @@
 		<ul class="fa-ul">
 			<li>
 				<i class="fa fa-check-circle fa-li fa-lg"></i> <b>Help Topic attached</b> &nbsp;
-				<span class="label label-success"><a href='{{help_topic}}' target='_blank'>Open Help Topic</a></span>
+				<a class="label label-success" href='{{help_topic}}' target='_blank'>Open Help Topic</a>
 			</li>
 		</ul>
 	</div>
@@ -107,7 +107,7 @@
 
 <div style="clear:both;"></div>
 <!-- Single button -->
-<div class="btn-group">
+<div class="btn-group kb-links">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Helpful links <span class="caret"></span>
   </button>
@@ -119,6 +119,62 @@
     <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
   </ul>
 </div>
+
+<!-- Single button -->
+<div class="btn-group kb-links">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    School links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-center">
+  	{{#if school_url}}<li><a href="{{school_url}}" target="_blank">Hosted URL</a></li>{{/if}}
+	{{#if app_url}}<li><a href="{{app_url}}" target="_blank">App URL</a></li>{{/if}}
+    <li role="separator" class="divider"></li>
+	{{#if site_specs}}<li><a href="{{site_specs}}" title="Site Specs" target="_blank">Site Specs</a></li>{{/if}}
+	{{#if support_handoffs}}<li><a href="{{support_handoffs}}" title="Support Handoffs" target="_blank">Support Handoffs</a></li>{{/if}}
+  </ul>
+</div>
+
+<!-- Single button -->
+<div class="btn-group kb-links">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    AE links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+	<li><p>{{ae_name}}<br>{{ae_phone}}</p></li>
+    <li role="separator" class="divider"></li>
+	<li><a href="mailto:{{ae_email}}" target="_blank">Send Email</a></li>
+    </ul>
+</div>
+<!-- <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on left</button>
+<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" data-placement="top"  title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?" data-trigger="hover">Click to toggle popover</button> -->
+<div class="school-info">
+	{{#if school_url}}<a href="{{school_url}}" target="_blank" class="label label-default">Hosted URL</a>{{/if}}
+	{{#if app_url}}<a href="{{app_url}}" target="_blank" class="label label-primary">App URL</a>{{/if}}
+	{{#if notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="School Notes" data-content="{{notes}}" data-trigger="hover">Notes</button>{{/if}}
+	{{#if user_notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="User Notes" data-content="{{user_notes}}" data-trigger="hover">User Notes</button>{{/if}}
+	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<span class="label label-danger" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Unauthorized Contact">Unauthorized</span>{{/if}}
+	{{#if edition}}<span class="label label-light">Full Edition</span>{{/if}}
+
+<!-- 	<span class="label label-default">Default</span>
+	<span class="label label-primary">Primary</span>
+	<span class="label label-success">Success</span>
+	<span class="label label-info">Info</span>
+	<span class="label label-warning">Warning</span>
+	<span class="label label-danger">Danger</span>
+	<a href="" class="label label-default">Hosted URL</a>
+	<a href="" class="label label-primary">Hosted URL</a>
+	<a href="" class="label label-success">Hosted URL</a>
+	<a href="" class="label label-info">Hosted URL</a>
+	<a href="" class="label label-warning">Hosted URL</a>
+	<a href="" class="label label-danger">Hosted URL</a> -->
+
+</div>
+
+<!-- <a href="#" class="btn btn-large btn-danger" data-toggle="popover" title="" data-trigger="hover" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">Click to toggle popover</a> -->
+
+
+<!-- <a href="#" data-toggle="tooltip" title="Title Here">Hyperlink Text</a> -->
+<!-- <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tooltip on top">Tooltip on top</a> -->
 <!-- <h5>Helpful links:</h5>
 <ul class="links">
 	<li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a>:  Style guide, training, tips, etc.</li>

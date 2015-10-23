@@ -43,6 +43,26 @@
 	var help_topic_valid = false;
 	var no_kb_necessary = false;
 
+	// School Info
+	var school_url = "";
+	var app_url = "";
+	var status = "";
+
+	var ae_name = "";
+	var ae_phone = "";
+	var ae_email = "";
+
+	var site_specs = "";
+	var support_handoffs = "";
+	var edition = "";
+	var notes = "";
+
+	var requester = "";
+	var authorized_contact = "";
+	var user_notes = "";
+
+
+
 	return {
 	events: {
 		// 'app.activated':'doSomething'
@@ -213,6 +233,39 @@
 		console.log("subject changed / setup search");
 	},
 
+	get_school_info: function () {
+		// body...
+		var organization = this.ticket().organization();
+		requester = this.ticket().requester();
+		console.log(requester.customField('authorized_contact'));
+		var org_fields = organization.organizationFields();
+		// console.log(org_fields);
+		// var school_url = organization.organizationFields("hosted_url");
+		school_url = org_fields['hosted_url'];
+		app_url = org_fields['app_url'];
+		notes = organization.notes();
+
+		status = org_fields['status'];
+
+		var ae_name_raw = org_fields['account_manager'];
+		ae_name = ae_name_raw.replace('_', ' '); 
+		ae_name = ae_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+		ae_phone = org_fields['ae_phone_number'];
+		
+		ae_email = ae_name_raw.replace('_', '.'); 
+		ae_email += "@blackbaud.com";
+
+		site_specs = org_fields['site_specs'];
+		support_handoffs = org_fields['support_handoffs'];
+		edition = {full_edition: org_fields['full_edition']};
+
+		authorized_contact = requester.customField('authorized_contact');
+		user_notes = requester.notes();
+		console.log(user_notes);
+		// console.log(ae_email);
+		this.update_app();
+	},
+
 
 	update_app: function () {
 		var base = "k-12 on products";
@@ -271,6 +324,7 @@
 		subject = subject.replace('CHAT:', '');
 
 
+
 		console.log("app updated");
 		this.switchTo('app', {
 			// username: test
@@ -297,7 +351,20 @@
 			kb_article_valid: kb_article_valid,
 			help_topic: help_topic,
 			help_topic_valid: help_topic_valid,
-			no_kb_necessary: no_kb_necessary
+			no_kb_necessary: no_kb_necessary,
+			school_url: school_url,
+			app_url: app_url,
+			notes: notes,
+			status : status,
+			ae_name : ae_name,
+			ae_phone : ae_phone,
+			ae_email : ae_email,
+			site_specs : site_specs,
+			support_handoffs : support_handoffs,
+			edition : edition,
+			authorized_contact: authorized_contact,
+			user_notes: user_notes
+
 		});
 	},
 
@@ -310,10 +377,11 @@
 		}
 		else {
 		}
+		
 		this.update_app();
 		this.kb_id_changed();
 		this.help_topic_changed();
-		
+		this.get_school_info();
 
 	},
 

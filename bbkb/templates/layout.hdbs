@@ -1,8 +1,14 @@
-<header>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+<script>
 
-  <span class="logo"/>
-  <h3>{{setting "name"}}</h3>
-  <!-- <aside>Quick access to the new KB</aside> -->
-</header>
+
+$(document).ready(function() {
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+    $("body").popover({ selector: '[data-toggle=popover]' });
+});
+
+</script>
+
 <section data-main/>
