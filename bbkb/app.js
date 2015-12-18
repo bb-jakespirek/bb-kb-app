@@ -44,8 +44,10 @@
 	var no_kb_necessary = false;
 
 	// School Info
+	var school_urls = {};
 	var school_url = "";
 	var app_url = "";
+	var prog_url = "";
 	var status = "";
 
 	var ae_name = "";
@@ -54,7 +56,7 @@
 
 	var site_specs = "";
 	var support_handoffs = "";
-	var edition = "";
+	var edition = false;
 	var notes = "";
 
 	var requester = "";
@@ -72,7 +74,8 @@
 		'ticket.custom_field_22930600.changed' : 'kb_id_changed',
 		'ticket.custom_field_22790214.changed' : 'help_topic_changed',
 		'ticket.custom_field_22222564.changed' : 'kb_id_changed',
-		'ticket.subject.changed' : 'subject_changed'
+		'ticket.subject.changed' : 'subject_changed',
+		'ticket.requester.id.changed' : 'get_school_info'
 	},
 
 
@@ -146,7 +149,6 @@
 		"success_coach__training",
 		"success_coach__transition",
 		"support__install_related",
-		"support_lead__advanced_case",
 		"support_lead__enhancement",
 		"support_lead__r_d_bug_review",
 		"support_programmer__change_order",
@@ -234,35 +236,71 @@
 	},
 
 	get_school_info: function () {
+					console.log("running get school info");
+
 		// body...
 		var organization = this.ticket().organization();
+		if (!organization) {
+			console.log("no org");
+			return;
+		}
 		requester = this.ticket().requester();
-		console.log(requester.customField('authorized_contact'));
+		if (!requester) {
+			console.log("no requester");
+			return;
+		}
+		// console.log(requester.customField('authorized_contact'));
 		var org_fields = organization.organizationFields();
 		// console.log(org_fields);
 		// var school_url = organization.organizationFields("hosted_url");
+		
+		school_urls.hosted_url = org_fields['hosted_url'];
+		school_urls.app_url = org_fields['app_url'];
+		school_urls.prog_url = org_fields['prog_url'];
+		if (school_urls.prog_url) {
+			school_urls.prog_web = school_urls.prog_url.replace(/(\/app)(\/)?$/, '/page/'); 
+		}
+		school_urls.school_id = org_fields['school_id'];
+		school_urls.clarify_site_id = org_fields['clarify_site_id'];
+		school_urls.database = org_fields['database'];
+		// console.log("website replace: " + school_urls.prog_web);
+
+// get rid of these 
 		school_url = org_fields['hosted_url'];
 		app_url = org_fields['app_url'];
+		prog_url = org_fields['prog_url'];
+
+
 		notes = organization.notes();
 
+// to-do: make status into an object and show different colors for things like in production
 		status = org_fields['status'];
-
+		if (status == "in_support") {
+			status = "In Support";
+		}
+// console.log(status + " In support");
 		var ae_name_raw = org_fields['account_manager'];
-		ae_name = ae_name_raw.replace('_', ' '); 
-		ae_name = ae_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-		ae_phone = org_fields['ae_phone_number'];
-		
-		ae_email = ae_name_raw.replace('_', '.'); 
-		ae_email += "@blackbaud.com";
+		if (ae_name_raw) {
+			ae_name = ae_name_raw.replace('_', ' '); 
+			ae_name = ae_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+			ae_phone = org_fields['ae_phone_number'];
+			
+			ae_email = ae_name_raw.replace('_', '.'); 
+			ae_email += "@blackbaud.com";
+		}
 
 		site_specs = org_fields['site_specs'];
 		support_handoffs = org_fields['support_handoffs'];
-		edition = {full_edition: org_fields['full_edition']};
+		edition = org_fields['full_edition'];
 
-		authorized_contact = requester.customField('authorized_contact');
-		user_notes = requester.notes();
-		console.log(user_notes);
+		if (requester) {
+			authorized_contact = requester.customField('authorized_contact');
+			user_notes = requester.notes();
+			console.log(user_notes);
+		}
+
 		// console.log(ae_email);
+		this.update_article_status();
 		this.update_app();
 	},
 
@@ -282,6 +320,9 @@
 
 		var ticket = this.ticket();
 		var subject = ticket.subject();
+		if (!subject) {
+			subject="";
+		}
 		var product = ticket.customField("custom_field_21744040");
 		// var assignee = ticket.assignee();
 		// var assignee_name = assignee.user().name();
@@ -354,6 +395,7 @@
 			no_kb_necessary: no_kb_necessary,
 			school_url: school_url,
 			app_url: app_url,
+			prog_url: prog_url,
 			notes: notes,
 			status : status,
 			ae_name : ae_name,
@@ -363,7 +405,8 @@
 			support_handoffs : support_handoffs,
 			edition : edition,
 			authorized_contact: authorized_contact,
-			user_notes: user_notes
+			user_notes: user_notes,
+			school_urls: school_urls
 
 		});
 	},
@@ -374,6 +417,11 @@
 		// console.log("status = " + ticket.status());
 		if (ticket.status() == "new") {
 			console.log("this is a new ticket");
+			// var organization = this.ticket().organization();
+			// if (!organization) {
+			// 	return;
+			// }
+
 		}
 		else {
 		}
