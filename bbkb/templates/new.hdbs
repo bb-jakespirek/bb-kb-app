@@ -1,0 +1,5 @@
+<div class="alert alert-warning single-alert">
+	<ul class="fa-ul">
+		<li><i class="fa fa-exclamation-triangle fa-li fa-lg"></i><p>This ticket needs a requester.</li>
+	</ul>
+</div>	

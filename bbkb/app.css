@@ -291,3 +291,13 @@ a.label-danger:hover {
 .btn.pull-left.create-idea {
     display: none;
 }
+
+
+
+a#chat_button {
+    margin-top: 6px;
+}
+
+.single-alert {
+  margin: 4px 0 -6px 0;
+}

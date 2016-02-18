@@ -1,0 +1,87 @@
+
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="#" target="_blank" class="btn btn-kb full highlight" role="button"><span class="fa fa-search-plus fa-lg"></span>New Blank KB Search</a>
+</div>
+<div style="clear:both;"></div>
+
+
+
+
+<!-- Chat -->
+{{#if ticket_new}}
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <!-- <a id="chat_button" href="{{chat_base_URL}}?requester={{requester.email}}&assignee={{user_id}}" target="_blank" class="btn btn-kb full" role="button" {{#unless requester.email}}disabled{{/unless}}><span class="fa fa-comment fa-lg"></span>New Chat Ticket</a> -->
+
+  <button id="dummy_button" class="btn btn-kb full" role="button"><span class="fa fa-disable fa-lg"></span>This is a new ticket</button>
+</div>
+{{/if}}
+
+<div class="alert alert-info">
+	<ul class="fa-ul">
+	    <li><i class="fa fa-info-circle fa-li fa-lg"></i><b>Org Info</b></li>
+	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org ID:</b> {{organization.id}}</li>
+		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org notes:</b> {{organization.notes}}</li>
+		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org name:</b> {{organization.name}}</li>
+		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>hosted_url:</b> {{organization.organization_fields.hosted_url}}</li>
+		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>app_url:</b> {{organization.organization_fields.app_url}}</li>
+		<li><a href="{{organization.organization_fields.prog_url}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_url</b> </a></li>
+		<li><a href="{{organization.organization_fields.prog_web}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_web</b> </a></li>
+	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Name:</b> {{organization.ae_info.ae_name}}</li>
+	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Phone:</b> {{organization.ae_info.ae_phone}}</li>
+	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Email:</b> {{organization.ae_info.ae_email}}</li>
+
+	</ul>
+</div>	
+
+<div class="alert alert-info">
+	<ul class="fa-ul">
+		<li><i class="fa fa-info-circle fa-li fa-lg"></i><b>Chat Info:</b></li>
+		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Requester:</b> {{requester.name}}</li>
+		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Requester Email:</b> {{requester.email}}</li>
+		<li><i class="fa fa-user fa-li fa-lg"></i><b>Current User ID:</b> {{user_id}}</li>
+	</ul>
+</div>	
+
+<div class="alert alert-warning">
+	<ul class="fa-ul">
+	    <li><i class="fa fa-database fa-li fa-lg"></i><b>Org Info Dump</b></li>
+		{{#each organization}}
+    		<li><i class="fa fa-double-right fa-li fa-lg"></i><b>{{@key}}:</b> {{this}}</li>
+		{{/each}}
+	</ul>
+</div>	
+<div class="alert alert-warning">
+	<ul class="fa-ul">
+	    <li><i class="fa fa-database fa-li fa-lg"></i><b>Org Fields Dump</b></li>
+		{{#each organization.organization_fields}}
+    		<li><i class="fa fa-users-o fa-li fa-lg"></i><b>{{@key}}:</b> {{this}}</li>
+		{{/each}}
+	</ul>
+</div>	
+<div class="alert alert-warning">
+	<ul class="fa-ul">
+	    <li><i class="fa fa-database fa-li fa-lg"></i><b>KB Links Dump</b></li>
+		{{#each kb_links}}
+    		<li><i class="fa fa-double-right fa-li fa-lg"></i><b>{{@key}}:</b> {{this}}</li>
+		{{/each}}
+
+	</ul>
+</div>	
+
+
+
+<div class="alert alert-success">
+	<ul class="fa-ul">
+		<li><i class="fa fa-hand-peace-o fa-li fa-lg"></i>Ticket New: {{ticket_new}}</li>
+		<li><i class="fa fa-user fa-li fa-lg"></i>Current User ID: {{user_id}}</li>
+		<li><i class="fa fa-users-o fa-li fa-lg"></i>Requester: {{requester.name}}</li>
+		{{#each requester}}
+    		<li><i class="fa fa-users-o fa-li fa-lg"></i>{{@key}}: {{this}}</li>
+		{{/each}}
+
+		{{#each requester.organizations}}
+    		<li><i class="fa fa-users-o fa-li fa-lg"></i>{{@key}}: {{this.name}}</li>
+		{{/each}}
+		<!-- <li><i class="fa fa-users-o fa-li fa-lg"></i>Org ID: {{requester.organizations.1.organization_id}}</li> -->
+	</ul>
+</div>		

@@ -1,0 +1,227 @@
+module.exports = {
+
+	make_kb_links: function () {
+		var kb_links = {};
+
+		kb_links.baseURL = "http://bbkb.blackbaud.com/#sort=relevancy";
+		kb_links.productName = "onCampus";
+
+		return kb_links;
+	},
+
+	format_URLs: function () {
+		var base = "k-12 on products";
+		var parent = base + "|";
+		var k12Products = base; 
+		var Core = parent+"core"; 
+		var onAccount = parent+"onaccount";
+		var onBoard = parent+"onboard";
+		var onCampus = parent+"oncampus";
+		var onMessage = parent+"onmessage";
+		var onRecord = parent+"onrecord";
+		var allK12Products = k12Products + "," + Core + "," + onAccount + "," + onBoard + "," + onCampus + "," + onMessage + "," + onRecord + "," + "internal systems";
+		var allK12ProductsPKB = k12Products + "," + Core + "," + onAccount + "," + onBoard + "," + onCampus + "," + onMessage + "," + onRecord;
+
+		var ticket = this.ticket();
+		var subject = ticket.subject();
+		if (!subject) {
+			subject="";
+		}
+		var product = ticket.customField("custom_field_21744040");
+		// var assignee = ticket.assignee();
+		// var assignee_name = assignee.user().name();
+
+		var kb_article_number = ticket.customField("custom_field_22930600");
+
+
+		switch (product) {
+			case 'core':
+				product = Core;
+				break;
+			case 'onaccount':
+				product = onAccount;
+				break;
+			case 'onboard':
+				product = onBoard;
+				break;
+			case 'oncampus':
+				product = onCampus;
+				break;	
+			case 'onmessage':
+				product = onMessage;
+				break;
+			case 'onrecord':
+				product = onRecord;
+				break;
+			default:
+				product = k12Products; 
+				break;
+		}
+
+	},
+
+	fix_subject: function (raw_subject) {
+		// Remove the first part of the subject up to the backslash
+		subject = raw_subject.replace(/(.+\s?\\)/, ''); 
+
+		// Remove any other backslashes
+		subject = subject.replace('\\', '');
+		
+		// Remove Five9 Call and CHAT:
+		subject = subject.replace('Five9 Call', '');
+		subject = subject.replace('CHAT:', '');
+	},
+
+	kb_id_changed: function () {
+		var ticket = this.ticket();
+		kb_article_number = ticket.customField("custom_field_22930600");
+
+		console.log("kb id changed");
+
+		var pattern = new RegExp(/^[0-9]{5,6}$/g);
+		var article_num_test = pattern.test(kb_article_number);
+		// console.log(article_num_test + " article_num_test");
+
+		if (article_num_test) {
+			article_num_status = "bg-success text-success";
+			article_num_text = "KB Article Number:";
+			ticket.tags().add("valid_code");
+			ticket.tags().remove("needs_kb_article");
+			ticket.customField("custom_field_22953480", "kb_article_attached");
+			is_special_code = false;
+			if (kb_article_number == "00000" | kb_article_number == "000000" | kb_article_number == "111111" | kb_article_number == "22222" | kb_article_number == "222222") {
+				is_special_code = true;
+				article_num_status = "bg-warning text-warning";
+				ticket.tags().add("special_code");
+				ticket.tags().remove("valid_code");
+				ticket.tags().remove("needs_kb_article");
+				ticket.customField("custom_field_22953480", "special_code");
+			}
+			kb_article_valid = true;
+		} else {
+			article_num_status = "bg-danger text-danger";
+			article_num_text = "Make sure you fill out KB Article Number";
+			ticket.tags().remove("special_code");
+			ticket.tags().remove("valid_code");
+			ticket.tags().add("needs_kb_article");
+			ticket.customField("custom_field_22953480", "needs_kb_article");
+			kb_article_valid = false;
+		}
+
+		this.update_article_status();
+		this.update_app();
+	},
+
+	kb_needed_test: function () {
+		var ticket = this.ticket();
+		kb_article_number = ticket.customField("custom_field_22930600");
+
+		var ticket_about = ticket.customField("custom_field_22222564");
+
+
+		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
+		// var article_num_test = pattern.test(kb_article_number);
+		// console.log(article_num_test + " article_num_test");
+		var no_kb_necessary_list = [
+		"data__chargeable",
+		"data__export",
+		"data__fix",
+		"data__idc",
+		"data__other",
+		"data__refresh",
+		"data__research_question",
+		"product_owner__bug",
+		"product_owner__enhancement",
+		"product_owner__tech_research",
+		"r_d__bug_review",
+		"r_d__technical_research",
+		"success_coach__best_practice",
+		"success_coach__change_order",
+		"success_coach__jeopardy",
+		"success_coach__termination",
+		"success_coach__training",
+		"success_coach__transition",
+		"support__install_related",
+		"support_lead__enhancement",
+		"support_lead__r_d_bug_review",
+		"support_programmer__change_order",
+		"support_programmer__css",
+		"support_programmer__custom_page_bug",
+		"support_programmer__redirect"
+		];
+
+		var kb_needed = true;
+
+		for (var i = no_kb_necessary_list.length - 1; i >= 0; i--) {
+			if (ticket_about == no_kb_necessary_list[i]) {
+				kb_needed = false;
+				break;
+			}
+		}
+
+		// if (ticket_about == "product_owner__enhancement") {
+		// 	kb_needed = false;
+		// 	console.log("kb not needed");
+
+		// } else {
+		// 	kb_needed = true;
+		// }
+		return kb_needed;
+	},
+
+	help_topic_changed: function () {
+		console.log("help topic changed");
+		var ticket = this.ticket();
+		help_topic = ticket.customField("custom_field_22790214");
+		help_topic_valid = false;
+
+		var pattern = new RegExp(/https:\/\/www.blackbaud.com/g);
+		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
+
+		var help_topic_test = pattern.test(help_topic);
+
+		if (help_topic_test) {
+			help_topic_valid = true;
+		} 
+		else {
+			help_topic_valid = false;
+		}
+		
+		this.update_article_status();
+		this.update_app();
+	},
+
+
+	update_article_status: function () {
+		var ticket = this.ticket();
+		console.log("Help Topic Valid? " + help_topic_valid);
+		console.log("KB Article Valid? " + kb_article_valid);
+		no_kb_necessary = false;
+		// subject = ticket.subject();
+		if (help_topic_valid && kb_article_valid) {
+			ticket.customField("custom_field_22953480", "kb_and_help_topic_attached");
+		} 
+		else if (!help_topic_valid && kb_article_valid) {
+			ticket.customField("custom_field_22953480", "kb_article_attached");
+		} 
+		else if (help_topic_valid && !kb_article_valid) {
+			ticket.customField("custom_field_22953480", "help_topic_attached");
+		} 
+		else {
+			if(this.kb_needed_test()) {
+				ticket.customField("custom_field_22953480", "needs_kb_article");
+			}
+			else {
+				ticket.customField("custom_field_22953480", "no_kb_necessary");
+				no_kb_necessary = true;
+			}
+			
+		}
+		this.update_app();
+		console.log("subject changed / setup search");
+	}
+
+
+
+
+};

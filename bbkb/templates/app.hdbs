@@ -191,6 +191,19 @@
 
 </div>
 
+
+
+
+<!-- Chat -->
+{{#if ticket_new}}
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a id="chat_button" href="{{chat_base_URL}}?requester={{requester.email}}&assignee={{user_id}}" target="_blank" class="btn btn-kb full" role="button" {{#unless requester.email}}disabled{{/unless}}><span class="fa fa-comment fa-lg"></span>New Chat Ticket</a>
+  <!-- <button id="dummy_button" class="btn btn-kb full" role="button"><span class="fa fa-disable fa-lg"></span>Dummy Button</button> -->
+</div>
+{{/if}}
+
+
+
 <!-- <a href="#" class="btn btn-large btn-danger" data-toggle="popover" title="" data-trigger="hover" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">Click to toggle popover</a> -->
 
 
