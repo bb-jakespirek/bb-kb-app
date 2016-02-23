@@ -1,26 +1,26 @@
 
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
-  <a href="{{kb_links.btn_blank_kb_search}}" target="_blank" class="btn btn-kb full highlight" role="button"><span class="fa fa-search-plus fa-lg"></span>New Blank KB Search</a>
+  <a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]" target="_blank" class="btn btn-kb full highlight" role="button"><span class="fa fa-search-plus fa-lg"></span>New Blank KB Search</a>
 </div>
 <div style="clear:both;"></div>
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
-  <a href="{{kb_links.btn_public_kb_search}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-globe fa-lg"></span>Public KB Search</a>
-  <a href="{{kb_links.btn_internal_kb_search}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a>
+  <a href="{{baseURLpkb}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12ProductsPKB}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-globe fa-lg"></span>Public KB Search</a>
+  <a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a>
 </div>
 <div style="clear:both;"></div>
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
   <a href="https://blackbaudk12.ideas.aha.io/ideas/" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-lightbulb-o fa-lg"></span>Ideas Portal</a>
-  <a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{kb_links.ticket_subject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-search fa-lg"></span>Search Ideas</a>
+  <a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-search fa-lg"></span>Search Ideas</a>
 </div>
 <div style="clear:both;"></div>
 
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
   <a href="https://community.blackbaud.com/products/k12" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-users fa-lg"></span>K-12 Community</a>
-  <a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{kb_links.ticket_subject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-comments-o fa-lg"></span>Search Community</a>
+  <a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{ticketSubject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-comments-o fa-lg"></span>Search Community</a>
 </div>
 <div style="clear:both;"></div>
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
-  <a href="{{kb_links.btn_internal_procedures_search}}" target="_blank" class="btn btn-kb full internal" role="button"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a>
+  <a href="{{baseURL}}&f:@articlefilters=[internal procedure]&f:@articlefilters:not=[archived]&f:@hproduct:not=[{{notApplicable}}]" target="_blank" class="btn btn-kb full internal" role="button"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a>
 </div>
 
 <div style="clear:both"></div>
@@ -29,10 +29,7 @@
 	<div class="alert alert-success">
 		<ul class="fa-ul">
 			<li>
-				<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom<br>
-				<!-- {{kb_quotes.kb_success.txt}} -->
-				<!-- <img src="{{kb_quotes.kb_success.pic}}"> -->
-				<!-- <img src="{{assetURL 'emoticons/boom.gif'}}"> -->
+				<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom &nbsp;
 			</li>
 		</ul>
 	</div>		
@@ -55,8 +52,8 @@
 			<ul class="fa-ul">
 				<li>
 					<i class="fa fa-check-circle fa-li fa-lg"></i> <b>KB Article attached:</b> {{articleNumber}} &nbsp;
-					<a class="label label-success" href='https://kb.blackbaud.com/articles/Article/{{kb_article_number}}' target='_blank'>Open Article</a>
-					<a class="label label-success" href='https://na14.salesforce.com/articles/Article/{{kb_article_number}}' target='_blank'>Open in Salesforce</a>
+					<a class="label label-success" href='https://kb.blackbaud.com/articles/Article/{{articleNumber}}' target='_blank'>Open Article</a>
+					<a class="label label-success" href='https://na14.salesforce.com/articles/Article/{{articleNumber}}' target='_blank'>Open in Salesforce</a>
 				</li>
 			</ul>
 		</div>
@@ -131,39 +128,14 @@
     AE links <span class="caret"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
-	<li><p>{{organization.ae_info.ae_name}}<br><span class="js-phonelink">{{organization.ae_info.ae_phone}}</span></p></li>
+	<li><p>{{ae_name}}<br><span class="js-phonelink">{{ae_phone}}</span></p></li>
     <li role="separator" class="divider"></li>
-	<li><a href="mailto:{{organization.ae_info.ae_email}}" target="_blank"><i class="fa fa-send"></i> Send Email</a></li>
-	<li><a data-toggle="modal" data-target="#phone_modal" data-backdrop="true" data-show="true"><i class="fa fa-clipboard"></i> Copy Phone</a></li>
+	<li><a href="mailto:{{ae_email}}" target="_blank"><i class="fa fa-send"></i> Send Email</a></li>
+	<li><button class="js-phonecopybtn"><i class="fa fa-clipboard"></i> Copy Phone</button></li>
     </ul>
+   
+
 </div>
-
-
-<!-- Modal -->
-<div id="phone_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Copy AE Phone Number</h3>
-  </div>
-  <div class="modal-body">
-	<form>
-		<fieldset class="form-group">
-		<input id="phone_input" size="50" type="text" value="{{organization.ae_info.ae_phone}}" name="phone_input">
-
-		</fieldset>
-	</form>
-  </div>
-  <div class="modal-footer">
-    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-  </div>
-</div>
-
-
-
-
-
-
-
 <!-- <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on left</button>
 <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" data-placement="top"  title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?" data-trigger="hover">Click to toggle popover</button> -->
 <div class="school-info">
@@ -203,53 +175,84 @@
 </div>
 
 
-<!-- {{#unless requester.email}}disabled{{/unless}} -->
+
 
 <!-- Chat -->
 {{#if ticket_new}}
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
-  <a id="chat_button" href="{{chat_url}}" target="_blank" class="btn btn-kb full" role="button"><span class="fa fa-comment fa-lg"></span>New Chat Ticket</a>
+  <a id="chat_button" href="{{chat_base_URL}}?requester={{requester.email}}&assignee={{user_id}}" target="_blank" class="btn btn-kb full" role="button" {{#unless requester.email}}disabled{{/unless}}><span class="fa fa-comment fa-lg"></span>New Chat Ticket</a>
   <!-- <button id="dummy_button" class="btn btn-kb full" role="button"><span class="fa fa-disable fa-lg"></span>Dummy Button</button> -->
 </div>
 {{/if}}
 
 
 
+<!-- <a href="#" class="btn btn-large btn-danger" data-toggle="popover" title="" data-trigger="hover" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">Click to toggle popover</a> -->
+
+
+<!-- <a href="#" data-toggle="tooltip" title="Title Here">Hyperlink Text</a> -->
+<!-- <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tooltip on top">Tooltip on top</a> -->
+<!-- <h5>Helpful links:</h5>
+<ul class="links">
+	<li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a>:  Style guide, training, tips, etc.</li>
+	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
+</ul>	 -->
+
+
+<!-- Test for Aha -->
+<script>
+// var $test = this.$('#linkedIdeas a');
+// $test.click(function() {
+//   console.log( "Handler for .click() called." );
+// });
+// $( "#aha-link-idea-btn" ).on( "click", function() {
+//   console.log( "test" );
+// });
+// $( "#helpful_links" ).click(function() {
+//   console.log( "helpful_links Handler for .click() called." );
+// });
+</script>
+
+
+<!-- Copy Text Script -->
+<script>
+// // Function to change the content of t2
+// function modifyText() {
+//   var t2 = document.getElementById("t2");
+//   if (t2.firstChild.nodeValue == "three") {
+//     t2.firstChild.nodeValue = "two";
+//   } else {
+//     t2.firstChild.nodeValue = "three";
+//   }
+// }
+
+// // add event listener to table
+// var el = document.getElementById("outside");
+// el.addEventListener("click", modifyText, false);
 
 
 
+var copyEmailBtn = document.querySelector('.js-phonecopybtn');
 
+copyEmailBtn.addEventListener('click', function(event) {  
+  // Select the email link anchor text  
+  var emailLink = document.querySelector('.js-phonelink');  
+  var range = document.createRange();  
+  range.selectNode(emailLink);  
+  window.getSelection().addRange(range);  
 
+  try {  
+    // Now that we've selected the anchor text, execute the copy command  
+    var successful = document.execCommand('copy');  
+    var msg = successful ? 'successful' : 'unsuccessful';  
+    console.log('Copy email command was ' + msg);  
+  } catch(err) {  
+    console.log('Oops, unable to copy');  
+  }  
 
+  // Remove the selections - NOTE: Should use
+  // removeRange(range) when it is supported  
+  window.getSelection().removeAllRanges();  
+});
 
-<!-- Debugging -->
-
-<div class="alert alert-info">
-	<ul class="fa-ul">
-		<li><i class="fa fa-info-circle fa-li fa-lg"></i><b>School Links</b></li>
-	    <li><a href="{{organization.organization_fields.prog_web}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_web</b> </a></li>
-	    <li><a href="{{school_urls.prog_web}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_web (school_urls)</b> </a></li>
-
-
-	    <li><i class="fa fa-info-circle fa-li fa-lg"></i><b>KB Links</b></li>
-	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org ID:</b> {{kb_links.btn_public_kb_search}}</li>	    
-
-
-	    <li><i class="fa fa-info-circle fa-li fa-lg"></i><b>Org Info</b></li>
-	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org ID:</b> {{organization.id}}</li>
-		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org notes:</b> {{organization.notes}}</li>
-		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>Org name:</b> {{organization.name}}</li>
-		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>hosted_url:</b> {{organization.organization_fields.hosted_url}}</li>
-		<li><i class="fa fa-angle-right fa-li fa-lg"></i><b>app_url:</b> {{organization.organization_fields.app_url}}</li>
-		<li><a href="{{organization.organization_fields.prog_url}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_url</b> </a></li>
-		<li><a href="{{organization.organization_fields.prog_web}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_web</b> </a></li>
-	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Name:</b> {{organization.ae_info.ae_name}}</li>
-	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Phone:</b> {{organization.ae_info.ae_phone}}</li>
-	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Email:</b> {{organization.ae_info.ae_email}}</li>
-
-	</ul>
-</div>	
-
-
-
-
+</script>
