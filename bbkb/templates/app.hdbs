@@ -42,15 +42,7 @@
 
 
 {{#if kb_article_valid}}
-	{{#if is_special_code}}
-		<div class="alert alert-warning">
-			<ul class="fa-ul">
-				<li>
-					<i class="fa fa-exclamation-triangle fa-li fa-lg"></i> You've selected a special code, but we aren't using those anymore (yay!). Please remove the 00000 code. Thanks!
-				</li>
-			</ul>
-		</div>			
-	{{else}}
+
 		<div class="alert alert-success">
 			<ul class="fa-ul">
 				<li>
@@ -60,7 +52,6 @@
 				</li>
 			</ul>
 		</div>
-	{{/if}}
 	
 {{else}}
 	{{#unless help_topic_valid}}
@@ -76,7 +67,6 @@
 	{{/unless}}
 {{/if}}
 
-<!-- http://handlebarsjs.com/builtin_helpers.html -->
 {{#if help_topic_valid}}
 	<div class="alert alert-success">
 		<ul class="fa-ul">
@@ -89,10 +79,10 @@
 {{else}}
 
 {{/if}}
-
-
 <div style="clear:both;"></div>
-<!-- Single button -->
+
+
+<!-- Helpful Links button -->
 <div class="btn-group kb-links">
   <button id="helpful_links" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Helpful links <span class="caret"></span>
@@ -106,7 +96,8 @@
   </ul>
 </div>
 
-<!-- Single button -->
+
+<!-- School Links button -->
 <div class="btn-group kb-links">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     School links <span class="caret"></span>
@@ -125,7 +116,8 @@
   </ul>
 </div>
 
-<!-- Single button -->
+
+<!-- AE button -->
 <div class="btn-group kb-links">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     AE links <span class="caret"></span>
@@ -158,14 +150,7 @@
   </div>
 </div>
 
-
-
-
-
-
-
-<!-- <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on left</button>
-<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" data-placement="top"  title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?" data-trigger="hover">Click to toggle popover</button> -->
+<!-- School Info Fields -->
 <div class="school-info">
 	{{#if school_url}}<a href="{{school_url}}" target="_blank" class="label label-default">Hosted URL</a>{{/if}}
 
@@ -187,23 +172,7 @@
 
 	{{#if edition}}<span class="label label-light">Full Edition</span>{{/if}}
 
-<!-- 	<span class="label label-default">Default</span>
-	<span class="label label-primary">Primary</span>
-	<span class="label label-success">Success</span>
-	<span class="label label-info">Info</span>
-	<span class="label label-warning">Warning</span>
-	<span class="label label-danger">Danger</span>
-	<a href="" class="label label-default">Hosted URL</a>
-	<a href="" class="label label-primary">Hosted URL</a>
-	<a href="" class="label label-success">Hosted URL</a>
-	<a href="" class="label label-info">Hosted URL</a>
-	<a href="" class="label label-warning">Hosted URL</a>
-	<a href="" class="label label-danger">Hosted URL</a> -->
-
 </div>
-
-
-<!-- {{#unless requester.email}}disabled{{/unless}} -->
 
 <!-- Chat -->
 {{#if ticket_new}}
@@ -219,12 +188,8 @@
 
 
 
-
-
-
 <!-- Debugging -->
-
-<div class="alert alert-info">
+<!-- <div class="alert alert-info">
 	<ul class="fa-ul">
 		<li><i class="fa fa-info-circle fa-li fa-lg"></i><b>School Links</b></li>
 	    <li><a href="{{organization.organization_fields.prog_web}}"><i class="fa fa-link fa-li fa-lg"></i><b>prog_web</b> </a></li>
@@ -248,8 +213,7 @@
 	    <li><i class="fa fa-angle-right fa-li fa-lg"></i><b>AE Email:</b> {{organization.ae_info.ae_email}}</li>
 
 	</ul>
-</div>	
+</div>	 -->
 
-
-
-
+<!-- {{#unless requester.email}}disabled{{/unless}} -->
+<!-- http://handlebarsjs.com/builtin_helpers.html -->

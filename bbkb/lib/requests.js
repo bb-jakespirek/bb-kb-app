@@ -6,7 +6,7 @@ module.exports = {
 	// 	};
 	// },
 	fetchOrganization: function(org_id) {
-		console.log("fetchOrganization ran");
+		// console.log("fetchOrganization ran");
 		return {
 			url:  '/api/v2/organizations/'+org_id+'.json', 
 			type: 'GET'
