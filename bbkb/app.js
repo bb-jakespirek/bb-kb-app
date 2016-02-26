@@ -59,10 +59,9 @@
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
 		'click #chat_button': function(event) { 
-			//event.preventDefault(); 
-			// console.log("chat clicked");
-			this.disableSave();
-			//this.$('div.more').toggle(); 
+
+			//this.disableSave();
+
 		},
 		'click #phone_btn': function(event) { 
 			//event.preventDefault(); 
@@ -73,7 +72,7 @@
 				backdrop: true,
 				keyboard: true
 			});
-			this.$("#phone_input").select();
+			// this.$("#phone_input").select();
 
 			   //    this.switchTo('modal', {
       //   header: this.I18n.t('modal_header'),
@@ -313,8 +312,8 @@
 	make_chat_link: function() {
 		var ticket = this.ticket();
 		var subject = ticket.subject();
-		var chat_base_URL = "http://localhost:8888/k12-support-forms/chat/";
-		// var chat_base_URL = "https://k12supportform.myschoolapp.com/chat/";
+		// var chat_base_URL = "http://localhost:8888/k12-support-forms/chat/";
+		var chat_base_URL = "https://k12supportform.myschoolapp.com/chat/";
 
 		var user_id = this.currentUser().id();
 		var requester = ticket.requester();

@@ -109,10 +109,10 @@
 	{{#if school_urls.prog_web}}<li><a href="{{school_urls.prog_web}}" target="_blank"><span class="label label-info">PROG</span> Website</a></li>{{/if}}
 
 	
-    <li role="separator" class="divider"></li>
+<!--     <li role="separator" class="divider"></li>
 
 	{{#if site_specs}}<li><a href="{{site_specs}}" title="Site Specs" target="_blank">Site Specs</a></li>{{else}}<li><p>No Site Specs Docs</p></li>{{/if}}
-	{{#if support_handoffs}}<li><a href="{{support_handoffs}}" title="Support Handoffs" target="_blank">Support Handoffs</a></li>{{/if}}
+	{{#if support_handoffs}}<li><a href="{{support_handoffs}}" title="Support Handoffs" target="_blank">Support Handoffs</a></li>{{/if}} -->
   </ul>
 </div>
 
@@ -175,12 +175,11 @@
 </div>
 
 <!-- Chat -->
-{{#if ticket_new}}
+<!-- {{#if ticket_new}}
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
   <a id="chat_button" href="{{chat_url}}" target="_blank" class="btn btn-kb full" role="button"><span class="fa fa-comment fa-lg"></span>New Chat Ticket</a>
-  <!-- <button id="dummy_button" class="btn btn-kb full" role="button"><span class="fa fa-disable fa-lg"></span>Dummy Button</button> -->
 </div>
-{{/if}}
+{{/if}} -->
 
 
 
