@@ -58,6 +58,8 @@
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
+		'ticket.save': 'ticketSaveHandler',
+
 		'click #chat_button': function(event) { 
 
 			//this.disableSave();
@@ -91,14 +93,49 @@
 
     requests: require('requests.js'),
 
+    ticketSaveHandler: function() {
+    	var ticket = this.ticket();
+    	var no_kb_necessary = KB.kb_needed_test(ticket);
+		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+		// console.log(no_kb_necessary);
+		// console.log(kb_article_valid);
+		// console.log(ticket.status());
 
+    	if (no_kb_necessary != true && kb_article_valid == false) {
+    		// !ticket.isNew() && ticket.status() != "open" && ticket.status() != "pending"
+    		if (ticket.status() == "solved") {
+    			this.growl_kb_needed(ticket);
+    		}
+    		
+    	} else {
+    		
+    	}
+    },
+
+    growl_kb_needed: function(ticket) {
+		// https://developer.zendesk.com/apps/docs/agent/services
+		// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
+		var msg  = 'Hey now! You forgot to include a KB article and this ticket needs it! <a href="#/tickets/%@">%@</a>';
+		var life = parseInt(this.$('#life').val(), 10);
+		life = isNaN(life) ? 6 : life;
+		ticket_id = ticket.id();
+		// services.notify(msg.fmt(life), 'notice', life * 1000);
+		// notice, alert, error
+		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
+    },
 
     initialize: function(data) { // function called when we load
+		// console.log("initialize");
+
 		// if (data.firstLoad) {
 		//   // this.switchTo('main');
-		//   this.generate_app_view();
+		//   console.log("data.firstLoad");
+		//   // this.generate_app_view();
 		// }
 		this.resetGlobals();
+
+
+		// this.growl_kb_needed();
 
 		// Info.test_func(this); 
 		// pass the app as an argument to info.js
@@ -107,13 +144,49 @@
 		// 	console.log(app.ticket().id());
 		// },		
 
+
+		// https://developer.zendesk.com/apps/docs/agent/interface
+		// var field = this.ticketFields('tags')
+		// field.hide();
+
+		var myCustomField = this.ticketFields('custom_field_30584448');
+		// var option = _.find(myCustomField.options(), function(opt) {
+  //         return opt.value();
+  //       });
+  // myCustomField.options		
+  		// myCustomField.required = true;
+  		// myCustomField.required();
+
+		myCustomField.isRequired();
+		console.log("required? " + myCustomField.isRequired());
+		console.log(myCustomField);
+
+
+		// disable customer impact field from being changed by analyst
+		var customer_impact_field = this.ticketFields('custom_field_28972337');
+		customer_impact_field.disable();
+		// kb status
+		this.ticketFields('custom_field_22953480').disable();
+		
+		// ticket source
+		this.ticketFields('custom_field_27286948').disable();
+
+		// chat dispatched
+		this.ticketFields('custom_field_29482057').disable();
+		
+		// test
+
+
+
+		// this.$("button.continue").html("Next Step...")
+
 		var ticket = this.ticket();
 
 		// See if globals data is stale
 		// if (this.appProperties.ticket_id == this.ticket().id()) {
-		   //    console.log('ticket ID matches!');
+		//       console.log('ticket ID matches');
 		// } else {
-		 //  console.log('ticket ID does not match!');
+		//   console.log('ticket ID does not match!');
 		// }
 
 		// Check the ticket ID to see if things match
@@ -387,9 +460,19 @@
 			});
 		} else {
 			// console.log("don't update the view yet!");
-			this.switchTo('loading', {
+			if (ticket.requester()) {
+				this.switchTo('loading', {
 					user_id: this.currentUser().id()
-			});	
+				});	
+			} else {
+				this.switchTo('new', {
+					// ticket_new: ticket_new,
+					user_id: this.currentUser().id(),
+					// organization: org_info,
+					// requester: requester
+				});	
+			}
+			
 		}
 
 		

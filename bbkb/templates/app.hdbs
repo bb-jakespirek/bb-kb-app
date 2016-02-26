@@ -46,7 +46,7 @@
 		<div class="alert alert-success">
 			<ul class="fa-ul">
 				<li>
-					<i class="fa fa-check-circle fa-li fa-lg"></i> <b>KB Article attached:</b> {{articleNumber}} &nbsp;
+					<i class="fa fa-check-circle fa-li fa-lg"></i> <b>KB Article attached:</b> {{kb_article_number}} &nbsp;<br>
 					<a class="label label-success" href='https://kb.blackbaud.com/articles/Article/{{kb_article_number}}' target='_blank'>Open Article</a>
 					<a class="label label-success" href='https://na14.salesforce.com/articles/Article/{{kb_article_number}}' target='_blank'>Open in Salesforce</a>
 				</li>
