@@ -291,3 +291,33 @@ a.label-danger:hover {
 .btn.pull-left.create-idea {
     display: none;
 }
+
+
+
+a#chat_button {
+    margin-top: 6px;
+}
+
+.single-alert {
+  margin: 4px 0 -6px 0;
+}
+
+
+.native-emoji {
+    font-size: 15px;
+    padding: 0;
+    font-family: AppleColorEmoji;
+}
+
+.native-emoji, .emoji {
+    display: inline-block;
+    vertical-align: baseline;
+    zoom: 1;
+    /*cursor: pointer;*/
+}
+
+input#phone_input {
+    font-size: 15px;
+    border: 0;
+    box-shadow: none;
+}

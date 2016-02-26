@@ -1,0 +1,5 @@
+<div class="alert alert-info single-alert">
+	<ul class="fa-ul">
+		<li><i class="fa fa-spinner fa-spin fa-li fa-lg"></i><p>Loading ticket info...</li>
+	</ul>
+</div>	

@@ -1,209 +1,231 @@
 
-	// 
-	// https://whipplehill.zendesk.com/agent/tickets/54637?zat=true
-
-	// Custom fields
-	// https://developer.zendesk.com/apps/docs/agent/data
-	// curl http://services.faa.gov/airport/status/SFO -H "Accept: application/json"
-	// curl http://jsonblob.com/api/jsonBlob/555f9ee2e4b02057f77c7557 -H "Accept: application/json"
-
-	// JSON
-	// https://support.zendesk.com/hc/en-us/articles/203691456
-
-	// test locally
-	// https://support.zendesk.com/hc/en-us/articles/203691236
-	// OLD: cd /Applications/MAMP/htdocs/zendesk_api/app/bbkb
-
-	// cd /Users/jake.spirek/Dropbox/BBWH/GitHub/zd-kb/bbkb
-	// zat server
-	// zat package
-
-	// custom_field_22930600 = KB article
-	// custom_field_22790214 = Help Topic
-
-
-
-
 	(function() {
 
-	var article_num_status = "";
-	var article_num_text = "";
-	var article_num_test = "";
-	var is_special_code = "";
-	var kb_article_number = "";
-	var kb_article_valid = "";
 
-	var subject = "";
-	var product = "";
-	var assignee = "";
-	var assignee_name ="";
+// TO-DO:
 
 
-	var help_topic = "";
-	var help_topic_valid = false;
-	var no_kb_necessary = false;
 
-	// School Info
-	var school_urls = {};
-	var school_url = "";
-	var app_url = "";
-	var prog_url = "";
-	var status = "";
-
-	var ae_name = "";
-	var ae_phone = "";
-	var ae_email = "";
-
-	var site_specs = "";
-	var support_handoffs = "";
-	var edition = false;
-	var notes = "";
-
-	var requester = "";
-	var authorized_contact = "";
-	var user_notes = "";
-
+	var KB =  require('kb.js');
+	var Info =  require('info.js');
 
 
 	return {
-	events: {
-		// 'app.activated':'doSomething'
-		'app.activated': function() {
-			this.activate_app();
-		},
-		'ticket.custom_field_22930600.changed' : 'kb_id_changed',
-		'ticket.custom_field_22790214.changed' : 'help_topic_changed',
-		'ticket.custom_field_22222564.changed' : 'kb_id_changed',
-		'ticket.subject.changed' : 'subject_changed',
-		'ticket.requester.id.changed' : 'get_school_info'
-	},
 
 
-	kb_id_changed: function () {
-		var ticket = this.ticket();
-		kb_article_number = ticket.customField("custom_field_22930600");
-
-		console.log("kb id changed");
-
-		var pattern = new RegExp(/^[0-9]{5,6}$/g);
-		var article_num_test = pattern.test(kb_article_number);
-		// console.log(article_num_test + " article_num_test");
-
-		if (article_num_test) {
-			article_num_status = "bg-success text-success";
-			article_num_text = "KB Article Number:";
-			ticket.tags().add("valid_code");
-			ticket.tags().remove("needs_kb_article");
-			ticket.customField("custom_field_22953480", "kb_article_attached");
-			is_special_code = false;
-			if (kb_article_number == "00000" | kb_article_number == "000000" | kb_article_number == "111111" | kb_article_number == "22222" | kb_article_number == "222222") {
-				is_special_code = true;
-				article_num_status = "bg-warning text-warning";
-				ticket.tags().add("special_code");
-				ticket.tags().remove("valid_code");
-				ticket.tags().remove("needs_kb_article");
-				ticket.customField("custom_field_22953480", "special_code");
-			}
-			kb_article_valid = true;
-		} else {
-			article_num_status = "bg-danger text-danger";
-			article_num_text = "Make sure you fill out KB Article Number";
-			ticket.tags().remove("special_code");
-			ticket.tags().remove("valid_code");
-			ticket.tags().add("needs_kb_article");
-			ticket.customField("custom_field_22953480", "needs_kb_article");
-			kb_article_valid = false;
-		}
-
-		this.update_article_status();
-		this.update_app();
-	},
-
-	kb_needed_test: function () {
-		var ticket = this.ticket();
-		kb_article_number = ticket.customField("custom_field_22930600");
-
-		var ticket_about = ticket.customField("custom_field_22222564");
 
 
-		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
-		// var article_num_test = pattern.test(kb_article_number);
-		// console.log(article_num_test + " article_num_test");
-		var no_kb_necessary_list = [
-		"data__chargeable",
-		"data__export",
-		"data__fix",
-		"data__idc",
-		"data__other",
-		"data__refresh",
-		"data__research_question",
-		"product_owner__bug",
-		"product_owner__enhancement",
-		"product_owner__tech_research",
-		"r_d__bug_review",
-		"r_d__technical_research",
-		"success_coach__best_practice",
-		"success_coach__change_order",
-		"success_coach__jeopardy",
-		"success_coach__termination",
-		"success_coach__training",
-		"success_coach__transition",
-		"support__install_related",
-		"support_lead__enhancement",
-		"support_lead__r_d_bug_review",
-		"support_programmer__change_order",
-		"support_programmer__css",
-		"support_programmer__custom_page_bug",
-		"support_programmer__redirect"
-		];
+	appProperties: {
+      // This is available globally in your functions via this.appProperties.org_data
+      // We need to be very careful here though. When setting this, it might be possible previous data or unrelated data is served.
+      // This would also be shared among different instances of the app (per user) so if the agent switches tabs the data might be
+      // in the object may no longer be relevant. One way to get around that would be to make sure when setting data to include the
+      // current ticket_id in the object, so we can check that this.appProperties.ticket_id === this.ticket().id() before we trust the data.
+		"org_data": {},
+		"kb_info": {},
+		"school_info":{},
+		ticket_id: 0
+    },
 
-		var kb_needed = true;
-
-		for (var i = no_kb_necessary_list.length - 1; i >= 0; i--) {
-			if (ticket_about == no_kb_necessary_list[i]) {
-				kb_needed = false;
-				break;
-			}
-		}
-
-		// if (ticket_about == "product_owner__enhancement") {
-		// 	kb_needed = false;
-		// 	console.log("kb not needed");
-
-		// } else {
-		// 	kb_needed = true;
+  //   requests: {
+  //   	fetchOrganization: function() {
+		// 	console.log("fetchOrganization ran");
+		// 	return {
+		// 		url:  '/api/v2/organizations/28110694.json', //hard coded for now
+		// 		type: 'GET'
+		// 	};
 		// }
-		return kb_needed;
-	},
+  //   },
 
-	help_topic_changed: function () {
-		console.log("help topic changed");
-		var ticket = this.ticket();
-		help_topic = ticket.customField("custom_field_22790214");
-		help_topic_valid = false;
+	events: {
 
-		var pattern = new RegExp(/https:\/\/www.blackbaud.com/g);
-		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
-
-		var help_topic_test = pattern.test(help_topic);
-
-		if (help_topic_test) {
-			help_topic_valid = true;
-		} 
-		else {
-			help_topic_valid = false;
-		}
+		// 'app.activated': function() {
+		// 	this.activate_app();
+		// },
+		'app.activated': 'initialize', 
 		
-		this.update_article_status();
-		this.update_app();
+		// 'fetchBookmarks.done': 'fetchBookmarksDone',
+		'fetchOrganization.done': 'fetchOrganizationDone',
+
+
+		'ticket.subject.changed' : 'subject_changed',
+		'ticket.requester.id.changed' : 'requester_changed',
+	    'ticket.requester.email.changed': 'requester_changed',
+
+		'ticket.custom_field_22930600.changed' : 'kb_id_changed', // kb_id_changed
+		'ticket.custom_field_22790214.changed' : 'help_topic_changed', //help_topic_changed
+		'ticket.custom_field_22222564.changed' : 'field_changed', // kb_id_changed (About Field)
+
+		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
+
+		'click #chat_button': function(event) { 
+
+			//this.disableSave();
+
+		},
+		'click #phone_btn': function(event) { 
+			//event.preventDefault(); 
+			// console.log("phone clicked");
+			// alert(organization.ae_info.ae_phone);
+			// alert("phone number","Test");
+			this.$('#phone_modal').modal({
+				backdrop: true,
+				keyboard: true
+			});
+			// this.$("#phone_input").select();
+
+			   //    this.switchTo('modal', {
+      //   header: this.I18n.t('modal_header'),
+      //   body: this.I18n.t('modal_body')
+      // });
+			//this.$('div.more').toggle(); 
+		},
+	    'click #phone_input': function(event) { 
+
+			this.$("#phone_input").select();
+
+		},
+
+	    
 	},
 
+    requests: require('requests.js'),
 
+
+
+    initialize: function(data) { // function called when we load
+		// if (data.firstLoad) {
+		//   // this.switchTo('main');
+		//   this.generate_app_view();
+		// }
+		this.resetGlobals();
+
+		// Info.test_func(this); 
+		// pass the app as an argument to info.js
+		// info.js looks like this:
+		// test_func: function (app) {
+		// 	console.log(app.ticket().id());
+		// },		
+
+		var ticket = this.ticket();
+
+		// See if globals data is stale
+		// if (this.appProperties.ticket_id == this.ticket().id()) {
+		   //    console.log('ticket ID matches!');
+		// } else {
+		 //  console.log('ticket ID does not match!');
+		// }
+
+		// Check the ticket ID to see if things match
+		// this.appProperties.ticket_id === this.ticket().id()
+
+		// Check if it's a new ticket or not
+        
+		var ticket_new;
+
+        if (ticket.status() == "new") {
+        	// ticket.isNew()
+			ticket_new = true;
+
+			if (ticket.requester()) {
+				this.get_organization_info();
+			} 
+			else {
+				this.switchTo('new', {
+					// ticket_new: ticket_new,
+					user_id: this.currentUser().id(),
+					// organization: org_info,
+					// requester: requester
+				});				
+			}
+
+		}
+		else {
+			ticket_new = false;
+			this.get_organization_info();
+			// var organization = this.ticket().organization();
+			// // console.log(typeof organization);
+			// this.appProperties.org_data = organization;
+			// console.log("init----");
+			// console.log(organization);
+			// console.log("end init----");
+
+			// this.generate_app_view();
+		}
+
+
+    },
+
+
+
+
+
+	requester_changed: function() {
+      // Requester changed - let's just regenerate everything including our handlebars
+		if(this.ticket().requester()){
+			this.get_organization_info();
+		}
+    },
+
+
+    update_zd_custom_field: function(field_id, value) {
+    	// ticket.customField("custom_field_22953480", "special_code");
+  	    return this.ticket().customField( helpers.fmt('custom_field_%@', field_id), value );
+    },
+
+    kb_id_changed: function () {
+		this.update_article_status();
+
+		// var ticket = this.ticket();
+
+		// // subject = ticket.subject();
+		// // this.update_app();
+		
+						
+		// // this.appProperties
+		// // var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+
+		// // if (kb_article_valid) {
+		// // 	this.change_zd_custom_field(22930600,"special_code");
+		// // }
+		// this.generate_app_view();
+		// console.log("kb id changed");
+	},
+
+    help_topic_changed: function () {
+		this.update_article_status();
+
+		// var ticket = this.ticket();
+
+		// subject = ticket.subject();
+		// this.update_app();
+		
+						
+		// this.appProperties
+		// var help_topic_valid = this.appProperties.kb_info.help_topic_valid;
+
+		// help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
+
+		// if (help_topic_valid) {
+		// 	// this.change_zd_custom_field(22790214,"special_code");
+		// 	this.appProperties.kb_info.help_topic_valid
+		// }
+
+		// this.generate_app_view();
+		// console.log("help topic changed");
+	},
+
+	
 	update_article_status: function () {
 		var ticket = this.ticket();
-		console.log("Help Topic Valid? " + help_topic_valid);
-		console.log("KB Article Valid? " + kb_article_valid);
-		no_kb_necessary = false;
+
+		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
+		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+
+		this.appProperties.kb_info.kb_article_valid = kb_article_valid;
+		this.appProperties.kb_info.help_topic_valid = help_topic_valid;
+
+		var no_kb_necessary = false;
 		// subject = ticket.subject();
 		if (help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_and_help_topic_attached");
@@ -215,7 +237,7 @@
 			ticket.customField("custom_field_22953480", "help_topic_attached");
 		} 
 		else {
-			if(this.kb_needed_test()) {
+			if(KB.kb_needed_test(ticket)) {
 				ticket.customField("custom_field_22953480", "needs_kb_article");
 			}
 			else {
@@ -224,238 +246,224 @@
 			}
 			
 		}
-		this.update_app();
-		console.log("subject changed / setup search");
-	}, 
+		// this.update_app();
+		// console.log("article status updated");
+		this.generate_app_view();
+	},
 
+
+	field_changed: function () {
+		// subject = ticket.subject();
+		// this.update_app();
+		this.get_organization_info();
+		// console.log("something we want changed ");
+	},
 
 	subject_changed: function () {
 		// subject = ticket.subject();
-		this.update_app();
-		console.log("subject changed / setup search");
-	},
-
-	get_school_info: function () {
-					console.log("running get school info");
-
-		// body...
-		var organization = this.ticket().organization();
-		if (!organization) {
-			console.log("no org");
-			return;
-		}
-		requester = this.ticket().requester();
-		if (!requester) {
-			console.log("no requester");
-			return;
-		}
-		// console.log(requester.customField('authorized_contact'));
-		var org_fields = organization.organizationFields();
-		// console.log(org_fields);
-		// var school_url = organization.organizationFields("hosted_url");
-		
-		school_urls.hosted_url = org_fields['hosted_url'];
-		school_urls.app_url = org_fields['app_url'];
-		school_urls.prog_url = org_fields['prog_url'];
-		if (school_urls.prog_url) {
-			school_urls.prog_web = school_urls.prog_url.replace(/(\/app)(\/)?$/, '/page/'); 
-		}
-		school_urls.school_id = org_fields['school_id'];
-		school_urls.clarify_site_id = org_fields['clarify_site_id'];
-		school_urls.database = org_fields['database'];
-		// console.log("website replace: " + school_urls.prog_web);
-
-// get rid of these 
-		school_url = org_fields['hosted_url'];
-		app_url = org_fields['app_url'];
-		prog_url = org_fields['prog_url'];
-
-
-		notes = organization.notes();
-
-// to-do: make status into an object and show different colors for things like in production
-		status = org_fields['status'];
-		if (status == "in_support") {
-			status = "In Support";
-		}
-// console.log(status + " In support");
-		var ae_name_raw = org_fields['account_manager'];
-		if (ae_name_raw) {
-			ae_name = ae_name_raw.replace('_', ' '); 
-			ae_name = ae_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-			ae_phone = org_fields['ae_phone_number'];
-			
-			ae_email = ae_name_raw.replace('_', '.'); 
-			ae_email += "@blackbaud.com";
-		}
-
-		site_specs = org_fields['site_specs'];
-		support_handoffs = org_fields['support_handoffs'];
-		edition = org_fields['full_edition'];
-
-		if (requester) {
-			authorized_contact = requester.customField('authorized_contact');
-			user_notes = requester.notes();
-			console.log(user_notes);
-		}
-
-		// console.log(ae_email);
-		this.update_article_status();
-		this.update_app();
+		// this.update_app();
+		this.generate_app_view();
+		// console.log("subject changed / setup search");
 	},
 
 
-	update_app: function () {
-		var base = "k-12 on products";
-		var parent = base + "|";
-		var k12Products = base; 
-		var Core = parent+"core"; 
-		var onAccount = parent+"onaccount";
-		var onBoard = parent+"onboard";
-		var onCampus = parent+"oncampus";
-		var onMessage = parent+"onmessage";
-		var onRecord = parent+"onrecord";
-		var allK12Products = k12Products + "," + Core + "," + onAccount + "," + onBoard + "," + onCampus + "," + onMessage + "," + onRecord + "," + "internal systems";
-		var allK12ProductsPKB = k12Products + "," + Core + "," + onAccount + "," + onBoard + "," + onCampus + "," + onMessage + "," + onRecord;
+	// check_data: function() {
+ //        // Check if it's a new ticket or not
+ //        if (ticket.status() == "new") {
+ //        	// ticket.isNew()
+	// 		ticket_new = true;
+	// 	}
+	// 	else {
+	// 		ticket_new = false;
+	// 	}
 
+	// },
+
+
+	get_organization_info: function() {
+
+// TO DO
+// test to make sure the org info is actually updated
+
+		if(this.ticket().organization()){
+			var organization = this.ticket().organization();
+
+		 	// This response will be handled by fetchOrganizationDone if it's a success
+		 	// It will then run generate_app_view 
+		 	this.ajax('fetchOrganization', organization.id());
+		}
+	 	
+	},
+
+
+	fetchOrganizationDone: function(data) {
+		var org_data = data.organization;
+    	this.appProperties.org_data = org_data;
+
+    	this.appProperties.school_info = Info.fix_org_data(org_data);
+
+    	// this.appProperties.kb_info = 
+
+
+    	this.generate_app_view();
+    },
+
+
+	make_chat_link: function() {
 		var ticket = this.ticket();
 		var subject = ticket.subject();
-		if (!subject) {
-			subject="";
-		}
+		// var chat_base_URL = "http://localhost:8888/k12-support-forms/chat/";
+		var chat_base_URL = "https://k12supportform.myschoolapp.com/chat/";
+
+		var user_id = this.currentUser().id();
+		var requester = ticket.requester();
+
 		var product = ticket.customField("custom_field_21744040");
-		// var assignee = ticket.assignee();
-		// var assignee_name = assignee.user().name();
-
-		var kb_article_number = ticket.customField("custom_field_22930600");
 
 
-		switch (product) {
-			case 'core':
-				product = Core;
-				break;
-			case 'onaccount':
-				product = onAccount;
-				break;
-			case 'onboard':
-				product = onBoard;
-				break;
-			case 'oncampus':
-				product = onCampus;
-				break;	
-			case 'onmessage':
-				product = onMessage;
-				break;
-			case 'onrecord':
-				product = onRecord;
-				break;
-			default:
-				product = k12Products; 
-				break;
+		// console.log(requester);
+		// console.log(requester.email());
+		var chat_url = chat_base_URL; 
+		chat_url += "?requester=" + requester.email();
+		chat_url += "&requester_name=" + requester.name();
+		chat_url += "&assignee=" + user_id;
+		chat_url += "&assignee_name=" + this.currentUser().name();
+		
+		if (subject != null) {
+			chat_url += "&subject=" + ticket.subject();
 		}
 
-		// Remove the first part of the subject up to the backslash
-		subject = subject.replace(/(.+\s?\\)/, ''); 
+		if (product != null) {
+			chat_url += "&product=" + product;
+		}
 
-		// Remove any other backslashes
-		subject = subject.replace('\\', '');
-		
-		// Remove Five9 Call and CHAT:
-		subject = subject.replace('Five9 Call', '');
-		subject = subject.replace('CHAT:', '');
-
-
-
-		console.log("app updated");
-		this.switchTo('app', {
-			// username: test
-			productName: product,
-			articleNumber: kb_article_number,
-			productDebug: ticket.customField("custom_field_21744040"),
-			baseURL: "http://bbkb.blackbaud.com/#sort=relevancy",
-			baseURLpkb: "http://search.blackbaud.com/#sort=relevancy",
-			ticketSubject: subject,
-			k12Products: k12Products,
-			allK12ProductsPKB: allK12ProductsPKB,
-			allK12Products: allK12Products, 
-			Core: Core,
-			onAccount: onAccount,
-			onBoard: onBoard,
-			onCampus: onCampus, 
-			onMessage: onMessage,
-			onRecord: onRecord,
-			notApplicable: "Not Applicable",
-			article_num_status: article_num_status,
-			article_num_text: article_num_text, 
-			article_num_test: article_num_test,
-			is_special_code: is_special_code,
-			kb_article_valid: kb_article_valid,
-			help_topic: help_topic,
-			help_topic_valid: help_topic_valid,
-			no_kb_necessary: no_kb_necessary,
-			school_url: school_url,
-			app_url: app_url,
-			prog_url: prog_url,
-			notes: notes,
-			status : status,
-			ae_name : ae_name,
-			ae_phone : ae_phone,
-			ae_email : ae_email,
-			site_specs : site_specs,
-			support_handoffs : support_handoffs,
-			edition : edition,
-			authorized_contact: authorized_contact,
-			user_notes: user_notes,
-			school_urls: school_urls
-
-		});
+		return chat_url;
 	},
 
-	activate_app: function() {
-		// console.log("do something");
+
+	generate_app_view: function() {
 		var ticket = this.ticket();
-		// console.log("status = " + ticket.status());
-		if (ticket.status() == "new") {
-			console.log("this is a new ticket");
-			// var organization = this.ticket().organization();
-			// if (!organization) {
-			// 	return;
-			// }
+		var ticket_new = false;
+		var app = this;
 
+		var kb_info = this.appProperties.kb_info;
+
+		if (ticket.isNew()) {
+			ticket_new = true;
 		}
-		else {
+
+		if (typeof this.appProperties.org_data.id != 'undefined') {
+			if (this.appProperties.ticket_id === this.ticket().id()){
+				// console.log("The ticket ID's match");
+			} else {
+				// console.log("Yikes. The ticket ID's don't match");
+			}
+			// console.log("this.appProperties.org_data.id");
+			// console.log(this.appProperties.org_data.id);
+
+			this.switchTo('app', {
+			// this.switchTo('test', {
+				ticket_new: ticket_new,
+				kb_links: KB.make_kb_links(ticket),
+				no_kb_necessary: KB.kb_needed_test(ticket),
+				// help_topic_valid: KB.check_help_topic(ticket),
+				help_topic_valid: kb_info.help_topic_valid,
+				kb_article_valid: kb_info.kb_article_valid,
+				// kb_article_valid: KB.check_kb_id(ticket.customField("custom_field_22930600")),
+
+				kb_article_number: ticket.customField("custom_field_22930600"),
+				help_topic: ticket.customField("custom_field_22790214"),
+				// kb_quotes: this.kb_quotes(),
+				// chat_base_URL: "https://k12supportform.myschoolapp.com/chat/",
+				// chat_base_URL: "http://localhost:8888/k12-support-forms/chat/",
+
+				organization: this.appProperties.school_info,	
+				// organization: Info.fix_org_data(this.appProperties.org_data),
+				school_urls: this.appProperties.school_info.organization_fields,
+
+				chat_url: this.make_chat_link(),
+				user_id: this.currentUser().id(),
+				requester: ticket.requester()
+			});
+		} else {
+			// console.log("don't update the view yet!");
+			this.switchTo('loading', {
+					user_id: this.currentUser().id()
+			});	
 		}
+
 		
-		this.update_app();
-		this.kb_id_changed();
-		this.help_topic_changed();
-		this.get_school_info();
+
+	},
+
+    resetGlobals: function(){
+      var ticket_id = this.ticket().id();
+      this.appProperties = {
+		"org_data": {},
+		"kb_info": {},
+		"school_info":{},
+		ticket_id: ticket_id
+      };
+    },
+
+
+
+// ------------ KB Functions ---------------- //
+
+
+	kb_quotes: function() {
+		var kb_quotes = {};
+
+		kb_quotes.kb_success = this.random_kb_success_quote();
+
+		return kb_quotes;
+	},
+
+	random_kb_success_quote: function () {
+
+		// var quote_array = [];
+		
+		// var quote = {};
+		// quote.txt = "You're swell!";
+		// quote.pic = this.assetURL("emoticons/badpokerface.png");
+		// quote_array.push(quote);
+
+		// var quote = {};
+		// quote.txt = "You did great!";
+		// quote.pic = this.assetURL("emoticons/boom.gif");
+		// quote_array.push(quote);	
+
+		// var quote = {};
+		// quote.txt = "What if you did another one?";
+		// quote.pic = this.assetURL("emoticons/philosoraptor.png");
+		// quote_array.push(quote);	
+
+		// var random_number = Math.floor(Math.random() * quote_array.length);
+
+		// return quote_array[random_number];
 
 	},
 
 
-	set_first_responder: function () {
-		// this is just a test
-		// console.log("kb id changed");
-
-		// var tags = ticket.tags();
-		// var assignee_tag = assignee_name.replace(' ', '');
-		// var first = "first_";
-		// var first_assignee_tag = first.concat(assignee_tag);
-		// if (tags.indexOf("first_response") > -1) {
-		// //ticket.tags().add("valid_code");
-		// console.log("first response found");
-		// console.log(assignee_tag + " is assigned");
-		// console.log(first_assignee_tag + " is first_assignee");
-		// // console.log("first_" + assignee_tag);
-		// }
-	},
+// ------------ END KB Functions ---------------- //
 
 
-	sayHello: function() {
-		console.log("hello");
-	}
-	// end function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	};
 	// 

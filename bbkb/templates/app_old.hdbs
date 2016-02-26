@@ -1,0 +1,258 @@
+
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]" target="_blank" class="btn btn-kb full highlight" role="button"><span class="fa fa-search-plus fa-lg"></span>New Blank KB Search</a>
+</div>
+<div style="clear:both;"></div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="{{baseURLpkb}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12ProductsPKB}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-globe fa-lg"></span>Public KB Search</a>
+  <a href="{{baseURL}}&f:@articlefilters:not=[archived]&f:@hproduct=[{{allK12Products}}]&f:@hproduct:not=[{{notApplicable}}]&q={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-tag fa-lg"></span>Internal KB Search</a>
+</div>
+<div style="clear:both;"></div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="https://blackbaudk12.ideas.aha.io/ideas/" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-lightbulb-o fa-lg"></span>Ideas Portal</a>
+  <a href="https://blackbaudk12.ideas.aha.io/ideas/search?utf8=%E2%9C%93&query={{ticketSubject}}" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-search fa-lg"></span>Search Ideas</a>
+</div>
+<div style="clear:both;"></div>
+
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="https://community.blackbaud.com/products/k12" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-users fa-lg"></span>K-12 Community</a>
+  <a href="https://community.blackbaud.com/forums/forums_search?selectedTab=forums&search_filters%5BforumCategories%5D=366%2C300%2C330%2C296%2C297%2C298%2C299%2C301%2C149%2C334&search_filters%5BforumStatusLevels%5D=&query={{ticketSubject}}&tk=jgedq86rq3I1gGG6cbRw1gIawRf1QDlAmnzcjI-jEBU%2C&tm=oiEyZiMAlqd2WLpGGVS4YEgx-wpFfCuBH-eW8UB1AFs%2C" target="_blank" class="btn btn-kb" role="button"><span class="fa fa-comments-o fa-lg"></span>Search Community</a>
+</div>
+<div style="clear:both;"></div>
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a href="{{baseURL}}&f:@articlefilters=[internal procedure]&f:@articlefilters:not=[archived]&f:@hproduct:not=[{{notApplicable}}]" target="_blank" class="btn btn-kb full internal" role="button"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a>
+</div>
+
+<div style="clear:both"></div>
+
+{{#if no_kb_necessary}}
+	<div class="alert alert-success">
+		<ul class="fa-ul">
+			<li>
+				<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom &nbsp;
+			</li>
+		</ul>
+	</div>		
+{{else}}
+
+{{/if}}
+
+
+{{#if kb_article_valid}}
+	{{#if is_special_code}}
+		<div class="alert alert-warning">
+			<ul class="fa-ul">
+				<li>
+					<i class="fa fa-exclamation-triangle fa-li fa-lg"></i> You've selected a special code, but we aren't using those anymore (yay!). Please remove the 00000 code. Thanks!
+				</li>
+			</ul>
+		</div>			
+	{{else}}
+		<div class="alert alert-success">
+			<ul class="fa-ul">
+				<li>
+					<i class="fa fa-check-circle fa-li fa-lg"></i> <b>KB Article attached:</b> {{articleNumber}} &nbsp;
+					<a class="label label-success" href='https://kb.blackbaud.com/articles/Article/{{articleNumber}}' target='_blank'>Open Article</a>
+					<a class="label label-success" href='https://na14.salesforce.com/articles/Article/{{articleNumber}}' target='_blank'>Open in Salesforce</a>
+				</li>
+			</ul>
+		</div>
+	{{/if}}
+	
+{{else}}
+	{{#unless help_topic_valid}}
+		{{#unless no_kb_necessary}}
+		<div class="alert alert-warning">
+			<ul class="fa-ul">
+				<li>
+					<i class="fa fa-exclamation-triangle fa-li fa-lg"></i> Don't forget the KB Article or Help Topic
+				</li>
+			</ul>
+		</div>
+		{{/unless}}
+	{{/unless}}
+{{/if}}
+
+<!-- http://handlebarsjs.com/builtin_helpers.html -->
+{{#if help_topic_valid}}
+	<div class="alert alert-success">
+		<ul class="fa-ul">
+			<li>
+				<i class="fa fa-check-circle fa-li fa-lg"></i> <b>Help Topic attached</b> &nbsp;
+				<a class="label label-success" href='{{help_topic}}' target='_blank'>Open Help Topic</a>
+			</li>
+		</ul>
+	</div>
+{{else}}
+
+{{/if}}
+
+
+<div style="clear:both;"></div>
+<!-- Single button -->
+<div class="btn-group kb-links">
+  <button id="helpful_links" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Helpful links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a></li>
+	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="https://community.blackbaud.com/blogs/46" target="_blank">Support &amp; Product News Blog</a></li>
+    <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
+  </ul>
+</div>
+
+<!-- Single button -->
+<div class="btn-group kb-links">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    School links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-center">
+  	{{#if school_urls.hosted_url}}<li><a href="{{school_urls.hosted_url}}" target="_blank"><span class="label label-primary">LIVE</span> Website</a></li>{{/if}}
+	{{#if school_urls.app_url}}<li><a href="{{school_urls.app_url}}" target="_blank"><span class="label label-primary">LIVE</span> App</a></li>{{/if}}
+	{{#if school_urls.prog_url}}<li><a href="{{school_urls.prog_url}}" target="_blank"><span class="label label-info">PROG</span> App</a></li>{{/if}}
+	{{#if school_urls.prog_web}}<li><a href="{{school_urls.prog_web}}" target="_blank"><span class="label label-info">PROG</span> Website</a></li>{{/if}}
+
+	
+    <li role="separator" class="divider"></li>
+
+	{{#if site_specs}}<li><a href="{{site_specs}}" title="Site Specs" target="_blank">Site Specs</a></li>{{else}}<li><p>No Site Specs Docs</p></li>{{/if}}
+	{{#if support_handoffs}}<li><a href="{{support_handoffs}}" title="Support Handoffs" target="_blank">Support Handoffs</a></li>{{/if}}
+  </ul>
+</div>
+
+<!-- Single button -->
+<div class="btn-group kb-links">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    AE links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+	<li><p>{{ae_name}}<br><span class="js-phonelink">{{ae_phone}}</span></p></li>
+    <li role="separator" class="divider"></li>
+	<li><a href="mailto:{{ae_email}}" target="_blank"><i class="fa fa-send"></i> Send Email</a></li>
+	<li><button class="js-phonecopybtn"><i class="fa fa-clipboard"></i> Copy Phone</button></li>
+    </ul>
+   
+
+</div>
+<!-- <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on left</button>
+<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" data-placement="top"  title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?" data-trigger="hover">Click to toggle popover</button> -->
+<div class="school-info">
+	{{#if school_url}}<a href="{{school_url}}" target="_blank" class="label label-default">Hosted URL</a>{{/if}}
+
+	{{#if app_url}}<a href="{{app_url}}" target="_blank" class="label label-primary">LIVE App</a>{{/if}}
+
+	{{#if school_urls.prog_url}}<a href="{{school_urls.prog_url}}" target="_blank" class="label label-info">PROG App</a>{{/if}}
+
+	{{#if notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="School Notes" data-content="{{notes}}" data-trigger="hover">Notes</button>{{/if}}
+	
+	{{#if user_notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="User Notes" data-content="{{user_notes}}" data-trigger="hover">User Notes</button>{{/if}}
+	
+	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<span class="label label-danger" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Unauthorized Contact">Unauthorized</span>{{/if}}
+
+	{{#if status}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Support Status">{{status}}</span>{{/if}}
+
+	{{#if school_urls.school_id}}<button type="button" target="_blank" class="label label-light" data-toggle="popover" data-placement="top"  title="Site ID's" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: {{school_urls.clarify_site_id}}" data-trigger="hover">ID: {{school_urls.school_id}}</button>{{/if}}
+
+	{{#if school_urls.database}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Database">{{school_urls.database}}</span>{{/if}}
+
+	{{#if edition}}<span class="label label-light">Full Edition</span>{{/if}}
+
+<!-- 	<span class="label label-default">Default</span>
+	<span class="label label-primary">Primary</span>
+	<span class="label label-success">Success</span>
+	<span class="label label-info">Info</span>
+	<span class="label label-warning">Warning</span>
+	<span class="label label-danger">Danger</span>
+	<a href="" class="label label-default">Hosted URL</a>
+	<a href="" class="label label-primary">Hosted URL</a>
+	<a href="" class="label label-success">Hosted URL</a>
+	<a href="" class="label label-info">Hosted URL</a>
+	<a href="" class="label label-warning">Hosted URL</a>
+	<a href="" class="label label-danger">Hosted URL</a> -->
+
+</div>
+
+
+
+
+<!-- Chat -->
+{{#if ticket_new}}
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+  <a id="chat_button" href="{{chat_base_URL}}?requester={{requester.email}}&assignee={{user_id}}" target="_blank" class="btn btn-kb full" role="button" {{#unless requester.email}}disabled{{/unless}}><span class="fa fa-comment fa-lg"></span>New Chat Ticket</a>
+  <!-- <button id="dummy_button" class="btn btn-kb full" role="button"><span class="fa fa-disable fa-lg"></span>Dummy Button</button> -->
+</div>
+{{/if}}
+
+
+
+<!-- <a href="#" class="btn btn-large btn-danger" data-toggle="popover" title="" data-trigger="hover" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">Click to toggle popover</a> -->
+
+
+<!-- <a href="#" data-toggle="tooltip" title="Title Here">Hyperlink Text</a> -->
+<!-- <a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Tooltip on top">Tooltip on top</a> -->
+<!-- <h5>Helpful links:</h5>
+<ul class="links">
+	<li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a>:  Style guide, training, tips, etc.</li>
+	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
+</ul>	 -->
+
+
+<!-- Test for Aha -->
+<script>
+// var $test = this.$('#linkedIdeas a');
+// $test.click(function() {
+//   console.log( "Handler for .click() called." );
+// });
+// $( "#aha-link-idea-btn" ).on( "click", function() {
+//   console.log( "test" );
+// });
+// $( "#helpful_links" ).click(function() {
+//   console.log( "helpful_links Handler for .click() called." );
+// });
+</script>
+
+
+<!-- Copy Text Script -->
+<script>
+// // Function to change the content of t2
+// function modifyText() {
+//   var t2 = document.getElementById("t2");
+//   if (t2.firstChild.nodeValue == "three") {
+//     t2.firstChild.nodeValue = "two";
+//   } else {
+//     t2.firstChild.nodeValue = "three";
+//   }
+// }
+
+// // add event listener to table
+// var el = document.getElementById("outside");
+// el.addEventListener("click", modifyText, false);
+
+
+
+var copyEmailBtn = document.querySelector('.js-phonecopybtn');
+
+copyEmailBtn.addEventListener('click', function(event) {  
+  // Select the email link anchor text  
+  var emailLink = document.querySelector('.js-phonelink');  
+  var range = document.createRange();  
+  range.selectNode(emailLink);  
+  window.getSelection().addRange(range);  
+
+  try {  
+    // Now that we've selected the anchor text, execute the copy command  
+    var successful = document.execCommand('copy');  
+    var msg = successful ? 'successful' : 'unsuccessful';  
+    console.log('Copy email command was ' + msg);  
+  } catch(err) {  
+    console.log('Oops, unable to copy');  
+  }  
+
+  // Remove the selections - NOTE: Should use
+  // removeRange(range) when it is supported  
+  window.getSelection().removeAllRanges();  
+});
+
+</script>
