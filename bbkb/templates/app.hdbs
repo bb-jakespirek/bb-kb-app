@@ -176,7 +176,7 @@
   </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary save_button" aria-hidden="true">Save</button>
+    <button class="btn btn-primary save_button" aria-hidden="true">Apply to Ticket</button>
   </div>
 </div>
 
@@ -200,6 +200,8 @@
 	{{#if school_urls.school_id}}<button type="button" target="_blank" class="label label-light" data-toggle="popover" data-placement="top"  title="Site ID's" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: {{school_urls.clarify_site_id}}" data-trigger="hover">ID: {{school_urls.school_id}}</button>{{/if}}
 
 	{{#if school_urls.database}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Database">{{school_urls.database}}</span>{{/if}}
+
+	{{#if organization.csm}}<span class="label label-success" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Customer Success Manager">CSM: {{organization.csm}}</span>{{/if}}
 
 	{{#if edition}}<span class="label label-light">Full Edition</span>{{/if}}
 

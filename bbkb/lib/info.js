@@ -50,7 +50,9 @@ module.exports = {
 			ae_info.ae_email = ae_email;
 
 		}
-
+		if(org_fields.success_coach != null) {
+			organization.csm = org_fields.success_coach.replace('_', ' '); 
+		}
 		// organization.school_urls = this.get_school_info(org_fields);
 
 		return organization;

@@ -153,8 +153,8 @@ li.ticket.internal > a:hover {
 .label-light {
     background-color: #ECECEC;
     color: #000;
-    font-weight: normal;
-}
+/*    font-weight: normal;
+*/}
 .label-default {
     background-color: #777;
 }

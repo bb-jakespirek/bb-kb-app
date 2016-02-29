@@ -89,13 +89,13 @@
 		},
 
 		'click #chat_transcript_btn': function(event) { 
-			var ticket = this.ticket();
-	    	var chat_transcript = ticket.customField("custom_field_30844127");
+			// var ticket = this.ticket();
+	    	// var chat_transcript = ticket.customField("custom_field_30844127");
 			//event.preventDefault(); 
 			// console.log("phone clicked");
 			// alert(organization.ae_info.ae_phone);
 			// alert("phone number","Test");
-			this.$('#chat_transcript').val(chat_transcript);
+			// this.$('#chat_transcript').val(chat_transcript);
 
 
 			this.$('#chat_transcript_modal').modal({
@@ -266,16 +266,71 @@
 		// this.$('.modal-body textarea').text();
 		// console.log(this.$('#chat_transcript').val());
 
-		ticket.customField('custom_field_30844127', modal_transcript);
+		// ticket.customField('custom_field_30844127', modal_transcript);
 
-		var updated_transcript = ticket.customField("custom_field_30844127");
+		var name = ticket.requester().name().split(" ");
+		name = name[0];
 
-		comment.appendMarkdown(updated_transcript);
+		var greeting = "Hi " + name + ", thanks for chatting today. Here is the transcript of our chat. You can reply by email with any further comments related to this ticket.";
+		
+		// comment.appendMarkdown(greeting);
+		// comment.appendMarkdown('---');
+		// comment.appendMarkdown('## Chat Transcript:');
+
+		var full_comment;
+		full_comment = '\r' + greeting + '\r\r';
+		full_comment += '---' + '\r';
+		full_comment += '## Chat Transcript:' + '\r';
+
+		var updated_transcript = this.format_chat_transcript();
+		// ticket.customField("custom_field_30844127");
+
+		full_comment += updated_transcript;
+
+		comment.appendMarkdown(full_comment);
 
 		this.$('#chat_transcript_modal').modal('hide');
 
 
 	},
+
+    format_chat_transcript: function() {
+    	var ticket = this.ticket();
+    	var raw_chat_transcript = this.$('#chat_transcript').val();
+
+
+    	console.log("chat transcript fixed");
+    	console.log(this.$('#chat_transcript').val());
+    	
+		// subject = raw_subject.replace(/(.+\s?\\)/, ''); 
+
+		// // Remove any other backslashes
+		// subject = subject.replace('\\', '');
+		
+		// // Remove Five9 Call and CHAT:
+		// subject = subject.replace('Five9 Call', '');
+		// subject = subject.replace('CHAT:', '');
+
+		// console.log("check the kb id");
+		// var pattern = new RegExp("---");
+		// var already_formatted = pattern.test(raw_chat_transcript);
+		// console.log("it's been formatted");
+
+		// if (!already_formatted) {
+			var pattern = new RegExp(/^(([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] ?(AM|PM)) (\[(.*)\])/igm);
+			// var replacement = " --- \r\r\r*$1* **$5:**\r  \t";
+			var replacement = " \r\r\r*$1* **$5:**\r  \t";
+			var fixed_chat_transcript = raw_chat_transcript.replace(pattern, replacement);
+			// ticket.customField('custom_field_30844127', fixed_chat_transcript);
+			// console.log(fixed_chat_transcript);
+			return fixed_chat_transcript;
+		// }
+
+		
+    },
+
+
+// Delete this function and the event listener
     chat_transcript_updated: function() {
     	var ticket = this.ticket();
     	var raw_chat_transcript = ticket.customField("custom_field_30844127");
