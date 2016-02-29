@@ -22,8 +22,16 @@
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
   <a href="{{kb_links.btn_internal_procedures_search}}" target="_blank" class="btn btn-kb full internal" role="button"><span class="fa fa-lock fa-lg"></span>Search Internal Procedures</a>
 </div>
+<div style="clear:both;"></div>
 
+
+{{#if is_chat_ticket}}
+<div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
+      <button class="btn btn-kb full" id="chat_transcript_btn"><span class="fa fa-file-text-o fa-lg"></span>Chat Transcript</button>
+</div>
 <div style="clear:both"></div>
+{{/if}}
+
 
 {{#if no_kb_necessary}}
 	<div class="alert alert-success">
@@ -131,7 +139,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Phone Modal -->
 <div id="phone_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -149,6 +157,29 @@
     <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
   </div>
 </div>
+
+
+<!-- Chat Transcript Modal -->
+<div id="chat_transcript_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="chat transcript">Chat Transcript</h3>
+  </div>
+  <div class="modal-body">
+	<form>
+		<fieldset class="form-group">
+		<!-- <input id="chat_transcript" size="50" type="text" value="{{organization.ae_info.ae_phone}}" name="chat_transcript"> -->
+		<textarea class="form-control" id="chat_transcript" name="chat_transcript" rows="4"></textarea>
+
+		</fieldset>
+	</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary save_button" aria-hidden="true">Save</button>
+  </div>
+</div>
+
 
 <!-- School Info Fields -->
 <div class="school-info">

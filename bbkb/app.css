@@ -231,6 +231,9 @@ a.label-danger:hover {
 .btn-kb.full {
   width: 92.5%;
 }
+button.btn-kb.full {
+  width: 99.3%;
+}
 .btn-kb:hover {
   text-decoration: none;
   background: #99CC56;
@@ -321,3 +324,14 @@ input#phone_input {
     border: 0;
     box-shadow: none;
 }
+
+textarea#chat_transcript {
+  width: 98%;
+  height: 300px;
+}
+
+#chat_transcript_modal {
+  width: 700px;
+  height: 450px;
+}
+

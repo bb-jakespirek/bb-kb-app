@@ -58,6 +58,11 @@
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
+		'ticket.custom_field_30844127.changed' : 'chat_transcript_updated', // Product field
+
+		'click .save_button': 'chat_transcript_save',
+
+
 		'ticket.save': 'ticketSaveHandler',
 
 		'click #chat_button': function(event) { 
@@ -82,6 +87,30 @@
       // });
 			//this.$('div.more').toggle(); 
 		},
+
+		'click #chat_transcript_btn': function(event) { 
+			var ticket = this.ticket();
+	    	var chat_transcript = ticket.customField("custom_field_30844127");
+			//event.preventDefault(); 
+			// console.log("phone clicked");
+			// alert(organization.ae_info.ae_phone);
+			// alert("phone number","Test");
+			this.$('#chat_transcript').val(chat_transcript);
+
+
+			this.$('#chat_transcript_modal').modal({
+				backdrop: true,
+				keyboard: true
+			});
+			// this.$("#phone_input").select();
+
+			   //    this.switchTo('modal', {
+      //   header: this.I18n.t('modal_header'),
+      //   body: this.I18n.t('modal_body')
+      // });
+			//this.$('div.more').toggle(); 
+		},		
+
 	    'click #phone_input': function(event) { 
 
 			this.$("#phone_input").select();
@@ -230,7 +259,53 @@
     },
 
 
+    chat_transcript_save: function() {
+		var ticket = this.ticket();
+		var comment = this.comment();
+		var modal_transcript = this.$('#chat_transcript').val();
+		// this.$('.modal-body textarea').text();
+		// console.log(this.$('#chat_transcript').val());
 
+		ticket.customField('custom_field_30844127', modal_transcript);
+
+		var updated_transcript = ticket.customField("custom_field_30844127");
+
+		comment.appendMarkdown(updated_transcript);
+
+		this.$('#chat_transcript_modal').modal('hide');
+
+
+	},
+    chat_transcript_updated: function() {
+    	var ticket = this.ticket();
+    	var raw_chat_transcript = ticket.customField("custom_field_30844127");
+
+
+    	console.log("chat transcript updated");
+    	
+		// subject = raw_subject.replace(/(.+\s?\\)/, ''); 
+
+		// // Remove any other backslashes
+		// subject = subject.replace('\\', '');
+		
+		// // Remove Five9 Call and CHAT:
+		// subject = subject.replace('Five9 Call', '');
+		// subject = subject.replace('CHAT:', '');
+
+		// console.log("check the kb id");
+		var pattern = new RegExp("---");
+		var already_formatted = pattern.test(raw_chat_transcript);
+		console.log("it's been formatted");
+
+		if (!already_formatted) {
+			var pattern = new RegExp(/^(([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] ?(AM|PM)) (\[(.*)\])/igm);
+			var replacement = " --- \r\r\r*$1* **$5:**\r  \t";
+			var fixed_chat_transcript = raw_chat_transcript.replace(pattern, replacement);
+			ticket.customField('custom_field_30844127', fixed_chat_transcript);
+			console.log(fixed_chat_transcript);
+		}
+		
+    },
 
 
 	requester_changed: function() {
@@ -421,8 +496,15 @@
 
 		var kb_info = this.appProperties.kb_info;
 
+		var ticket_source = ticket.customField("custom_field_27286948");
+		var is_chat_ticket = false;
+
 		if (ticket.isNew()) {
 			ticket_new = true;
+		}
+
+		if (ticket_source == "chat") {
+			is_chat_ticket = true;
 		}
 
 		if (typeof this.appProperties.org_data.id != 'undefined') {
@@ -442,6 +524,7 @@
 				// help_topic_valid: KB.check_help_topic(ticket),
 				help_topic_valid: kb_info.help_topic_valid,
 				kb_article_valid: kb_info.kb_article_valid,
+				is_chat_ticket: is_chat_ticket,
 				// kb_article_valid: KB.check_kb_id(ticket.customField("custom_field_22930600")),
 
 				kb_article_number: ticket.customField("custom_field_22930600"),
