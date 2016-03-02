@@ -58,8 +58,6 @@
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
-		'ticket.custom_field_30844127.changed' : 'chat_transcript_updated', // Product field
-
 		'click .save_button': 'chat_transcript_save',
 
 
@@ -125,12 +123,18 @@
     ticketSaveHandler: function() {
     	var ticket = this.ticket();
     	var no_kb_necessary = KB.kb_needed_test(ticket);
+    	var has_kb_or_help = false;
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
+
+		if (kb_article_valid || help_topic_valid) {
+			has_kb_or_help = true;
+		}
 		// console.log(no_kb_necessary);
 		// console.log(kb_article_valid);
 		// console.log(ticket.status());
 
-    	if (no_kb_necessary != true && kb_article_valid == false) {
+    	if (no_kb_necessary !== true && has_kb_or_help === false) {
     		// !ticket.isNew() && ticket.status() != "open" && ticket.status() != "pending"
     		if (ticket.status() == "solved") {
     			this.growl_kb_needed(ticket);
@@ -144,10 +148,10 @@
     growl_kb_needed: function(ticket) {
 		// https://developer.zendesk.com/apps/docs/agent/services
 		// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
-		var msg  = 'Hey now! You forgot to include a KB article and this ticket needs it! <a href="#/tickets/%@">%@</a>';
+		var msg  = "Hey now! You didn't include a KB article or Help Topic, and this ticket needs one. <a href='#/tickets/%@'>%@</a>";
 		var life = parseInt(this.$('#life').val(), 10);
-		life = isNaN(life) ? 6 : life;
-		ticket_id = ticket.id();
+		life = isNaN(life) ? 10 : life;
+		var ticket_id = ticket.id();
 		// services.notify(msg.fmt(life), 'notice', life * 1000);
 		// notice, alert, error
 		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
@@ -178,7 +182,7 @@
 		// var field = this.ticketFields('tags')
 		// field.hide();
 
-		var myCustomField = this.ticketFields('custom_field_30584448');
+		// var myCustomField = this.ticketFields('custom_field_30584448');
 		// var option = _.find(myCustomField.options(), function(opt) {
   //         return opt.value();
   //       });
@@ -186,9 +190,9 @@
   		// myCustomField.required = true;
   		// myCustomField.required();
 
-		myCustomField.isRequired();
-		console.log("required? " + myCustomField.isRequired());
-		console.log(myCustomField);
+		// myCustomField.isRequired();
+		// console.log("required? " + myCustomField.isRequired());
+		// console.log(myCustomField);
 
 
 		// disable customer impact field from being changed by analyst
@@ -210,6 +214,9 @@
 		// this.$("button.continue").html("Next Step...")
 
 		var ticket = this.ticket();
+
+		// check to see if KB is attached.
+		this.update_article_status();
 
 		// See if globals data is stale
 		// if (this.appProperties.ticket_id == this.ticket().id()) {
@@ -268,17 +275,18 @@
 
 		// ticket.customField('custom_field_30844127', modal_transcript);
 
-		var name = ticket.requester().name().split(" ");
-		name = name[0];
+		// var name = ticket.requester().name().split(" ");
+		// name = name[0];
 
-		var greeting = "Hi " + name + ", thanks for chatting today. Here is the transcript of our chat. You can reply by email with any further comments related to this ticket.";
+		// var greeting = "Hi " + name + ", thanks for chatting today. Here is the transcript of our chat. You can reply by email with any further comments related to this ticket.";
 		
 		// comment.appendMarkdown(greeting);
 		// comment.appendMarkdown('---');
 		// comment.appendMarkdown('## Chat Transcript:');
 
 		var full_comment;
-		full_comment = '\r' + greeting + '\r\r';
+		// full_comment = '\r' + greeting + '\r\r';
+		full_comment = '\r';
 		full_comment += '---' + '\r';
 		full_comment += '## Chat Transcript:' + '\r';
 
@@ -299,8 +307,8 @@
     	var raw_chat_transcript = this.$('#chat_transcript').val();
 
 
-    	console.log("chat transcript fixed");
-    	console.log(this.$('#chat_transcript').val());
+    	// console.log("chat transcript fixed");
+    	// console.log(this.$('#chat_transcript').val());
     	
 		// subject = raw_subject.replace(/(.+\s?\\)/, ''); 
 
@@ -330,37 +338,6 @@
     },
 
 
-// Delete this function and the event listener
-    chat_transcript_updated: function() {
-    	var ticket = this.ticket();
-    	var raw_chat_transcript = ticket.customField("custom_field_30844127");
-
-
-    	console.log("chat transcript updated");
-    	
-		// subject = raw_subject.replace(/(.+\s?\\)/, ''); 
-
-		// // Remove any other backslashes
-		// subject = subject.replace('\\', '');
-		
-		// // Remove Five9 Call and CHAT:
-		// subject = subject.replace('Five9 Call', '');
-		// subject = subject.replace('CHAT:', '');
-
-		// console.log("check the kb id");
-		var pattern = new RegExp("---");
-		var already_formatted = pattern.test(raw_chat_transcript);
-		console.log("it's been formatted");
-
-		if (!already_formatted) {
-			var pattern = new RegExp(/^(([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] ?(AM|PM)) (\[(.*)\])/igm);
-			var replacement = " --- \r\r\r*$1* **$5:**\r  \t";
-			var fixed_chat_transcript = raw_chat_transcript.replace(pattern, replacement);
-			ticket.customField('custom_field_30844127', fixed_chat_transcript);
-			console.log(fixed_chat_transcript);
-		}
-		
-    },
 
 
 	requester_changed: function() {
