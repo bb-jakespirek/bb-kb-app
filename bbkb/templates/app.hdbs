@@ -139,6 +139,43 @@
 </div>
 
 
+
+<!-- Hold Modal -->
+<div id="hold_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">This ticket needs a Hold Status</h3>
+  </div>
+  <div class="modal-body">
+	<ul>
+  		<li><b>CR:</b> Used for Incidents</li>
+		<li><b>Third-Party:</b> When you’re waiting to hear back from a third-party (outside consultant, vendor, etc…)
+		</li>
+		<li><b>Internal:</b> When you’re waiting for a response from someone internal</li>
+		<li><b>Client:</b> When a client is OOO or asks you to keep a ticket on-hold until they experience the problem again
+		</li>
+		<li><b>Survey:</b> When your manager needs to review a bad survey</li>  
+	</ul>
+	<!-- {{hold_status_options}} -->
+	
+
+<!-- 	<form>
+		<fieldset class="form-group">
+        <select class="form-control" id="product" name="z_product">
+        {{#each hold_status_options}}
+            <option value="{{this.value}}">{{this.label}}</option>
+	    {{/each}}
+        </select>
+		</fieldset>
+	</form> -->
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+
+
 <!-- Phone Modal -->
 <div id="phone_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">

@@ -1,5 +1,5 @@
 {
-  "name": "Knowledgebase",
+  "name": "K-12 Support App",
   "author": {
     "name": "Jake Spirek",
     "email": "jake.spirek@blackbaud.com",
@@ -8,7 +8,7 @@
   "defaultLocale": "en",
   "private": true,
   "location": ["ticket_sidebar", "new_ticket_sidebar"],
-  "version": "1.803",
+  "version": "1.804",
   "frameworkVersion": "1.0"
 }
 

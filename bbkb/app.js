@@ -120,8 +120,16 @@
 
     requests: require('requests.js'),
 
+
+    'ticket.save': function() {
+	    // do something
+	    return "The ticket wasn't saved!";
+	},
+
     ticketSaveHandler: function() {
     	var ticket = this.ticket();
+
+    	// KB Stuff
     	var no_kb_necessary = KB.kb_needed_test(ticket);
     	var has_kb_or_help = false;
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
@@ -130,20 +138,57 @@
 		if (kb_article_valid || help_topic_valid) {
 			has_kb_or_help = true;
 		}
-		// console.log(no_kb_necessary);
-		// console.log(kb_article_valid);
-		// console.log(ticket.status());
 
-    	if (no_kb_necessary !== true && has_kb_or_help === false) {
-    		// !ticket.isNew() && ticket.status() != "open" && ticket.status() != "pending"
-    		if (ticket.status() == "solved") {
+
+		// Hold Stuff
+		var hold_status = ticket.customField("custom_field_30584448");
+
+
+		console.log(hold_status);
+
+
+		// Hold
+		if (ticket.status() == "hold") {
+			if (hold_status === "") {
+    			// this.growl_hold_status_needed(ticket);
+
+    			// This should only affect Support people
+    			if (this.check_user_groups("Support") || this.check_user_groups("Product Support Leads")) {
+	    			this.$('#hold_modal').modal({
+						backdrop: true,
+						keyboard: true
+					});
+    				return "The ticket wasn't saved! You need a Hold Status before submitting again.";
+    			}
+
+    		}
+		} else {
+			// Remove Hold Status
+			ticket.customField("custom_field_30584448", "");
+		}
+
+		// Solved
+		if (ticket.status() == "solved") {
+
+			if (no_kb_necessary !== true && has_kb_or_help === false) {
     			this.growl_kb_needed(ticket);
     		}
-    		
-    	} else {
-    		
-    	}
+		}
+
+
     },
+
+    check_user_groups: function(group) {
+    	// This function returns true if 
+		var current_user_groups = this.currentUser().groups();
+		var group_names = [];
+
+		_.each(current_user_groups, function(element, index, list){ 
+			group_names.push(element.name()); 
+		});
+		var in_group = _.contains(group_names,group);
+		return in_group;
+	},
 
     growl_kb_needed: function(ticket) {
 		// https://developer.zendesk.com/apps/docs/agent/services
@@ -156,6 +201,24 @@
 		// notice, alert, error
 		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
     },
+
+    growl_hold_status_needed: function(ticket) {
+		// https://developer.zendesk.com/apps/docs/agent/services
+		// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
+		var msg  = "Hold your horses, you didn't include a Hold Status. <a href='#/tickets/%@'>%@</a>";
+		var life = parseInt(this.$('#life').val(), 10);
+		life = isNaN(life) ? 6 : life;
+		var ticket_id = ticket.id();
+		// services.notify(msg.fmt(life), 'notice', life * 1000);
+		// notice, alert, error
+			this.$('#hold_modal').modal({
+				backdrop: true,
+				keyboard: true
+			});
+		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
+
+
+    },    
 
     initialize: function(data) { // function called when we load
 		// console.log("initialize");
@@ -571,7 +634,8 @@
 
 				chat_url: this.make_chat_link(),
 				user_id: this.currentUser().id(),
-				requester: ticket.requester()
+				requester: ticket.requester(),
+				hold_status_options: this.ticketFields('custom_field_30584448').options()
 			});
 		} else {
 			// console.log("don't update the view yet!");
