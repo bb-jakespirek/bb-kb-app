@@ -140,8 +140,7 @@
 		}
 
 
-		// Hold Stuff
-		var hold_status = ticket.customField("custom_field_30584448");
+		
 
 
 		console.log(hold_status);
@@ -149,11 +148,16 @@
 
 		// Hold
 		if (ticket.status() == "hold") {
+			// Hold Stuff
+			var hold_status = ticket.customField("custom_field_30584448");
+
 			if (hold_status === "") {
     			// this.growl_hold_status_needed(ticket);
 
     			// This should only affect Support people
-    			if (this.check_user_groups("Support") || this.check_user_groups("Product Support Leads")) {
+
+    			var group_array = ["Support", "Product Support Leads", "Support Relationship Manager"];
+    			if (this.check_user_groups(group_array)) {
 	    			this.$('#hold_modal').modal({
 						backdrop: true,
 						keyboard: true
@@ -178,16 +182,23 @@
 
     },
 
-    check_user_groups: function(group) {
-    	// This function returns true if 
+    check_user_groups: function(group_array) {
+    	// This function returns true if user is one of the groups
 		var current_user_groups = this.currentUser().groups();
 		var group_names = [];
+		var in_group;
 
+		// Add each group name to an array called group_names
 		_.each(current_user_groups, function(element, index, list){ 
 			group_names.push(element.name()); 
 		});
-		var in_group = _.contains(group_names,group);
-		return in_group;
+
+		_.each(group_array, function(element, index, list){ 
+			if (_.contains(group_names, element)) {
+				in_group = true;
+			} 
+		});
+		return in_group;		
 	},
 
     growl_kb_needed: function(ticket) {
@@ -635,7 +646,8 @@
 				chat_url: this.make_chat_link(),
 				user_id: this.currentUser().id(),
 				requester: ticket.requester(),
-				hold_status_options: this.ticketFields('custom_field_30584448').options()
+				// Don't necessarily need this:
+				// hold_status_options: this.ticketFields('custom_field_30584448').options()
 			});
 		} else {
 			// console.log("don't update the view yet!");
