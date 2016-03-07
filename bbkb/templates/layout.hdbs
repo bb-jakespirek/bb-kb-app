@@ -7,6 +7,7 @@
 $(document).ready(function() {
     $("body").tooltip({ selector: '[data-toggle=tooltip]' });
     $("body").popover({ selector: '[data-toggle=popover]' });
+    // $("body").alert({ selector: '[data-dismiss=alert]' });
 });
 
 </script>

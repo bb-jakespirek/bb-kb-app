@@ -63,6 +63,7 @@
 
 		'ticket.save': 'ticketSaveHandler',
 
+
 		'click #chat_button': function(event) { 
 
 			//this.disableSave();
@@ -139,11 +140,24 @@
 			has_kb_or_help = true;
 		}
 
+// this.$('#test_popover').popover({
+//     placement : 'right',
+//     html : true,
+//     delay: { 
+//        show: "0", 
+//        hide: "10"
+//     }
+// });		
+// 			// this.$('#test_popover').popover('show');
 
-		
-
-
-		console.log(hold_status);
+// this.$('#test_popover').on('show.bs.popover', function() {
+// 	// console.log("shown");
+//     setTimeout(function() {
+//         this.$('#test_popover').popover('hide');
+//     }, 1000);
+// });
+    				// this.$('#test_popover').popover('hide');
+		// console.log(hold_status);
 
 
 		// Hold
@@ -158,6 +172,9 @@
 
     			var group_array = ["Support", "Product Support Leads", "Support Relationship Manager"];
     			if (this.check_user_groups(group_array)) {
+
+    			
+
 	    			this.$('#hold_modal').modal({
 						backdrop: true,
 						keyboard: true
@@ -605,6 +622,8 @@
 		var ticket_source = ticket.customField("custom_field_27286948");
 		var is_chat_ticket = false;
 
+		var authorized_contact = ticket.requester().customField("authorized_contact");
+
 		if (ticket.isNew()) {
 			ticket_new = true;
 		}
@@ -612,6 +631,8 @@
 		if (ticket_source == "chat") {
 			is_chat_ticket = true;
 		}
+
+		
 
 		if (typeof this.appProperties.org_data.id != 'undefined') {
 			if (this.appProperties.ticket_id === this.ticket().id()){
@@ -642,6 +663,8 @@
 				organization: this.appProperties.school_info,	
 				// organization: Info.fix_org_data(this.appProperties.org_data),
 				school_urls: this.appProperties.school_info.organization_fields,
+
+				authorized_contact: authorized_contact,
 
 				chat_url: this.make_chat_link(),
 				user_id: this.currentUser().id(),
