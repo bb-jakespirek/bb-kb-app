@@ -54,7 +54,7 @@
 
 		'ticket.custom_field_22930600.changed' : 'kb_id_changed', // kb_id_changed
 		'ticket.custom_field_22790214.changed' : 'help_topic_changed', //help_topic_changed
-		'ticket.custom_field_22222564.changed' : 'field_changed', // kb_id_changed (About Field)
+		'ticket.custom_field_22222564.changed' : 'kb_id_changed', // kb_id_changed (About Field)
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
@@ -131,7 +131,7 @@
     	var ticket = this.ticket();
 
     	// KB Stuff
-    	var no_kb_necessary = KB.kb_needed_test(ticket);
+    	var no_kb_necessary = KB.no_kb_needed_test(ticket);
     	var has_kb_or_help = false;
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
@@ -307,7 +307,7 @@
 		var ticket = this.ticket();
 
 		// check to see if KB is attached.
-		this.update_article_status();
+		// this.update_article_status();
 
 		// See if globals data is stale
 		// if (this.appProperties.ticket_id == this.ticket().id()) {
@@ -445,7 +445,7 @@
     },
 
     kb_id_changed: function () {
-		this.update_article_status();
+		// this.update_article_status();
 
 		// var ticket = this.ticket();
 
@@ -459,13 +459,13 @@
 		// // if (kb_article_valid) {
 		// // 	this.change_zd_custom_field(22930600,"special_code");
 		// // }
-		// this.generate_app_view();
+		this.generate_app_view();
 		// console.log("kb id changed");
 	},
 
     help_topic_changed: function () {
-		this.update_article_status();
-
+		// this.update_article_status();
+		this.generate_app_view();
 		// var ticket = this.ticket();
 
 		// subject = ticket.subject();
@@ -496,7 +496,6 @@
 		this.appProperties.kb_info.kb_article_valid = kb_article_valid;
 		this.appProperties.kb_info.help_topic_valid = help_topic_valid;
 
-		var no_kb_necessary = false;
 		// subject = ticket.subject();
 		if (help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_and_help_topic_attached");
@@ -508,18 +507,19 @@
 			ticket.customField("custom_field_22953480", "help_topic_attached");
 		} 
 		else {
-			if(KB.kb_needed_test(ticket)) {
-				ticket.customField("custom_field_22953480", "needs_kb_article");
+			if(KB.no_kb_needed_test(ticket)) {
+				// TRUE = no KB is necessary
+				ticket.customField("custom_field_22953480", "no_kb_necessary");
 			}
 			else {
-				ticket.customField("custom_field_22953480", "no_kb_necessary");
-				no_kb_necessary = true;
+				// FALSE  = needs KB
+				ticket.customField("custom_field_22953480", "needs_kb_article");
 			}
 			
 		}
 		// this.update_app();
 		// console.log("article status updated");
-		this.generate_app_view();
+		// this.generate_app_view();
 	},
 
 
@@ -527,6 +527,7 @@
 		// subject = ticket.subject();
 		// this.update_app();
 		this.get_organization_info();
+		this.generate_app_view();
 		// console.log("something we want changed ");
 	},
 
@@ -632,6 +633,8 @@
 			is_chat_ticket = true;
 		}
 
+		// Set the KB article status field
+		this.update_article_status();
 		
 
 		if (typeof this.appProperties.org_data.id != 'undefined') {
@@ -647,7 +650,7 @@
 			// this.switchTo('test', {
 				ticket_new: ticket_new,
 				kb_links: KB.make_kb_links(ticket),
-				no_kb_necessary: KB.kb_needed_test(ticket),
+				no_kb_necessary: KB.no_kb_needed_test(ticket),
 				// help_topic_valid: KB.check_help_topic(ticket),
 				help_topic_valid: kb_info.help_topic_valid,
 				kb_article_valid: kb_info.kb_article_valid,

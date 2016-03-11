@@ -160,7 +160,7 @@ module.exports = {
 
 
 
-	kb_needed_test: function (ticket) {
+	no_kb_needed_test: function (ticket) {
 		// var ticket = this.ticket();
 		var kb_article_number = ticket.customField("custom_field_22930600");
 
@@ -212,11 +212,14 @@ module.exports = {
 
 		for (var i = no_kb_necessary_list.length - 1; i >= 0; i--) {
 			if (ticket_about == no_kb_necessary_list[i]) {
+				// console.log("no kb needed");
+				// If true, this ticket doesn't need a KB
 				no_kb_needed = true;
 				break;
 			}
 		}
 
+		// TRUE = no KB is necessary
 		return no_kb_needed;
 	},
 
