@@ -165,12 +165,21 @@ module.exports = {
 		var kb_article_number = ticket.customField("custom_field_22930600");
 
 		var ticket_about = ticket.customField("custom_field_22222564");
+		var ticket_source = ticket.customField("custom_field_27286948");
 		var no_kb_needed = false;
 
 		// console.log("ticket type");
 		// console.log(ticket.type());
 		// Incidents don't need KB's
 		if (ticket.type() == "incident") {
+			no_kb_needed = true;
+			// console.log("no kb needed");
+			return no_kb_needed;
+
+		}
+
+
+		if (ticket_source == "follow_up") {
 			no_kb_needed = true;
 			// console.log("no kb needed");
 			return no_kb_needed;
@@ -190,6 +199,7 @@ module.exports = {
 		"data__research_question",
 		"product_owner__bug",
 		"product_owner__enhancement",
+		"product_owner__eap",
 		"product_owner__tech_research",
 		"r_d__bug_review",
 		"r_d__technical_research",
@@ -200,12 +210,14 @@ module.exports = {
 		"success_coach__training",
 		"success_coach__transition",
 		"support__install_related",
+		"support__no_resolution_needed",
+		"support__no_customer_response",
 		"support_lead__enhancement",
 		"support_lead__r_d_bug_review",
 		"support_programmer__change_order",
 		"support_programmer__css",
 		"support_programmer__custom_page_bug",
-		"support_programmer__redirect"
+		"support_programmer__redirect",
 		];
 
 		
@@ -219,11 +231,47 @@ module.exports = {
 			}
 		}
 
+
+		if (this.internal_kb_recommended(ticket)) {
+			no_kb_needed = true;
+			return no_kb_needed;
+		}
+
 		// TRUE = no KB is necessary
 		return no_kb_needed;
 	},
 
+	internal_kb_recommended: function (ticket) {
 
+		var ticket_product = ticket.customField("custom_field_21744040");
+		var ticket_about = ticket.customField("custom_field_22222564");
+
+		var internal_kb_rec = false;
+
+		var products_int_kb_rec_list = [
+		"podium",
+		"support_systems"
+		];
+
+		var about_int_kb_rec_list = [
+		"support__customer_specific"
+		];
+
+		// _.each(invalid_article_numbers, function(element, index, list){ console.log(element + " = " + index ); });
+
+		var product_listed = _.contains(products_int_kb_rec_list, ticket_product);
+		var about_listed = _.contains(about_int_kb_rec_list, ticket_about);
+		// console.log(product_listed);
+
+		if (product_listed || about_listed) {
+			internal_kb_rec = true;
+
+		} else {
+			internal_kb_rec = false;
+		}
+
+		return internal_kb_rec;
+	},
 
 
 

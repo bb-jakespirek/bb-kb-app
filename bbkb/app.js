@@ -135,6 +135,7 @@
     	var has_kb_or_help = false;
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
+		var internal_kb_rec = KB.internal_kb_recommended(ticket);
 
 		if (kb_article_valid || help_topic_valid) {
 			has_kb_or_help = true;
@@ -191,7 +192,7 @@
 		// Solved
 		if (ticket.status() == "solved") {
 
-			if (no_kb_necessary !== true && has_kb_or_help === false) {
+			if (no_kb_necessary === false && has_kb_or_help === false && internal_kb_rec === false) {
     			this.growl_kb_needed(ticket);
     		}
 		}
@@ -227,7 +228,7 @@
 		var ticket_id = ticket.id();
 		// services.notify(msg.fmt(life), 'notice', life * 1000);
 		// notice, alert, error
-		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
+		services.notify(msg.fmt(ticket_id, ticket_id), 'error', life * 1000);
     },
 
     growl_hold_status_needed: function(ticket) {
@@ -651,6 +652,7 @@
 				ticket_new: ticket_new,
 				kb_links: KB.make_kb_links(ticket),
 				no_kb_necessary: KB.no_kb_needed_test(ticket),
+				internal_kb_rec: KB.internal_kb_recommended(ticket),
 				// help_topic_valid: KB.check_help_topic(ticket),
 				help_topic_valid: kb_info.help_topic_valid,
 				kb_article_valid: kb_info.kb_article_valid,
