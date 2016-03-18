@@ -32,12 +32,31 @@
 <div style="clear:both"></div>
 {{/if}}
 
+<!-- Test -->
+<!-- <div target="_blank" id="pop_test" class="alert alert-warning" data-toggle="popover" data-placement="top"  title="" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: sdfsdfs">Test</div> -->
+
+<div class="kb_popover"><div id="kb_success_popover" data-toggle="popover" data-placement="top" title="" data-html="true" data-content="{{kb_quotes.kb_success.text}}
+<div class='kb_success_pic'><img src='{{kb_quotes.kb_success.pic}}'></div>"></div></div>
+
+{{#if show_kb_popup}}
+<script type="text/javascript">
+	$('#kb_success_popover').popover('hide');
+
+	window.clearTimeout(timeoutHandle);
+
+	$('#kb_success_popover').popover('show');
+	timeoutHandle = window.setTimeout(function() { $('#kb_success_popover').popover('hide'); }, 6000);
+	
+</script>
+{{/if}}
+
+
 
 {{#if no_kb_necessary}}
 	{{#if internal_kb_rec}}
 		<div class="alert alert-warning">
 			<ul class="fa-ul">
-				<li>
+				<li >
 					<i class="fa fa-life-ring fa-li fa-lg"></i>An internal KB article about this would be super helpful for your teammates.<br>
 				</li>
 			</ul>
@@ -59,7 +78,7 @@
 
 
 {{#if kb_article_valid}}
-
+	
 		<div class="alert alert-success">
 			<ul class="fa-ul">
 				<li>
@@ -74,7 +93,7 @@
 	{{#unless help_topic_valid}}
 		{{#unless no_kb_necessary}}
 		{{#unless internal_kb_rec}}
-		<div class="alert alert-danger">
+		<div class="alert alert-danger" >
 			<ul class="fa-ul">
 				<li>
 					<i class="fa fa-exclamation-triangle fa-li fa-lg"></i> Don't forget the KB Article or Help Topic
@@ -159,7 +178,7 @@
   </div>
   <div class="modal-body">
 	<ul>
-  		<li><b>CR:</b> Used for Incidents</li>
+  		<li><b>CR:</b> Used for tickets sent to PD / R&D</li>
 		<li><b>Third-Party:</b> When you’re waiting to hear back from a third-party (outside consultant, vendor, etc…)
 		</li>
 		<li><b>Internal:</b> When you’re waiting for a response from someone internal</li>
@@ -255,9 +274,29 @@
 
 </div>
 
-<!-- <div class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <h4>Oh snap! You got an error!</h4> <p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p> <p> <button type="button" class="btn btn-danger">Take this action</button> <button type="button" class="btn btn-default">Or do this</button> </p> </div> -->
 
 
+
+<!-- <br>
+{{kb_quotes.kb_success.text}}
+<img src="{{kb_quotes.kb_success.pic}}">
+<br>
+
+<button type="button" target="_blank" id="pop_test_toggle" class="label label-light">Toggle Popover</button>
+<button type="button" target="_blank" id="test_btn" class="label label-light">Hide this</button>
+ -->
+<!-- <div id="test_alert" class="alert alert-danger alert-dismissible fade in" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> <h4>Oh snap! You got an error!</h4> <p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p> <p> <button type="button" class="btn btn-danger">Take this action</button> <button type="button" class="btn btn-default">Or do this</button> </p> </div>
+
+<script type="text/javascript">console.log("loaded");</script>
+<div id="my_test_alert" class="alert alert-success">
+	<ul class="fa-ul">
+		<li>
+			<i class="fa fa-check-circle fa-li fa-lg"></i> <b>Help Topic attached</b> &nbsp;
+			<a class="label label-success" href='{{help_topic}}' target='_blank'>Open Help Topic</a>
+		</li>
+	</ul>
+</div>
+ -->
 <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
   <span aria-hidden="true">&times;</span>
 </button> -->

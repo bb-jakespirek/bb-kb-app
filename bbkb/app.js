@@ -9,6 +9,7 @@
 	var KB =  require('kb.js');
 	var Info =  require('info.js');
 
+	
 
 	return {
 
@@ -78,13 +79,7 @@
 				backdrop: true,
 				keyboard: true
 			});
-			// this.$("#phone_input").select();
 
-			   //    this.switchTo('modal', {
-      //   header: this.I18n.t('modal_header'),
-      //   body: this.I18n.t('modal_body')
-      // });
-			//this.$('div.more').toggle(); 
 		},
 
 		'click #chat_transcript_btn': function(event) { 
@@ -114,6 +109,21 @@
 
 			this.$("#phone_input").select();
 
+		},
+
+		// 'click .submit': function(event) {
+		// 	event.preventDefault();
+		// 	this.$(event.target).hide();
+		// },
+
+		'click #pop_test_toggle': function(event) { 
+			this.$('#kb_success_popover').popover('show');
+			var app = this;
+			// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);
+		},
+
+		'click #test_btn': function(event) { 
+			this.test_jquery();
 		},
 
 	    
@@ -249,16 +259,25 @@
 
     },    
 
+
+
     initialize: function(data) { // function called when we load
 		// console.log("initialize");
 
 		// if (data.firstLoad) {
-		//   // this.switchTo('main');
+		// //   // this.switchTo('main');
 		//   console.log("data.firstLoad");
-		//   // this.generate_app_view();
+		  
+		// //   // this.generate_app_view();
 		// }
 		this.resetGlobals();
 
+		// _.defer(function(){ console.log("blah"); });
+		// this.$("#test_alert").fadeTo(2000, 500).slideUp(500, function(){
+		// 	// this.$("#test_alert").alert('close');
+		// 	console.log("blah");
+		// 	this.$("#test_alert").remove();
+		// });
 
 		// this.growl_kb_needed();
 
@@ -487,28 +506,42 @@
 		// console.log("help topic changed");
 	},
 
-	
+	test_jquery: function () {
+		var $test = this.$('#pop_test_toggle');
+		$test.hide();
+		console.log($test.is(':visible'));
+		this.$('#pop_test').popover('show');
+	},
+
+
 	update_article_status: function () {
 		var ticket = this.ticket();
 
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+		var no_kb_necessary = KB.no_kb_needed_test(ticket);
 
 		this.appProperties.kb_info.kb_article_valid = kb_article_valid;
 		this.appProperties.kb_info.help_topic_valid = help_topic_valid;
+		// this.appProperties.kb_info.show_kb_popup = false;
+		var kb_status_before = ticket.customField("custom_field_22953480");
+		var kb_status_after;
+		this.appProperties.kb_info.show_kb_popup = false;
+		console.log(kb_status_before + " kb before");
 
-		// subject = ticket.subject();
+		// subject = ticket.subject();	
 		if (help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_and_help_topic_attached");
 		} 
 		else if (!help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_article_attached");
+			kb_status_after = ticket.customField("custom_field_22953480");
 		} 
 		else if (help_topic_valid && !kb_article_valid) {
 			ticket.customField("custom_field_22953480", "help_topic_attached");
 		} 
 		else {
-			if(KB.no_kb_needed_test(ticket)) {
+			if(no_kb_necessary) {
 				// TRUE = no KB is necessary
 				ticket.customField("custom_field_22953480", "no_kb_necessary");
 			}
@@ -518,6 +551,28 @@
 			}
 			
 		}
+		// console.log("update article status");
+
+
+		if (kb_status_before == "needs_kb_article" && kb_status_after != "needs_kb_article") {
+			console.log("it used to be needs_kb_article");
+			if (kb_article_valid || help_topic_valid)  {
+				console.log("now it's valid, show popup");
+				this.appProperties.kb_info.show_kb_popup = true;
+			// this.test_jquery();
+				// var $test = this.$('#pop_test_toggle');
+				// $test.hide();
+				// console.log($test.is(':visible'));
+				// $test.hide();
+				// this.$('#pop_test_toggle').hide();
+				// this.$('#pop_test').popover('show');
+				// var app = this;
+				// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);			
+			}
+
+		}
+
+
 		// this.update_app();
 		// console.log("article status updated");
 		// this.generate_app_view();
@@ -637,6 +692,22 @@
 		// Set the KB article status field
 		this.update_article_status();
 		
+		// if (kb_info.kb_status_before == "needs_kb_article") {
+		// 	console.log("it used to be needs_kb_article");
+		// 	if (kb_info.kb_article_valid || kb_info.help_topic_valid) {
+		// 	console.log("now it's valid");
+		// 	this.test_jquery();
+		// 		// var $test = this.$('#pop_test_toggle');
+		// 		// $test.hide();
+		// 		// console.log($test.is(':visible'));
+		// 		// $test.hide();
+		// 		// this.$('#pop_test_toggle').hide();
+		// 		// this.$('#pop_test').popover('show');
+		// 		// var app = this;
+		// 		// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);			
+		// 	}
+
+		// }
 
 		if (typeof this.appProperties.org_data.id != 'undefined') {
 			if (this.appProperties.ticket_id === this.ticket().id()){
@@ -646,7 +717,7 @@
 			}
 			// console.log("this.appProperties.org_data.id");
 			// console.log(this.appProperties.org_data.id);
-
+			// this.$('#pop_test').popover('show');
 			this.switchTo('app', {
 			// this.switchTo('test', {
 				ticket_new: ticket_new,
@@ -656,12 +727,13 @@
 				// help_topic_valid: KB.check_help_topic(ticket),
 				help_topic_valid: kb_info.help_topic_valid,
 				kb_article_valid: kb_info.kb_article_valid,
+				show_kb_popup: kb_info.show_kb_popup,
 				is_chat_ticket: is_chat_ticket,
 				// kb_article_valid: KB.check_kb_id(ticket.customField("custom_field_22930600")),
 
 				kb_article_number: ticket.customField("custom_field_22930600"),
 				help_topic: ticket.customField("custom_field_22790214"),
-				// kb_quotes: this.kb_quotes(),
+				kb_quotes: this.kb_quotes(),
 				// chat_base_URL: "https://k12supportform.myschoolapp.com/chat/",
 				// chat_base_URL: "http://localhost:8888/k12-support-forms/chat/",
 
@@ -723,8 +795,55 @@
 
 	random_kb_success_quote: function () {
 
-		// var quote_array = [];
+		var quote_array = [];
+		var quote = {}; 
 		
+		quote_array.push({
+			text:"You're swell!", 
+			pic:this.assetURL("emoticons/badpokerface.png")});
+
+		quote_array.push({
+			text:"Awww, thanks for adding that!", 
+			pic:this.assetURL("emoticons/awthanks.png")});
+
+		quote_array.push({
+			text:"You make Jen smile every time you add a KB article.", 
+			pic:this.assetURL("emoticons/content.png")});
+
+		quote_array.push({
+			text:"I don't always add a KB, but when I do, I'm about 10x cooler.", 
+			pic:this.assetURL("emoticons/dosequis.png")});
+
+		quote_array.push({
+			text:"You just made Steve proud.", 
+			pic:this.assetURL("emoticons/jobs.png")});
+
+		quote_array.push({
+			text:"A mi me gusta cuando añadas un KB.", 
+			pic:this.assetURL("emoticons/megusta.png")});
+
+		quote_array.push({
+			text:"You're like a KB ninja!", 
+			pic:this.assetURL("emoticons/ninja.png")});
+
+		quote_array.push({
+			text:"#boom (drop the mic)", 
+			pic:this.assetURL("emoticons/boom.gif")});
+
+		quote_array.push({
+			text:"I get a little emotional when someone adds a KB.", 
+			pic:this.assetURL("emoticons/yey.png")});
+
+		quote_array.push({
+			text:"Only cool people add a KB. #suave", 
+			pic:this.assetURL("emoticons/caruso.png")});
+
+
+		console.log(quote_array);
+// var person = {firstName:"John", lastName:"Doe", age:46};
+// var person2 = new person;
+
+		// quote_array[0] = ["txt"];
 		// var quote = {};
 		// quote.txt = "You're swell!";
 		// quote.pic = this.assetURL("emoticons/badpokerface.png");
@@ -740,9 +859,10 @@
 		// quote.pic = this.assetURL("emoticons/philosoraptor.png");
 		// quote_array.push(quote);	
 
-		// var random_number = Math.floor(Math.random() * quote_array.length);
+		var random_number = Math.floor(Math.random() * quote_array.length);
 
-		// return quote_array[random_number];
+		return quote_array[random_number];
+		// return quote_array[0];
 
 	},
 
