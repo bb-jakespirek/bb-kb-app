@@ -126,11 +126,12 @@
     Helpful links <span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
-    <li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Internal KB FAQ</a></li>
+    <li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Top K-12 KB Articles</a></li>
 	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
     <li role="separator" class="divider"></li>
     <li><a href="https://community.blackbaud.com/blogs/46" target="_blank">Support &amp; Product News Blog</a></li>
     <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
+    <li><a href="http://goo.gl/forms/ZJZBFTNgNh" target="_blank">Update Product Documentation Form</a></li>
   </ul>
 </div>
 
@@ -178,7 +179,7 @@
   </div>
   <div class="modal-body">
 	<ul>
-  		<li><b>CR:</b> Used for tickets sent to PD / R&D</li>
+  		<li><b>Incident:</b> Used for tickets linked to a bug PD is working on</li>
 		<li><b>Third-Party:</b> When you’re waiting to hear back from a third-party (outside consultant, vendor, etc…)
 		</li>
 		<li><b>Internal:</b> When you’re waiting for a response from someone internal</li>

@@ -838,8 +838,33 @@
 			text:"Only cool people add a KB. #suave", 
 			pic:this.assetURL("emoticons/caruso.png")});
 
+		quote_array.push({
+			text:"Way to go!", 
+			pic:this.assetURL("emoticons/thumbs_up.png")});
+
+		quote_array.push({
+			text:"This article is Wookie approved.", 
+			pic:this.assetURL("emoticons/chewy.png")});
+
+		quote_array.push({
+			text:"You have just wowed our customers!", 
+			pic:this.assetURL("emoticons/boom.gif")});
+
+		quote_array.push({
+			text:"Cheers!", 
+			pic:this.assetURL("emoticons/beer.png")});
+
+		quote_array.push({
+			text:"You have all the best words.", 
+			pic:this.assetURL("emoticons/trump.png")});
+
 
 		console.log(quote_array);
+		var random_number = Math.floor(Math.random() * quote_array.length);
+
+		return quote_array[random_number];
+		// return quote_array[14];
+		
 // var person = {firstName:"John", lastName:"Doe", age:46};
 // var person2 = new person;
 
@@ -859,10 +884,7 @@
 		// quote.pic = this.assetURL("emoticons/philosoraptor.png");
 		// quote_array.push(quote);	
 
-		var random_number = Math.floor(Math.random() * quote_array.length);
 
-		return quote_array[random_number];
-		// return quote_array[0];
 
 	},
 
