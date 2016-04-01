@@ -800,63 +800,63 @@
 		
 		quote_array.push({
 			text:"You're swell!", 
-			pic:this.assetURL("emoticons/badpokerface.png")});
+			pic:this.assetURL("e-badpokerface.png")});
 
 		quote_array.push({
 			text:"Awww, thanks for adding that!", 
-			pic:this.assetURL("emoticons/awthanks.png")});
+			pic:this.assetURL("e-awthanks.png")});
 
 		quote_array.push({
 			text:"You make Jen smile every time you add a KB article.", 
-			pic:this.assetURL("emoticons/content.png")});
+			pic:this.assetURL("e-content.png")});
 
 		quote_array.push({
 			text:"I don't always add a KB, but when I do, I'm about 10x cooler.", 
-			pic:this.assetURL("emoticons/dosequis.png")});
+			pic:this.assetURL("e-dosequis.png")});
 
 		quote_array.push({
 			text:"You just made Steve proud.", 
-			pic:this.assetURL("emoticons/jobs.png")});
+			pic:this.assetURL("e-jobs.png")});
 
 		quote_array.push({
 			text:"A mi me gusta cuando añadas un KB.", 
-			pic:this.assetURL("emoticons/megusta.png")});
+			pic:this.assetURL("e-megusta.png")});
 
 		quote_array.push({
 			text:"You're like a KB ninja!", 
-			pic:this.assetURL("emoticons/ninja.png")});
+			pic:this.assetURL("e-ninja.png")});
 
 		quote_array.push({
 			text:"#boom (drop the mic)", 
-			pic:this.assetURL("emoticons/boom.gif")});
+			pic:this.assetURL("e-boom.gif")});
 
 		quote_array.push({
 			text:"I get a little emotional when someone adds a KB.", 
-			pic:this.assetURL("emoticons/yey.png")});
+			pic:this.assetURL("e-yey.png")});
 
 		quote_array.push({
 			text:"Only cool people add a KB. #suave", 
-			pic:this.assetURL("emoticons/caruso.png")});
+			pic:this.assetURL("e-caruso.png")});
 
 		quote_array.push({
 			text:"Way to go!", 
-			pic:this.assetURL("emoticons/thumbs_up.png")});
+			pic:this.assetURL("e-thumbs_up.png")});
 
 		quote_array.push({
 			text:"This article is Wookie approved.", 
-			pic:this.assetURL("emoticons/chewy.png")});
+			pic:this.assetURL("e-chewy.png")});
 
 		quote_array.push({
 			text:"You have just wowed our customers!", 
-			pic:this.assetURL("emoticons/boom.gif")});
+			pic:this.assetURL("e-boom.gif")});
 
 		quote_array.push({
 			text:"Cheers!", 
-			pic:this.assetURL("emoticons/beer.png")});
+			pic:this.assetURL("e-beer.png")});
 
 		quote_array.push({
 			text:"You have all the best words.", 
-			pic:this.assetURL("emoticons/trump.png")});
+			pic:this.assetURL("e-trump.png")});
 
 
 		console.log(quote_array);
