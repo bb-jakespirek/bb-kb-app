@@ -222,7 +222,7 @@
     	var type = ticket.type();
     	var about = ticket.customField("custom_field_22222564");
 
-    	console.log(ticket.type());
+    	// console.log(ticket.type());
     	if (type == "incident") {
     		// Change the hold status
     		ticket.customField("custom_field_30584448", "hold_incident");
@@ -534,7 +534,7 @@
 	test_jquery: function () {
 		var $test = this.$('#pop_test_toggle');
 		$test.hide();
-		console.log($test.is(':visible'));
+		// console.log($test.is(':visible'));
 		this.$('#pop_test').popover('show');
 	},
 
@@ -552,7 +552,7 @@
 		var kb_status_before = ticket.customField("custom_field_22953480");
 		var kb_status_after;
 		this.appProperties.kb_info.show_kb_popup = false;
-		console.log(kb_status_before + " kb before");
+		// console.log(kb_status_before + " kb before");
 
 		// subject = ticket.subject();	
 		if (help_topic_valid && kb_article_valid) {
@@ -580,9 +580,9 @@
 
 
 		if (kb_status_before == "needs_kb_article" && kb_status_after != "needs_kb_article") {
-			console.log("it used to be needs_kb_article");
+			// console.log("it used to be needs_kb_article");
 			if (kb_article_valid || help_topic_valid)  {
-				console.log("now it's valid, show popup");
+				// console.log("now it's valid, show popup");
 				this.appProperties.kb_info.show_kb_popup = true;
 			// this.test_jquery();
 				// var $test = this.$('#pop_test_toggle');
@@ -884,7 +884,7 @@
 			pic:this.assetURL("e-trump.png")});
 
 
-		console.log(quote_array);
+		// console.log(quote_array);
 		var random_number = Math.floor(Math.random() * quote_array.length);
 
 		return quote_array[random_number];
