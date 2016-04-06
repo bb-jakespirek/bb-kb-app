@@ -50,12 +50,14 @@
 
 
 		'ticket.subject.changed' : 'subject_changed',
+		'ticket.type.changed' : 'type_changed',
+
 		'ticket.requester.id.changed' : 'requester_changed',
 	    'ticket.requester.email.changed': 'requester_changed',
 
 		'ticket.custom_field_22930600.changed' : 'kb_id_changed', // kb_id_changed
 		'ticket.custom_field_22790214.changed' : 'help_topic_changed', //help_topic_changed
-		'ticket.custom_field_22222564.changed' : 'kb_id_changed', // kb_id_changed (About Field)
+		'ticket.custom_field_22222564.changed' : 'about_changed', // (About Field)
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
@@ -208,6 +210,29 @@
 		}
 
 
+    },
+
+    about_changed: function () {
+    	this.type_changed();
+    	this.generate_app_view();
+    },
+
+    type_changed: function () {
+    	var ticket = this.ticket();
+    	var type = ticket.type();
+    	var about = ticket.customField("custom_field_22222564");
+
+    	console.log(ticket.type());
+    	if (type == "incident") {
+    		// Change the hold status
+    		ticket.customField("custom_field_30584448", "hold_incident");
+    	} 
+    	else if (type == "problem" && about == "product_owner__bug") {
+    		ticket.customField("custom_field_30584448", "hold_bug");
+    	}
+    	else if (type == "problem" && about != "product_owner__bug") {
+    		ticket.customField("custom_field_30584448", "");
+    	}
     },
 
     check_user_groups: function(group_array) {
