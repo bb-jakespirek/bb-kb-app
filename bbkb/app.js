@@ -57,7 +57,7 @@
 
 		'ticket.custom_field_22930600.changed' : 'kb_id_changed', // kb_id_changed
 		'ticket.custom_field_22790214.changed' : 'help_topic_changed', //help_topic_changed
-		'ticket.custom_field_22222564.changed' : 'about_changed', // (About Field)
+		'ticket.custom_field_22222564.changed' : 'about_changed', // About Field
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 
@@ -141,6 +141,8 @@
 
     ticketSaveHandler: function() {
     	var ticket = this.ticket();
+    	var type = ticket.type();
+    	var about = ticket.customField("custom_field_22222564");
 
     	// KB Stuff
     	var no_kb_necessary = KB.no_kb_needed_test(ticket);
@@ -198,7 +200,12 @@
     		}
 		} else {
 			// Remove Hold Status
-			ticket.customField("custom_field_30584448", "");
+			if ( type == "problem" && about == "product_owner__bug" || type == "incident") {
+				// Don't remove the status if a problem ticket or it's an incident.
+			} else {
+				ticket.customField("custom_field_30584448", "");
+			}
+			
 		}
 
 		// Solved
