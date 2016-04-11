@@ -602,3 +602,86 @@ Not being used:
     this.update_article_status();
     this.update_app();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      serializeCustomFields: function() {
+      var fields = [];
+
+      this.forEachCustomField(function(field){
+
+        if (field.value !== ""){
+          var test = ""+field.value+"";
+          var isDate = "";
+          
+          if (field.value !== undefined){
+              isDate = test.match(this.dateRegExp);
+          }
+          
+          var value = "";
+          
+          if (isDate !== "" && isDate !== null) {
+              var date = new Date(field.value);
+              var year = date.getFullYear();
+              var month = (1 + date.getMonth()).toString();
+              month = month.length > 1 ? month : '0' + month;
+              var day = date.getDate().toString();
+              day = day.length > 1 ? day : '0' + day;
+              value = year+"-"+month+"-"+day;
+          } else {
+              value = field.value;
+          }
+
+          if (field.value !== null) { // Only save field ID & value is there is a value present
+            fields.push({
+              id: field.id,
+              value: value
+            });
+          }
+        }
+      });
+
+      return fields;
+    },
+    forEachCustomField: function(block){
+      _.each(this._customFields(), function(field){
+        var id      = field.match(this.customFieldRegExp)[1],
+            value   = this.normalizeValue(this.ticket().customField(field));
+        block.call(this, {
+          label: field,
+          id: id,
+          value: value
+        });
+      }, this);
+    },
+    normalizeValue: function(value){
+      return {
+        "yes": true,
+        "no": false
+      }[value] || value;
+    },
+    _customFields: _.memoize(function(){
+      return _.filter(_.keys(this.containerContext().ticket), function(field){
+        return field.match(this.customFieldRegExp);
+      }, this);
+    }

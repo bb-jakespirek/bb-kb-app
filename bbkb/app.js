@@ -66,6 +66,8 @@
 
 		'ticket.save': 'ticketSaveHandler',
 
+		'createTicketRequest.always': 'createTicketRequestDone',
+
 
 		'click #chat_button': function(event) { 
 
@@ -113,6 +115,17 @@
 
 		},
 
+	    'click #create_bug_btn': function(event) { 
+
+			// this.$("#phone_input").select();
+			console.log("create a new bug");
+			var ticket = this.ticket();
+			var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}];
+			this.ajax('createTicketRequest', ticket, custom_fields);
+			// this.ajax('createTicketRequest', ticket);
+			// services.notify('Created copy of this ticket', 'notice', 1500);
+		},
+
 		// 'click .submit': function(event) {
 		// 	event.preventDefault();
 		// 	this.$(event.target).hide();
@@ -133,6 +146,15 @@
 
     requests: require('requests.js'),
 
+
+    createTicketRequestDone: function(data){
+		var ticket_id = data.ticket.id;
+		console.log('Created Ticket ID: ' + data.ticket.id);
+		var msg  = "Created new ticket <a href='#/tickets/%@'>%@</a>.";
+
+		services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
+
+    },
 
     'ticket.save': function() {
 	    // do something
@@ -155,24 +177,24 @@
 			has_kb_or_help = true;
 		}
 
-// this.$('#test_popover').popover({
-//     placement : 'right',
-//     html : true,
-//     delay: { 
-//        show: "0", 
-//        hide: "10"
-//     }
-// });		
-// 			// this.$('#test_popover').popover('show');
+		// this.$('#test_popover').popover({
+		//     placement : 'right',
+		//     html : true,
+		//     delay: { 
+		//        show: "0", 
+		//        hide: "10"
+		//     }
+		// });		
+		// 			// this.$('#test_popover').popover('show');
 
-// this.$('#test_popover').on('show.bs.popover', function() {
-// 	// console.log("shown");
-//     setTimeout(function() {
-//         this.$('#test_popover').popover('hide');
-//     }, 1000);
-// });
-    				// this.$('#test_popover').popover('hide');
-		// console.log(hold_status);
+		// this.$('#test_popover').on('show.bs.popover', function() {
+		// 	// console.log("shown");
+		//     setTimeout(function() {
+		//         this.$('#test_popover').popover('hide');
+		//     }, 1000);
+		// });
+		    				// this.$('#test_popover').popover('hide');
+				// console.log(hold_status);
 
 
 		// Hold

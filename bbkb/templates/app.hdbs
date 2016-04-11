@@ -147,6 +147,8 @@
     <li><a href="https://community.blackbaud.com/blogs/46" target="_blank">Support &amp; Product News Blog</a></li>
     <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
     <li><a href="http://goo.gl/forms/ZJZBFTNgNh" target="_blank">Update Product Documentation Form</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a id="create_bug_btn" target="_blank">Create bug (PSLs)</a></li>
   </ul>
 </div>
 
