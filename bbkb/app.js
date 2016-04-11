@@ -124,9 +124,9 @@
 			// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);
 		},
 
-		'click #test_btn': function(event) { 
-			this.test_jquery();
-		},
+		// 'click #test_btn': function(event) { 
+		// 	this.test_jquery();
+		// },
 
 	    
 	},

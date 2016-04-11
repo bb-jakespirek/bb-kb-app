@@ -35,8 +35,23 @@
 <!-- Test -->
 <!-- <div target="_blank" id="pop_test" class="alert alert-warning" data-toggle="popover" data-placement="top"  title="" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: sdfsdfs">Test</div> -->
 
-<div class="kb_popover"><div id="kb_success_popover" data-toggle="popover" data-placement="top" title="" data-html="true" data-content="{{kb_quotes.kb_success.text}}
-<div class='kb_success_pic'><img src='{{kb_quotes.kb_success.pic}}'></div>"></div></div>
+<div class="kb_popover"><div id="kb_success_popover" data-toggle="popover" data-placement="top" data-html="true" data-content="<div>{{kb_quotes.kb_success.text}}</div>
+<div class='kb_success_pic' style='  width: 50px; 
+  height: 50px; 
+  background: #D2D2D2;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  border: 2px solid #828282;
+  padding: 0px;'><img src='{{kb_quotes.kb_success.pic}}' style='  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;'></div>"></div></div>
 
 {{#if show_kb_popup}}
 <script type="text/javascript">
