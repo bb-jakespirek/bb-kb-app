@@ -272,7 +272,7 @@
 
 	{{#if school_urls.prog_url}}<a href="{{school_urls.prog_url}}" target="_blank" class="label label-info">PROG App</a>{{/if}}
 
-	{{#if notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="School Notes" data-content="{{notes}}" data-trigger="hover">Notes</button>{{/if}}
+	{{#if organization.notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="School Notes" data-content="{{organization.notes}}" data-trigger="hover">Notes</button>{{/if}}
 	
 	{{#if user_notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="User Notes" data-content="{{user_notes}}" data-trigger="hover">User Notes</button>{{/if}}
 	

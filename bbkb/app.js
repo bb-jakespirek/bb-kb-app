@@ -774,6 +774,7 @@
 				school_urls: this.appProperties.school_info.organization_fields,
 
 				authorized_contact: authorized_contact,
+				user_notes: ticket.requester().notes(),
 
 				chat_url: this.make_chat_link(),
 				user_id: this.currentUser().id(),
