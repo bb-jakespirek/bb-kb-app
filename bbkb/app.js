@@ -350,7 +350,18 @@
 		// chat dispatched
 		this.ticketFields('custom_field_29482057').disable();
 		
-		// test
+
+
+		// Disable PD Only fields for all groups except PSLs and PMs
+		var group_array = ["Product Support Leads", "Product Managers"];
+		if (!this.check_user_groups(group_array)) {
+			// Bug Review
+			this.ticketFields('custom_field_30520367').disable();
+			// Bug Priority
+			this.ticketFields('custom_field_30300358').disable();
+			// PD SLA
+			this.ticketFields('custom_field_31407407').disable();
+		}
 
 
 
