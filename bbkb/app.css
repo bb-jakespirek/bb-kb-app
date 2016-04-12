@@ -245,6 +245,12 @@ button.btn-kb.full {
 .btn-kb.internal:hover {
   background-color: #E35FFF;
 }
+.btn-kb.bug {
+  background-color: #F89406;
+}
+.btn-kb.bug:hover {
+  background-color: #FFAF40;
+}
 .btn-kb .fa {
   margin-right: 5px;
 }
@@ -279,7 +285,7 @@ button.btn-kb.full {
     font-size: 12px;
 }
 
-    
+
 
 .school-info {
   padding: 2px 0 0;
@@ -371,8 +377,8 @@ textarea#chat_transcript {
   bottom: 0;
 }
 .kb_success_pic {
-  width: 50px; 
-  height: 50px; 
+  width: 50px;
+  height: 50px;
   background: #D2D2D2;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
@@ -385,11 +391,44 @@ textarea#chat_transcript {
 }
 
 .kb_success_pic {
-    width: 50px !important; 
-  height: 50px !important; 
+    width: 50px !important;
+  height: 50px !important;
   background: #D2D2D2 !important;
 }
 
 .popover {
   background-color: red;
 }
+
+
+
+/* Sparkle */
+
+$buttonBackground: #2c3e50;
+$buttonColor: rgba(255,255,255,1);
+
+.sparkley {
+
+  background: lighten( $buttonBackground , 10% );
+  color: $buttonColor;
+  border: none;
+
+  padding: 16px 36px;
+  font-weight: normal;
+
+  border-radius: 3px;
+  transition: all 0.25s ease;
+
+  box-shadow: 0 38px 32px -23px black;
+  margin: 0 1em 1em;
+
+  &:hover {
+
+    background: $buttonBackground;
+    color: transparentize( $buttonColor,0.8 );
+
+  }
+
+}
+
+/* END Sparkle */

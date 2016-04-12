@@ -9,7 +9,7 @@
 	var KB =  require('kb.js');
 	var Info =  require('info.js');
 
-	
+
 
 	return {
 
@@ -43,8 +43,8 @@
 		// 'app.activated': function() {
 		// 	this.activate_app();
 		// },
-		'app.activated': 'initialize', 
-		
+		'app.activated': 'initialize',
+
 		// 'fetchBookmarks.done': 'fetchBookmarksDone',
 		'fetchOrganization.done': 'fetchOrganizationDone',
 
@@ -69,13 +69,13 @@
 		'createTicketRequest.always': 'createTicketRequestDone',
 
 
-		'click #chat_button': function(event) { 
+		'click #chat_button': function(event) {
 
 			//this.disableSave();
 
 		},
-		'click #phone_btn': function(event) { 
-			//event.preventDefault(); 
+		'click #phone_btn': function(event) {
+			//event.preventDefault();
 			// console.log("phone clicked");
 			// alert(organization.ae_info.ae_phone);
 			// alert("phone number","Test");
@@ -86,10 +86,10 @@
 
 		},
 
-		'click #chat_transcript_btn': function(event) { 
+		'click #chat_transcript_btn': function(event) {
 			// var ticket = this.ticket();
 	    	// var chat_transcript = ticket.customField("custom_field_30844127");
-			//event.preventDefault(); 
+			//event.preventDefault();
 			// console.log("phone clicked");
 			// alert(organization.ae_info.ae_phone);
 			// alert("phone number","Test");
@@ -106,16 +106,16 @@
       //   header: this.I18n.t('modal_header'),
       //   body: this.I18n.t('modal_body')
       // });
-			//this.$('div.more').toggle(); 
-		},		
+			//this.$('div.more').toggle();
+		},
 
-	    'click #phone_input': function(event) { 
+	    'click #phone_input': function(event) {
 
 			this.$("#phone_input").select();
 
 		},
 
-	    'click #create_bug_btn': function(event) { 
+	    'click #create_bug_btn': function(event) {
 
 			// this.$("#phone_input").select();
 			console.log("create a new bug");
@@ -131,17 +131,17 @@
 		// 	this.$(event.target).hide();
 		// },
 
-		'click #pop_test_toggle': function(event) { 
+		'click #pop_test_toggle': function(event) {
 			this.$('#kb_success_popover').popover('show');
 			var app = this;
 			// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);
 		},
 
-		// 'click #test_btn': function(event) { 
+		// 'click #test_btn': function(event) {
 		// 	this.test_jquery();
 		// },
 
-	    
+
 	},
 
     requests: require('requests.js'),
@@ -150,7 +150,7 @@
     createTicketRequestDone: function(data){
 		var ticket_id = data.ticket.id;
 		console.log('Created Ticket ID: ' + data.ticket.id);
-		var msg  = "Created new ticket <a href='#/tickets/%@'>%@</a>.";
+		var msg  = "Created new ticket #<a href='#/tickets/%@'>%@</a>.";
 
 		services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
 
@@ -169,22 +169,22 @@
     	// KB Stuff
     	var no_kb_necessary = KB.no_kb_needed_test(ticket);
     	var has_kb_or_help = false;
-		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
-		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
-		var internal_kb_rec = KB.internal_kb_recommended(ticket);
+			var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+			var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
+			var internal_kb_rec = KB.internal_kb_recommended(ticket);
 
-		if (kb_article_valid || help_topic_valid) {
-			has_kb_or_help = true;
-		}
+			if (kb_article_valid || help_topic_valid) {
+				has_kb_or_help = true;
+			}
 
 		// this.$('#test_popover').popover({
 		//     placement : 'right',
 		//     html : true,
-		//     delay: { 
-		//        show: "0", 
+		//     delay: {
+		//        show: "0",
 		//        hide: "10"
 		//     }
-		// });		
+		// });
 		// 			// this.$('#test_popover').popover('show');
 
 		// this.$('#test_popover').on('show.bs.popover', function() {
@@ -210,7 +210,7 @@
     			var group_array = ["Support", "Product Support Leads", "Support Relationship Manager"];
     			if (this.check_user_groups(group_array)) {
 
-    			
+
 
 	    			this.$('#hold_modal').modal({
 						backdrop: true,
@@ -227,7 +227,7 @@
 			} else {
 				ticket.customField("custom_field_30584448", "");
 			}
-			
+
 		}
 
 		// Solved
@@ -255,7 +255,7 @@
     	if (type == "incident") {
     		// Change the hold status
     		ticket.customField("custom_field_30584448", "hold_incident");
-    	} 
+    	}
     	else if (type == "problem" && about == "product_owner__bug") {
     		ticket.customField("custom_field_30584448", "hold_bug");
     	}
@@ -271,16 +271,16 @@
 		var in_group;
 
 		// Add each group name to an array called group_names
-		_.each(current_user_groups, function(element, index, list){ 
-			group_names.push(element.name()); 
+		_.each(current_user_groups, function(element, index, list){
+			group_names.push(element.name());
 		});
 
-		_.each(group_array, function(element, index, list){ 
+		_.each(group_array, function(element, index, list){
 			if (_.contains(group_names, element)) {
 				in_group = true;
-			} 
+			}
 		});
-		return in_group;		
+		return in_group;
 	},
 
     growl_kb_needed: function(ticket) {
@@ -311,7 +311,7 @@
 		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
 
 
-    },    
+    },
 
 
 
@@ -321,7 +321,7 @@
 		// if (data.firstLoad) {
 		// //   // this.switchTo('main');
 		//   console.log("data.firstLoad");
-		  
+
 		// //   // this.generate_app_view();
 		// }
 		this.resetGlobals();
@@ -335,12 +335,12 @@
 
 		// this.growl_kb_needed();
 
-		// Info.test_func(this); 
+		// Info.test_func(this);
 		// pass the app as an argument to info.js
 		// info.js looks like this:
 		// test_func: function (app) {
 		// 	console.log(app.ticket().id());
-		// },		
+		// },
 
 
 		// https://developer.zendesk.com/apps/docs/agent/interface
@@ -351,7 +351,7 @@
 		// var option = _.find(myCustomField.options(), function(opt) {
   //         return opt.value();
   //       });
-  // myCustomField.options		
+  // myCustomField.options
   		// myCustomField.required = true;
   		// myCustomField.required();
 
@@ -365,13 +365,13 @@
 		customer_impact_field.disable();
 		// kb status
 		this.ticketFields('custom_field_22953480').disable();
-		
+
 		// ticket source
 		this.ticketFields('custom_field_27286948').disable();
 
 		// chat dispatched
 		this.ticketFields('custom_field_29482057').disable();
-		
+
 
 
 		// Disable PD Only fields for all groups except PSLs and PMs
@@ -405,7 +405,7 @@
 		// this.appProperties.ticket_id === this.ticket().id()
 
 		// Check if it's a new ticket or not
-        
+
 		var ticket_new;
 
         if (ticket.status() == "new") {
@@ -414,14 +414,14 @@
 
 			if (ticket.requester()) {
 				this.get_organization_info();
-			} 
+			}
 			else {
 				this.switchTo('new', {
 					// ticket_new: ticket_new,
 					user_id: this.currentUser().id(),
 					// organization: org_info,
 					// requester: requester
-				});				
+				});
 			}
 
 		}
@@ -455,7 +455,7 @@
 		// name = name[0];
 
 		// var greeting = "Hi " + name + ", thanks for chatting today. Here is the transcript of our chat. You can reply by email with any further comments related to this ticket.";
-		
+
 		// comment.appendMarkdown(greeting);
 		// comment.appendMarkdown('---');
 		// comment.appendMarkdown('## Chat Transcript:');
@@ -485,12 +485,12 @@
 
     	// console.log("chat transcript fixed");
     	// console.log(this.$('#chat_transcript').val());
-    	
-		// subject = raw_subject.replace(/(.+\s?\\)/, ''); 
+
+		// subject = raw_subject.replace(/(.+\s?\\)/, '');
 
 		// // Remove any other backslashes
 		// subject = subject.replace('\\', '');
-		
+
 		// // Remove Five9 Call and CHAT:
 		// subject = subject.replace('Five9 Call', '');
 		// subject = subject.replace('CHAT:', '');
@@ -510,7 +510,7 @@
 			return fixed_chat_transcript;
 		// }
 
-		
+
     },
 
 
@@ -536,8 +536,8 @@
 
 		// // subject = ticket.subject();
 		// // this.update_app();
-		
-						
+
+
 		// // this.appProperties
 		// // var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
 
@@ -555,8 +555,8 @@
 
 		// subject = ticket.subject();
 		// this.update_app();
-		
-						
+
+
 		// this.appProperties
 		// var help_topic_valid = this.appProperties.kb_info.help_topic_valid;
 
@@ -594,17 +594,17 @@
 		this.appProperties.kb_info.show_kb_popup = false;
 		// console.log(kb_status_before + " kb before");
 
-		// subject = ticket.subject();	
+		// subject = ticket.subject();
 		if (help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_and_help_topic_attached");
-		} 
+		}
 		else if (!help_topic_valid && kb_article_valid) {
 			ticket.customField("custom_field_22953480", "kb_article_attached");
 			kb_status_after = ticket.customField("custom_field_22953480");
-		} 
+		}
 		else if (help_topic_valid && !kb_article_valid) {
 			ticket.customField("custom_field_22953480", "help_topic_attached");
-		} 
+		}
 		else {
 			if(no_kb_necessary) {
 				// TRUE = no KB is necessary
@@ -614,7 +614,7 @@
 				// FALSE  = needs KB
 				ticket.customField("custom_field_22953480", "needs_kb_article");
 			}
-			
+
 		}
 		// console.log("update article status");
 
@@ -632,7 +632,7 @@
 				// this.$('#pop_test_toggle').hide();
 				// this.$('#pop_test').popover('show');
 				// var app = this;
-				// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);			
+				// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);
 			}
 
 		}
@@ -682,10 +682,10 @@
 			var organization = this.ticket().organization();
 
 		 	// This response will be handled by fetchOrganizationDone if it's a success
-		 	// It will then run generate_app_view 
+		 	// It will then run generate_app_view
 		 	this.ajax('fetchOrganization', organization.id());
 		}
-	 	
+
 	},
 
 
@@ -695,7 +695,7 @@
 
     	this.appProperties.school_info = Info.fix_org_data(org_data);
 
-    	// this.appProperties.kb_info = 
+    	// this.appProperties.kb_info =
 
 
     	this.generate_app_view();
@@ -716,12 +716,12 @@
 
 		// console.log(requester);
 		// console.log(requester.email());
-		var chat_url = chat_base_URL; 
+		var chat_url = chat_base_URL;
 		chat_url += "?requester=" + requester.email();
 		chat_url += "&requester_name=" + requester.name();
 		chat_url += "&assignee=" + user_id;
 		chat_url += "&assignee_name=" + this.currentUser().name();
-		
+
 		if (subject != null) {
 			chat_url += "&subject=" + ticket.subject();
 		}
@@ -733,6 +733,13 @@
 		return chat_url;
 	},
 
+	check_if_in_group: function(group_array) {
+		if (this.check_user_groups(group_array)) {
+			return true;
+		} else {
+			return false;
+		}
+	},
 
 	generate_app_view: function() {
 		var ticket = this.ticket();
@@ -756,7 +763,7 @@
 
 		// Set the KB article status field
 		this.update_article_status();
-		
+
 		// if (kb_info.kb_status_before == "needs_kb_article") {
 		// 	console.log("it used to be needs_kb_article");
 		// 	if (kb_info.kb_article_valid || kb_info.help_topic_valid) {
@@ -769,7 +776,7 @@
 		// 		// this.$('#pop_test_toggle').hide();
 		// 		// this.$('#pop_test').popover('show');
 		// 		// var app = this;
-		// 		// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);			
+		// 		// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);
 		// 	}
 
 		// }
@@ -794,6 +801,7 @@
 				kb_article_valid: kb_info.kb_article_valid,
 				show_kb_popup: kb_info.show_kb_popup,
 				is_chat_ticket: is_chat_ticket,
+				user_is_psl: this.check_if_in_group(["Product Support Leads"]),
 				// kb_article_valid: KB.check_kb_id(ticket.customField("custom_field_22930600")),
 
 				kb_article_number: ticket.customField("custom_field_22930600"),
@@ -802,7 +810,7 @@
 				// chat_base_URL: "https://k12supportform.myschoolapp.com/chat/",
 				// chat_base_URL: "http://localhost:8888/k12-support-forms/chat/",
 
-				organization: this.appProperties.school_info,	
+				organization: this.appProperties.school_info,
 				// organization: Info.fix_org_data(this.appProperties.org_data),
 				school_urls: this.appProperties.school_info.organization_fields,
 
@@ -820,19 +828,19 @@
 			if (ticket.requester()) {
 				this.switchTo('loading', {
 					user_id: this.currentUser().id()
-				});	
+				});
 			} else {
 				this.switchTo('new', {
 					// ticket_new: ticket_new,
 					user_id: this.currentUser().id(),
 					// organization: org_info,
 					// requester: requester
-				});	
+				});
 			}
-			
+
 		}
 
-		
+
 
 	},
 
@@ -862,66 +870,66 @@
 	random_kb_success_quote: function () {
 
 		var quote_array = [];
-		var quote = {}; 
-		
+		var quote = {};
+
 		quote_array.push({
-			text:"You're swell!", 
+			text:"You're swell!",
 			pic:this.assetURL("e-badpokerface.png")});
 
 		quote_array.push({
-			text:"Awww, thanks for adding that!", 
+			text:"Awww, thanks for adding that!",
 			pic:this.assetURL("e-awthanks.png")});
 
 		quote_array.push({
-			text:"You make Jen smile every time you add a KB article.", 
+			text:"You make Jen smile every time you add a KB article.",
 			pic:this.assetURL("e-content.png")});
 
 		quote_array.push({
-			text:"I don't always add a KB, but when I do, I'm about 10x cooler.", 
+			text:"I don't always add a KB, but when I do, I'm about 10x cooler.",
 			pic:this.assetURL("e-dosequis.png")});
 
 		quote_array.push({
-			text:"You just made Steve proud.", 
+			text:"You just made Steve proud.",
 			pic:this.assetURL("e-jobs.png")});
 
 		quote_array.push({
-			text:"A mi me gusta cuando añadas un KB.", 
+			text:"A mi me gusta cuando añadas un KB.",
 			pic:this.assetURL("e-megusta.png")});
 
 		quote_array.push({
-			text:"You're like a KB ninja!", 
+			text:"You're like a KB ninja!",
 			pic:this.assetURL("e-ninja.png")});
 
 		quote_array.push({
-			text:"#boom (drop the mic)", 
+			text:"#boom (drop the mic)",
 			pic:this.assetURL("e-boom.gif")});
 
 		quote_array.push({
-			text:"I get a little emotional when someone adds a KB.", 
+			text:"I get a little emotional when someone adds a KB.",
 			pic:this.assetURL("e-yey.png")});
 
 		quote_array.push({
-			text:"Only cool people add a KB. #suave", 
+			text:"Only cool people add a KB. #suave",
 			pic:this.assetURL("e-caruso.png")});
 
 		quote_array.push({
-			text:"Way to go!", 
+			text:"Way to go!",
 			pic:this.assetURL("e-thumbs_up.png")});
 
 		quote_array.push({
-			text:"This article is Wookie approved.", 
+			text:"This article is Wookie approved.",
 			pic:this.assetURL("e-chewy.png")});
 
 		quote_array.push({
-			text:"You have just wowed our customers!", 
+			text:"You have just wowed our customers!",
 			pic:this.assetURL("e-boom.gif")});
 
 		quote_array.push({
-			text:"Cheers!", 
+			text:"Cheers!",
 			pic:this.assetURL("e-beer.png")});
 
 		quote_array.push({
-			text:"You have all the best words.", 
+			text:"You have all the best words.",
 			pic:this.assetURL("e-trump.png")});
 
 
@@ -930,7 +938,7 @@
 
 		return quote_array[random_number];
 		// return quote_array[14];
-		
+
 // var person = {firstName:"John", lastName:"Doe", age:46};
 // var person2 = new person;
 
@@ -943,12 +951,12 @@
 		// var quote = {};
 		// quote.txt = "You did great!";
 		// quote.pic = this.assetURL("emoticons/boom.gif");
-		// quote_array.push(quote);	
+		// quote_array.push(quote);
 
 		// var quote = {};
 		// quote.txt = "What if you did another one?";
 		// quote.pic = this.assetURL("emoticons/philosoraptor.png");
-		// quote_array.push(quote);	
+		// quote_array.push(quote);
 
 
 
@@ -976,6 +984,6 @@
 
 
 	};
-	// 
+	//
 
 	}());
