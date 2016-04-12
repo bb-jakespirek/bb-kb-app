@@ -67,6 +67,7 @@
 		'ticket.save': 'ticketSaveHandler',
 
 		'createTicketRequest.always': 'createTicketRequestDone',
+		'updateIncidentTicket.always': 'updateIncidentTicketDone',
 
 
 		'click #chat_button': function(event) {
@@ -149,18 +150,25 @@
 
 
     createTicketRequestDone: function(data){
-		var ticket_id = data.ticket.id;
-		console.log('Created Ticket ID: ' + data.ticket.id);
-		var msg  = "Created new ticket #<a href='#/tickets/%@'>%@</a>.";
-
-		services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
+			var incident_ticket_id = this.ticket().id();
+			var problem_ticket_id = data.ticket.id;
+			console.log('Created Ticket ID: ' + data.ticket.id);
+			var msg  = "Created new ticket #<a href='#/tickets/%@'>%@</a>.";
+			this.ajax('updateIncidentTicket', incident_ticket_id, problem_ticket_id);
+			services.notify(msg.fmt(problem_ticket_id, problem_ticket_id), 'notice', 5000);
 
     },
+
+		updateIncidentTicketDone: function(data){
+			// var ticket_id = data.ticket.id;
+			// var msg  = "Updated and linked incident ticket #<a href='#/tickets/%@'>%@</a>.";
+			// services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
+		},
 
     'ticket.save': function() {
 	    // do something
 	    return "The ticket wasn't saved!";
-	},
+		},
 
     ticketSaveHandler: function() {
     	var ticket = this.ticket();
