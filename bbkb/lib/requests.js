@@ -8,13 +8,13 @@ module.exports = {
 	fetchOrganization: function(org_id) {
 		// console.log("fetchOrganization ran");
 		return {
-			url:  '/api/v2/organizations/'+org_id+'.json', 
+			url:  '/api/v2/organizations/'+org_id+'.json',
 			type: 'GET'
 		};
-	},	
+	},
 
 
-	createTicketRequest: function(ticket, custom_fields) { 
+	createTicketRequest: function(ticket, custom_fields) {
 		// Create single ticket clone
 		return {
 		  url: '/api/v2/tickets.json',
@@ -24,7 +24,7 @@ module.exports = {
 		  data: JSON.stringify({
 		    "ticket": {
 		      "subject": ticket.subject(),
-		      "comment": { 
+		      "comment": {
 		        // "body":  ticket.description(),
 		        "body": "Bug ticket created",
 		        "public": false
@@ -37,14 +37,16 @@ module.exports = {
 		      "assignee_id": (ticket.assignee().user() && ticket.assignee().user().id()) || null,
 		      "group_id": (ticket.assignee().group() && ticket.assignee().group().id()) || null,
 		      // "requester_id": ticket.requester().id(),
-		      "requester_id": this.currentUser().id(),
+		      // "requester_id": this.currentUser().id(),
+					// Bugman as requester
+					"requester_id": 1657860238,
 
 		      // "collaborator_ids": _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
 		      "custom_fields": custom_fields
 		    }
 		  })
 		};
-	}	
+	},
 
 
 
@@ -52,7 +54,7 @@ module.exports = {
 	// fetchOrganizationFields: function(id) {
 	// 	console.log("fetchOrganizationFields ran");
 	// 	return {
-	// 		url:  '/api/v2/organization_fields/'+id+'.json', 
+	// 		url:  '/api/v2/organization_fields/'+id+'.json',
 	// 		type: 'GET'
 	// 	};
 	// }

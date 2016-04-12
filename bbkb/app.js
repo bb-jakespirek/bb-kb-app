@@ -109,17 +109,18 @@
 			//this.$('div.more').toggle();
 		},
 
-	    'click #phone_input': function(event) {
+    'click #phone_input': function(event) {
 
 			this.$("#phone_input").select();
 
 		},
 
-	    'click #create_bug_btn': function(event) {
+    'click #create_bug_btn': function(event) {
 
 			// this.$("#phone_input").select();
 			console.log("create a new bug");
 			var ticket = this.ticket();
+
 			var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}];
 			this.ajax('createTicketRequest', ticket, custom_fields);
 			// this.ajax('createTicketRequest', ticket);
