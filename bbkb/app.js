@@ -14,6 +14,7 @@
 		"org_data": {},
 		"kb_info": {},
 		"school_info":{},
+		"bug_info":{},
 		ticket_id: 0
     },
 
@@ -36,6 +37,7 @@
 
 		// 'fetchBookmarks.done': 'fetchBookmarksDone',
 		'fetchOrganization.done': 'fetchOrganizationDone',
+		'fetchProblemTicketInfo.done': 'fetchProblemTicketInfoDone',
 
 
 		'ticket.subject.changed' : 'subject_changed',
@@ -52,12 +54,16 @@
 
 		'ticket.custom_field_30300358.changed' : 'bug_priority_changed', // bug priority field
 
+		// 'ticket.problem_id.changed' : 'link_problem_changed', // link_problem field
+
 
 
 		'click .save_button': 'chat_transcript_save',
 
 
 		'ticket.save': 'ticketSaveHandler',
+		'ticket.submit.done': 'ticketSaveDoneHandler',
+
 
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
@@ -142,21 +148,102 @@
   requests: require('requests.js'),
 
 
-  createTicketRequestDone: function(data){
-			var incident_ticket_id = this.ticket().id();
-			var problem_ticket_id = data.ticket.id;
-			console.log('Created Ticket ID: ' + data.ticket.id);
-			var msg  = "Created new ticket #<a href='#/tickets/%@'>%@</a>.";
-			this.ajax('updateIncidentTicket', incident_ticket_id, problem_ticket_id);
-			services.notify(msg.fmt(problem_ticket_id, problem_ticket_id), 'notice', 5000);
+
+	initialize: function(data) { // function called when we load
+	// console.log("initialize");
+
+	// if (data.firstLoad) {
+	// //   // this.switchTo('main');
+	//   console.log("data.firstLoad");
+
+	// //   // this.generate_app_view();
+	// }
+	this.resetGlobals();
+
+	// https://developer.zendesk.com/apps/docs/agent/interface
+
+	// disable customer impact field from being changed by analyst
+	var customer_impact_field = this.ticketFields('custom_field_28972337');
+	customer_impact_field.disable();
+	// kb status
+	this.ticketFields('custom_field_22953480').disable();
+
+	// ticket source
+	this.ticketFields('custom_field_27286948').disable();
+
+	// chat dispatched
+	this.ticketFields('custom_field_29482057').disable();
+
+	// Disable PD Only fields for all groups except PSLs and PMs
+	var group_array = ["Product Support Leads", "Product Managers"];
+	if (!this.check_user_groups(group_array)) {
+		// Bug Review
+		this.ticketFields('custom_field_30520367').disable();
+		// Bug Priority
+		this.ticketFields('custom_field_30300358').disable();
+		// PD SLA
+		this.ticketFields('custom_field_31407407').disable();
+	}
+
+	var ticket = this.ticket();
+
+	// check to see if KB is attached.
+	// this.update_article_status();
+
+	// See if globals data is stale
+	// if (this.appProperties.ticket_id == this.ticket().id()) {
+	//       console.log('ticket ID matches');
+	// } else {
+	//   console.log('ticket ID does not match!');
+	// }
+
+	// Check the ticket ID to see if things match
+	// this.appProperties.ticket_id === this.ticket().id()
+
+	// Check if it's a new ticket or not
+
+	var ticket_new;
+
+  if (ticket.status() === "new") {
+      	// ticket.isNew()
+		ticket_new = true;
+
+		if (ticket.requester()) {
+			this.get_organization_info();
+		}
+		else {
+			this.switchTo('new', {
+				// ticket_new: ticket_new,
+				user_id: this.currentUser().id(),
+				// organization: org_info,
+				// requester: requester
+			});
+		}
+
+	}
+	else {
+		ticket_new = false;
+		this.get_organization_info();
+		if (ticket.type() === "incident") {
+			this.get_problem_ticket_info();
+
+		}
+		// var organization = this.ticket().organization();
+		// // console.log(typeof organization);
+		// this.appProperties.org_data = organization;
+		// console.log("init----");
+		// console.log(organization);
+		// console.log("end init----");
+
+		// this.generate_app_view();
+	}
+
 
   },
 
-	updateIncidentTicketDone: function(data){
-		// var ticket_id = data.ticket.id;
-		// var msg  = "Updated and linked incident ticket #<a href='#/tickets/%@'>%@</a>.";
-		// services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
-	},
+
+
+
 
   'ticket.save': function() {
     // do something
@@ -167,6 +254,7 @@
   	var ticket = this.ticket();
   	var type = ticket.type();
   	var about = ticket.customField("custom_field_22222564");
+
 
   	// KB Stuff
   	var no_kb_necessary = KB.no_kb_needed_test(ticket);
@@ -240,10 +328,14 @@
   		}
 	}
 
-
+		this.generate_app_view();
   },
 
-
+	ticketSaveDoneHandler: function() {
+		// console.log("save done");
+		this.get_problem_ticket_info();
+		this.generate_app_view();
+	},
 
 
 // Ticket Field Changes --------------------
@@ -252,6 +344,12 @@
 		this.set_pd_sla_date();
 		this.generate_app_view();
 	},
+
+	// link_problem_changed: function () {
+	// 	console.log("link_problem_changed");
+	// 	this.get_problem_ticket_info();
+	// 	this.generate_app_view();
+	// },
 
   about_changed: function () {
   	this.type_changed();
@@ -327,131 +425,7 @@
 
 
 
-  initialize: function(data) { // function called when we load
-	// console.log("initialize");
 
-	// if (data.firstLoad) {
-	// //   // this.switchTo('main');
-	//   console.log("data.firstLoad");
-
-	// //   // this.generate_app_view();
-	// }
-	this.resetGlobals();
-
-	// _.defer(function(){ console.log("blah"); });
-	// this.$("#test_alert").fadeTo(2000, 500).slideUp(500, function(){
-	// 	// this.$("#test_alert").alert('close');
-	// 	console.log("blah");
-	// 	this.$("#test_alert").remove();
-	// });
-
-	// this.growl_kb_needed();
-
-	// Info.test_func(this);
-	// pass the app as an argument to info.js
-	// info.js looks like this:
-	// test_func: function (app) {
-	// 	console.log(app.ticket().id());
-	// },
-
-
-	// https://developer.zendesk.com/apps/docs/agent/interface
-	// var field = this.ticketFields('tags')
-	// field.hide();
-
-	// var myCustomField = this.ticketFields('custom_field_30584448');
-	// var option = _.find(myCustomField.options(), function(opt) {
-//         return opt.value();
-//       });
-// myCustomField.options
-		// myCustomField.required = true;
-		// myCustomField.required();
-
-	// myCustomField.isRequired();
-	// console.log("required? " + myCustomField.isRequired());
-	// console.log(myCustomField);
-
-
-	// disable customer impact field from being changed by analyst
-	var customer_impact_field = this.ticketFields('custom_field_28972337');
-	customer_impact_field.disable();
-	// kb status
-	this.ticketFields('custom_field_22953480').disable();
-
-	// ticket source
-	this.ticketFields('custom_field_27286948').disable();
-
-	// chat dispatched
-	this.ticketFields('custom_field_29482057').disable();
-
-
-
-	// Disable PD Only fields for all groups except PSLs and PMs
-	var group_array = ["Product Support Leads", "Product Managers"];
-	if (!this.check_user_groups(group_array)) {
-		// Bug Review
-		this.ticketFields('custom_field_30520367').disable();
-		// Bug Priority
-		this.ticketFields('custom_field_30300358').disable();
-		// PD SLA
-		this.ticketFields('custom_field_31407407').disable();
-	}
-
-
-
-	// this.$("button.continue").html("Next Step...")
-
-	var ticket = this.ticket();
-
-	// check to see if KB is attached.
-	// this.update_article_status();
-
-	// See if globals data is stale
-	// if (this.appProperties.ticket_id == this.ticket().id()) {
-	//       console.log('ticket ID matches');
-	// } else {
-	//   console.log('ticket ID does not match!');
-	// }
-
-	// Check the ticket ID to see if things match
-	// this.appProperties.ticket_id === this.ticket().id()
-
-	// Check if it's a new ticket or not
-
-	var ticket_new;
-
-      if (ticket.status() == "new") {
-      	// ticket.isNew()
-		ticket_new = true;
-
-		if (ticket.requester()) {
-			this.get_organization_info();
-		}
-		else {
-			this.switchTo('new', {
-				// ticket_new: ticket_new,
-				user_id: this.currentUser().id(),
-				// organization: org_info,
-				// requester: requester
-			});
-		}
-
-	}
-	else {
-		ticket_new = false;
-		this.get_organization_info();
-		// var organization = this.ticket().organization();
-		// // console.log(typeof organization);
-		// this.appProperties.org_data = organization;
-		// console.log("init----");
-		// console.log(organization);
-		// console.log("end init----");
-
-		// this.generate_app_view();
-	}
-
-
-  },
 
 
   chat_transcript_save: function() {
@@ -721,10 +695,26 @@ format_chat_transcript: function() {
 	},
 
 	format_date_object: function (date_object) {
+		// This gets it to MM/DD/YYYY
 		var formatted_date = date_object.getMonth() + 1 + "/" + date_object.getDate() + "/" + date_object.getFullYear();
 		return formatted_date;
 	},
 
+
+	fix_inverted_date_formatting: function (date_string) {
+		var formatted_date;
+		if (date_string != "") {
+			//original is YYYY-MM-DD
+			var str = date_string.split("-");
+			// This gets it to MM/DD/YYYY
+			formatted_date = str[1] + "/" + str[2] + "/" + str[0];
+
+		}
+		else {
+			formatted_date = "";
+		}
+		return formatted_date;
+	},
 
 
 
@@ -741,12 +731,22 @@ format_chat_transcript: function() {
 
 	// },
 
+	get_problem_ticket_info: function() {
+		var ticket = this.ticket();
+		if (ticket.customField('problem_id') > 0) {
+			// console.log("running get problem ticket info");
+			var problem_ticket = ticket.customField('problem_id');
+			if (problem_ticket != null) {
+				this.ajax('fetchProblemTicketInfo', problem_ticket);
+			}
+
+		} else {
+			this.appProperties.bug_info.show = false;
+		}
+
+	},
 
 	get_organization_info: function() {
-
-// TO DO
-// test to make sure the org info is actually updated
-
 		if(this.ticket().organization()){
 			var organization = this.ticket().organization();
 
@@ -754,21 +754,53 @@ format_chat_transcript: function() {
 		 	// It will then run generate_app_view
 		 	this.ajax('fetchOrganization', organization.id());
 		}
-
 	},
 
 
 	fetchOrganizationDone: function(data) {
 		var org_data = data.organization;
-    	this.appProperties.org_data = org_data;
+  	this.appProperties.org_data = org_data;
+  	this.appProperties.school_info = Info.fix_org_data(org_data);
+  	this.generate_app_view();
+  },
 
-    	this.appProperties.school_info = Info.fix_org_data(org_data);
 
-    	// this.appProperties.kb_info =
+	fetchProblemTicketInfoDone: function(data) {
+		// console.log("finished grabbing problem info ");
+		// console.log(data.ticket);
+		var bug_info = {};
+		var custom_fields = data.ticket.custom_fields;
+		// console.log(custom_fields);
+
+		var bug_priority = _.find(custom_fields, function(item) { return item.id == 30300358; });
+		var bug_sla_date = _.find(custom_fields, function(item) { return item.id == 31407407; });
+
+		bug_info.priority = bug_priority.value;
+		bug_info.sla_date = this.fix_inverted_date_formatting(bug_sla_date.value);
+
+  	this.appProperties.bug_info = bug_info;
+  	// this.appProperties.school_info = Info.fix_org_data(org_data);
+  	this.generate_app_view();
+  },
 
 
-    	this.generate_app_view();
-    },
+	createTicketRequestDone: function(data){
+			var incident_ticket_id = this.ticket().id();
+			var problem_ticket_id = data.ticket.id;
+			console.log('Created Ticket ID: ' + data.ticket.id);
+			var msg  = "Created new ticket #<a href='#/tickets/%@'>%@</a>.";
+			this.ajax('updateIncidentTicket', incident_ticket_id, problem_ticket_id);
+			services.notify(msg.fmt(problem_ticket_id, problem_ticket_id), 'notice', 5000);
+
+  },
+
+	updateIncidentTicketDone: function(data){
+		// var ticket_id = data.ticket.id;
+		// var msg  = "Updated and linked incident ticket #<a href='#/tickets/%@'>%@</a>.";
+		// services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
+	},
+
+
 
 
 	make_chat_link: function() {
@@ -902,6 +934,7 @@ format_chat_transcript: function() {
 		"org_data": {},
 		"kb_info": {},
 		"school_info":{},
+		"bug_info":{},
 		ticket_id: ticket_id
       };
   },
@@ -917,10 +950,21 @@ format_chat_transcript: function() {
 		var bug_info = {};
 		bug_info.show = false;
 
-		if (type == "problem" && bug_priority != "") {
+		if (type === "problem" && bug_priority != "") {
 			bug_info.show = true;
 			bug_info.priority = bug_priority;
 			bug_info.sla_date = this.format_date_object(sla_date);
+		}
+		else if (type === "incident" && ticket.customField('problem_id') > 0) {
+			// console.log(this.appProperties.ticket_id);
+			bug_info = this.appProperties.bug_info;
+			if (bug_info.priority) {
+				bug_info.show = true;
+			}
+			else {
+				bug_info.show = false;
+			}
+
 		}
 
 

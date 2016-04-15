@@ -21,12 +21,12 @@ module.exports = {
 		// console.log("-----");
 		// Create the Prog Web link
 		// try {
-		// 	org_fields.prog_web = org_fields.prog_url.replace(/(\/app)(\/)?$/, '/page/'); 
+		// 	org_fields.prog_web = org_fields.prog_url.replace(/(\/app)(\/)?$/, '/page/');
 		// } catch(e) {
 		// 	console.log("Oh no!");
 		// }
 		if(org_fields.prog_url != null) {
-			org_fields.prog_web = org_fields.prog_url.replace(/(\/app)(\/)?$/, '/page/'); 
+			org_fields.prog_web = org_fields.prog_url.replace(/(\/app)(\/)?$/, '/page/');
 		}
 
 		// Fix the AE format
@@ -37,12 +37,12 @@ module.exports = {
 		var ae_name, ae_phone, ae_email;
 
 		if (ae_name_raw) {
-			ae_name = ae_name_raw.replace('_', ' '); 
+			ae_name = ae_name_raw.replace('_', ' ');
 			ae_name = ae_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 
 			ae_phone = org_fields['ae_phone_number'];
-			
-			ae_email = ae_name_raw.replace('_', '.'); 
+
+			ae_email = ae_name_raw.replace('_', '.');
 			ae_email += "@blackbaud.com";
 
 			ae_info.ae_name = ae_name;
@@ -51,7 +51,7 @@ module.exports = {
 
 		}
 		if(org_fields.success_coach != null) {
-			organization.csm = org_fields.success_coach.replace('_', ' '); 
+			organization.csm = org_fields.success_coach.replace('_', ' ');
 		}
 		// organization.school_urls = this.get_school_info(org_fields);
 

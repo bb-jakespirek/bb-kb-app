@@ -13,6 +13,13 @@ module.exports = {
 		};
 	},
 
+	fetchProblemTicketInfo: function(problem_id) {
+		// console.log("fetchOrganization ran");
+		return {
+			url:  '/api/v2/tickets/'+problem_id+'.json',
+			type: 'GET'
+		};
+	},
 
 	createTicketRequest: function(ticket, custom_fields) {
 		// Create single ticket clone
