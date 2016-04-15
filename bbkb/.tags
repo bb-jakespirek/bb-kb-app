@@ -1,3 +1,17 @@
+name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "name": "K-12 Support App",$/;"	function	line:2
+author	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "author": {$/;"	function	line:3
+name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "name": "Jake Spirek",$/;"	function	line:4
+email	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "email": "jake.spirek@blackbaud.com",$/;"	function	line:5
+url	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "url": ""$/;"	function	line:6
+defaultLocale	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "defaultLocale": "en",$/;"	function	line:8
+private	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "private": true,$/;"	function	line:9
+location	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "location": ["ticket_sidebar", "new_ticket_sidebar"],$/;"	function	line:10
+version	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "version": "1.811",$/;"	function	line:11
+frameworkVersion	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "frameworkVersion": "1.0"$/;"	function	line:12
+fetchOrganization	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/lib/requests.js	/^	fetchOrganization: function(org_id) {$/;"	function	line:8
+module.exports.fetchOrganization	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/lib/requests.js	/^module.exports = {$/;"	method	line:1
+createTicketRequest	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/lib/requests.js	/^	createTicketRequest: function(ticket, custom_fields) {$/;"	function	line:17
+updateIncidentTicket	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/lib/requests.js	/^	updateIncidentTicket: function(incident_ticket_id, problem_ticket_id) {$/;"	function	line:51
 Info	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var Info =  require('info.js');$/;"	variable	line:4
 createTicketRequestDone	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  createTicketRequestDone: function(data){$/;"	function	line:145
 problem_ticket_id	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^			var problem_ticket_id = data.ticket.id;$/;"	variable	line:147
@@ -65,18 +79,12 @@ ticket_new	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		
 ticket_source	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var ticket_source = ticket.customField("custom_field_27286948");$/;"	variable	line:820
 is_chat_ticket	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var is_chat_ticket = false;$/;"	variable	line:821
 authorized_contact	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var authorized_contact = ticket.requester().customField("authorized_contact");$/;"	variable	line:823
-resetGlobals	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^    resetGlobals: function(){$/;"	function	line:916
-appProperties.org_data	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^      this.appProperties = {$/;"	property	line:918
-kb_quotes	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	kb_quotes: function() {$/;"	function	line:931
-random_kb_success_quote	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	random_kb_success_quote: function () {$/;"	function	line:939
-random_number	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var random_number = Math.floor(Math.random() * quote_array.length);$/;"	variable	line:1006
-name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "name": "K-12 Support App",$/;"	function	line:2
-author	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "author": {$/;"	function	line:3
-name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "name": "Jake Spirek",$/;"	function	line:4
-email	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "email": "jake.spirek@blackbaud.com",$/;"	function	line:5
-url	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "url": ""$/;"	function	line:6
-defaultLocale	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "defaultLocale": "en",$/;"	function	line:8
-private	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "private": true,$/;"	function	line:9
-location	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "location": ["ticket_sidebar", "new_ticket_sidebar"],$/;"	function	line:10
-version	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "version": "1.811",$/;"	function	line:11
-frameworkVersion	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "frameworkVersion": "1.0"$/;"	function	line:12
+resetGlobals	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  resetGlobals: function(){$/;"	function	line:899
+appProperties.org_data	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^      this.appProperties = {$/;"	property	line:901
+get_bug_info	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	get_bug_info: function() {$/;"	function	line:911
+type	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var type = ticket.type();$/;"	variable	line:913
+bug_priority	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var bug_priority = ticket.customField("custom_field_30300358");$/;"	variable	line:914
+sla_date	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var sla_date = ticket.customField("custom_field_31407407");$/;"	variable	line:915
+kb_quotes	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	kb_quotes: function() {$/;"	function	line:934
+random_kb_success_quote	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	random_kb_success_quote: function () {$/;"	function	line:942
+random_number	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var random_number = Math.floor(Math.random() * quote_array.length);$/;"	variable	line:1009

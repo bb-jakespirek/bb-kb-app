@@ -59,26 +59,6 @@ module.exports = {
 		    "ticket": {
 					"type": "incident",
 					"problem_id": problem_ticket_id,
-		      // "subject": ticket.subject(),
-		      // "comment": {
-		      //   // "body":  ticket.description(),
-		      //   "body": "Bug ticket created",
-		      //   "public": false
-		      // },
-		      // "status": ticket.status(),
-		      // "priority": ticket.priority(),
-		      // // "type": ticket.type(),
-		      // "type": "problem",
-		      // "tags": ticket.tags(),
-		      // "assignee_id": (ticket.assignee().user() && ticket.assignee().user().id()) || null,
-		      // "group_id": (ticket.assignee().group() && ticket.assignee().group().id()) || null,
-		      // // "requester_id": ticket.requester().id(),
-		      // // "requester_id": this.currentUser().id(),
-					// // Bugman as requester
-					// "requester_id": 1657860238,
-
-		      // "collaborator_ids": _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
-		      // "custom_fields": custom_fields
 		    }
 		  })
 		};

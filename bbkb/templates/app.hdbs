@@ -296,6 +296,18 @@
 
 	{{#if edition}}<span class="label label-light">Full Edition</span>{{/if}}
 
+	{{#if bug_info.show}}
+    <button type="button" target="_blank" id="school_id" class="label label-warning" data-toggle="popover" data-placement="top"  title="Bug Priorities" data-html="true" data-content="0-Critical Down<br />
+1-Critical (Max 30 days) <br />
+2-High (Max 3 months)<br />
+3-Medium (6 month review)<br />
+4-Low<br />
+5-Cosmetic" data-trigger="hover">Bug Priority: {{bug_info.priority}}</button>
+    {{#if bug_info.sla_date}}
+      <button type="button" target="_blank" id="school_id" class="label label-warning" data-toggle="tooltip" data-placement="top"  title="SLA Date" data-trigger="hover">Bug SLA: {{bug_info.sla_date}}</button>
+    {{/if}}
+  {{/if}}
+
 </div>
 
 

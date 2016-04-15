@@ -716,7 +716,7 @@ format_chat_transcript: function() {
 				new_sla_date = sla_date;
 		}
 
-		console.log(new_sla_date);
+		// console.log(new_sla_date);
 		ticket.customField("custom_field_31407407", new_sla_date);
 	},
 
@@ -833,23 +833,6 @@ format_chat_transcript: function() {
 		// Set the KB article status field
 		this.update_article_status();
 
-		// if (kb_info.kb_status_before == "needs_kb_article") {
-		// 	console.log("it used to be needs_kb_article");
-		// 	if (kb_info.kb_article_valid || kb_info.help_topic_valid) {
-		// 	console.log("now it's valid");
-		// 	this.test_jquery();
-		// 		// var $test = this.$('#pop_test_toggle');
-		// 		// $test.hide();
-		// 		// console.log($test.is(':visible'));
-		// 		// $test.hide();
-		// 		// this.$('#pop_test_toggle').hide();
-		// 		// this.$('#pop_test').popover('show');
-		// 		// var app = this;
-		// 		// setTimeout(function() { app.$('#pop_test').popover('hide'); }, 10000);
-		// 	}
-
-		// }
-
 		if (typeof this.appProperties.org_data.id != 'undefined') {
 			if (this.appProperties.ticket_id === this.ticket().id()){
 				// console.log("The ticket ID's match");
@@ -872,7 +855,7 @@ format_chat_transcript: function() {
 				is_chat_ticket: is_chat_ticket,
 				user_is_psl: this.check_if_in_group(["Product Support Leads"]),
 				// kb_article_valid: KB.check_kb_id(ticket.customField("custom_field_22930600")),
-
+				bug_info: this.get_bug_info(),
 				kb_article_number: ticket.customField("custom_field_22930600"),
 				help_topic: ticket.customField("custom_field_22790214"),
 				kb_quotes: this.kb_quotes(),
@@ -913,7 +896,7 @@ format_chat_transcript: function() {
 
 	},
 
-    resetGlobals: function(){
+  resetGlobals: function(){
       var ticket_id = this.ticket().id();
       this.appProperties = {
 		"org_data": {},
@@ -921,8 +904,28 @@ format_chat_transcript: function() {
 		"school_info":{},
 		ticket_id: ticket_id
       };
-    },
+  },
 
+
+
+	get_bug_info: function() {
+		var ticket = this.ticket();
+		var type = ticket.type();
+		var bug_priority = ticket.customField("custom_field_30300358");
+		var sla_date = ticket.customField("custom_field_31407407");
+
+		var bug_info = {};
+		bug_info.show = false;
+
+		if (type == "problem" && bug_priority != "") {
+			bug_info.show = true;
+			bug_info.priority = bug_priority;
+			bug_info.sla_date = this.format_date_object(sla_date);
+		}
+
+
+		return bug_info;
+	},
 
 
 // ------------ KB Functions ---------------- //
