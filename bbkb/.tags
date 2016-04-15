@@ -1,0 +1,82 @@
+Info	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var Info =  require('info.js');$/;"	variable	line:4
+createTicketRequestDone	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  createTicketRequestDone: function(data){$/;"	function	line:145
+problem_ticket_id	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^			var problem_ticket_id = data.ticket.id;$/;"	variable	line:147
+msg	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^			var msg  = "Created new ticket #<a href='#\/tickets\/%@'>%@<\/a>.";$/;"	variable	line:149
+updateIncidentTicketDone	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	updateIncidentTicketDone: function(data){$/;"	function	line:155
+ticketSaveHandler	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  ticketSaveHandler: function() {$/;"	function	line:166
+type	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  	var type = ticket.type();$/;"	variable	line:168
+about	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  	var about = ticket.customField("custom_field_22222564");$/;"	variable	line:169
+no_kb_necessary	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  	var no_kb_necessary = KB.no_kb_needed_test(ticket);$/;"	variable	line:172
+has_kb_or_help	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  	var has_kb_or_help = false;$/;"	variable	line:173
+kb_article_valid	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));$/;"	variable	line:174
+help_topic_valid	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));$/;"	variable	line:175
+internal_kb_rec	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var internal_kb_rec = KB.internal_kb_recommended(ticket);$/;"	variable	line:176
+bug_priority_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	bug_priority_changed: function () {$/;"	function	line:251
+about_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  about_changed: function () {$/;"	function	line:256
+type_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  type_changed: function () {$/;"	function	line:261
+type	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  	var type = ticket.type();$/;"	variable	line:263
+about	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  	var about = ticket.customField("custom_field_22222564");$/;"	variable	line:264
+check_user_groups	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  check_user_groups: function(group_array) {$/;"	function	line:279
+group_names	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var group_names = [];$/;"	variable	line:282
+in_group	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var in_group;$/;"	variable	line:283
+growl_kb_needed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  growl_kb_needed: function(ticket) {$/;"	function	line:298
+life	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var life = parseInt(this.$('#life').val(), 10);$/;"	variable	line:302
+ticket_id	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var ticket_id = ticket.id();$/;"	variable	line:304
+growl_hold_status_needed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  growl_hold_status_needed: function(ticket) {$/;"	function	line:310
+life	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var life = parseInt(this.$('#life').val(), 10);$/;"	variable	line:314
+ticket_id	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var ticket_id = ticket.id();$/;"	variable	line:316
+initialize	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  initialize: function(data) { \/\/ function called when we load$/;"	function	line:330
+group_array	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var group_array = ["Product Support Leads", "Product Managers"];$/;"	variable	line:390
+ticket_new	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var ticket_new;$/;"	variable	line:421
+chat_transcript_save	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  chat_transcript_save: function() {$/;"	function	line:457
+full_comment	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	var full_comment;$/;"	variable	line:475
+format_chat_transcript	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^format_chat_transcript: function() {$/;"	function	line:495
+replacement	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var replacement = " \\r\\r\\r*$1* **$5:**\\r  \\t";$/;"	variable	line:520
+fixed_chat_transcript	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var fixed_chat_transcript = raw_chat_transcript.replace(pattern, replacement);$/;"	variable	line:521
+requester_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	requester_changed: function() {$/;"	function	line:533
+update_zd_custom_field	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  update_zd_custom_field: function(field_id, value) {$/;"	function	line:541
+kb_id_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  kb_id_changed: function () {$/;"	function	line:546
+help_topic_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^  help_topic_changed: function () {$/;"	function	line:565
+update_article_status	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	update_article_status: function () {$/;"	function	line:596
+help_topic_valid	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));$/;"	variable	line:599
+kb_article_valid	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));$/;"	variable	line:600
+no_kb_necessary	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var no_kb_necessary = KB.no_kb_needed_test(ticket);$/;"	variable	line:601
+kb_status_before	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var kb_status_before = ticket.customField("custom_field_22953480");$/;"	variable	line:606
+kb_status_after	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var kb_status_after;$/;"	variable	line:607
+field_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	field_changed: function () {$/;"	function	line:661
+subject_changed	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	subject_changed: function () {$/;"	function	line:669
+set_pd_sla_date	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	set_pd_sla_date: function () {$/;"	function	line:679
+bug_priority	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var bug_priority = ticket.customField("custom_field_30300358");$/;"	variable	line:681
+sla_date	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var sla_date = ticket.customField("custom_field_31407407");$/;"	variable	line:682
+new_sla_date	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var new_sla_date;$/;"	variable	line:683
+switch	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		switch (bug_priority) {$/;"	function	line:686
+format_date_object	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	format_date_object: function (date_object) {$/;"	function	line:723
+get_organization_info	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	get_organization_info: function() {$/;"	function	line:745
+fetchOrganizationDone	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	fetchOrganizationDone: function(data) {$/;"	function	line:761
+make_chat_link	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	make_chat_link: function() {$/;"	function	line:774
+subject	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var subject = ticket.subject();$/;"	variable	line:776
+chat_base_URL	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var chat_base_URL = "https:\/\/k12supportform.myschoolapp.com\/chat\/";$/;"	variable	line:778
+requester	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var requester = ticket.requester();$/;"	variable	line:781
+product	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var product = ticket.customField("custom_field_21744040");$/;"	variable	line:783
+chat_url	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var chat_url = chat_base_URL;$/;"	variable	line:788
+check_if_in_group	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	check_if_in_group: function(group_array) {$/;"	function	line:805
+generate_app_view	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	generate_app_view: function() {$/;"	function	line:813
+ticket_new	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var ticket_new = false;$/;"	variable	line:815
+ticket_source	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var ticket_source = ticket.customField("custom_field_27286948");$/;"	variable	line:820
+is_chat_ticket	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var is_chat_ticket = false;$/;"	variable	line:821
+authorized_contact	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var authorized_contact = ticket.requester().customField("authorized_contact");$/;"	variable	line:823
+resetGlobals	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^    resetGlobals: function(){$/;"	function	line:916
+appProperties.org_data	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^      this.appProperties = {$/;"	property	line:918
+kb_quotes	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	kb_quotes: function() {$/;"	function	line:931
+random_kb_success_quote	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^	random_kb_success_quote: function () {$/;"	function	line:939
+random_number	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/app.js	/^		var random_number = Math.floor(Math.random() * quote_array.length);$/;"	variable	line:1006
+name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "name": "K-12 Support App",$/;"	function	line:2
+author	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "author": {$/;"	function	line:3
+name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "name": "Jake Spirek",$/;"	function	line:4
+email	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "email": "jake.spirek@blackbaud.com",$/;"	function	line:5
+url	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "url": ""$/;"	function	line:6
+defaultLocale	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "defaultLocale": "en",$/;"	function	line:8
+private	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "private": true,$/;"	function	line:9
+location	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "location": ["ticket_sidebar", "new_ticket_sidebar"],$/;"	function	line:10
+version	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "version": "1.811",$/;"	function	line:11
+frameworkVersion	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "frameworkVersion": "1.0"$/;"	function	line:12

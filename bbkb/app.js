@@ -1,20 +1,9 @@
-
 	(function() {
-
-
-// TO-DO:
-
-
 
 	var KB =  require('kb.js');
 	var Info =  require('info.js');
 
-
-
 	return {
-
-
-
 
 	appProperties: {
       // This is available globally in your functions via this.appProperties.org_data
@@ -60,6 +49,10 @@
 		'ticket.custom_field_22222564.changed' : 'about_changed', // About Field
 
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
+
+		'ticket.custom_field_30300358.changed' : 'bug_priority_changed', // bug priority field
+
+
 
 		'click .save_button': 'chat_transcript_save',
 
@@ -146,10 +139,10 @@
 
 	},
 
-    requests: require('requests.js'),
+  requests: require('requests.js'),
 
 
-    createTicketRequestDone: function(data){
+  createTicketRequestDone: function(data){
 			var incident_ticket_id = this.ticket().id();
 			var problem_ticket_id = data.ticket.id;
 			console.log('Created Ticket ID: ' + data.ticket.id);
@@ -157,370 +150,382 @@
 			this.ajax('updateIncidentTicket', incident_ticket_id, problem_ticket_id);
 			services.notify(msg.fmt(problem_ticket_id, problem_ticket_id), 'notice', 5000);
 
-    },
+  },
 
-		updateIncidentTicketDone: function(data){
-			// var ticket_id = data.ticket.id;
-			// var msg  = "Updated and linked incident ticket #<a href='#/tickets/%@'>%@</a>.";
-			// services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
-		},
-
-    'ticket.save': function() {
-	    // do something
-	    return "The ticket wasn't saved!";
-		},
-
-    ticketSaveHandler: function() {
-    	var ticket = this.ticket();
-    	var type = ticket.type();
-    	var about = ticket.customField("custom_field_22222564");
-
-    	// KB Stuff
-    	var no_kb_necessary = KB.no_kb_needed_test(ticket);
-    	var has_kb_or_help = false;
-			var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
-			var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
-			var internal_kb_rec = KB.internal_kb_recommended(ticket);
-
-			if (kb_article_valid || help_topic_valid) {
-				has_kb_or_help = true;
-			}
-
-		// this.$('#test_popover').popover({
-		//     placement : 'right',
-		//     html : true,
-		//     delay: {
-		//        show: "0",
-		//        hide: "10"
-		//     }
-		// });
-		// 			// this.$('#test_popover').popover('show');
-
-		// this.$('#test_popover').on('show.bs.popover', function() {
-		// 	// console.log("shown");
-		//     setTimeout(function() {
-		//         this.$('#test_popover').popover('hide');
-		//     }, 1000);
-		// });
-		    				// this.$('#test_popover').popover('hide');
-				// console.log(hold_status);
-
-
-		// Hold
-		if (ticket.status() == "hold") {
-			// Hold Stuff
-			var hold_status = ticket.customField("custom_field_30584448");
-
-			if (hold_status === "") {
-    			// this.growl_hold_status_needed(ticket);
-
-    			// This should only affect Support people
-
-    			var group_array = ["Support", "Product Support Leads", "Support Relationship Manager"];
-    			if (this.check_user_groups(group_array)) {
-
-
-
-	    			this.$('#hold_modal').modal({
-						backdrop: true,
-						keyboard: true
-					});
-    				return "The ticket wasn't saved! You need a Hold Status before submitting again.";
-    			}
-
-    		}
-		} else {
-			// Remove Hold Status
-			if ( type == "problem" && about == "product_owner__bug" || type == "incident") {
-				// Don't remove the status if a problem ticket or it's an incident.
-			} else {
-				ticket.customField("custom_field_30584448", "");
-			}
-
-		}
-
-		// Solved
-		if (ticket.status() == "solved") {
-
-			if (no_kb_necessary === false && has_kb_or_help === false && internal_kb_rec === false) {
-    			this.growl_kb_needed(ticket);
-    		}
-		}
-
-
-    },
-
-    about_changed: function () {
-    	this.type_changed();
-    	this.generate_app_view();
-    },
-
-    type_changed: function () {
-    	var ticket = this.ticket();
-    	var type = ticket.type();
-    	var about = ticket.customField("custom_field_22222564");
-
-    	// console.log(ticket.type());
-    	if (type == "incident") {
-    		// Change the hold status
-    		ticket.customField("custom_field_30584448", "hold_incident");
-    	}
-    	else if (type == "problem" && about == "product_owner__bug") {
-    		ticket.customField("custom_field_30584448", "hold_bug");
-    	}
-    	else if (type == "problem" && about != "product_owner__bug") {
-    		ticket.customField("custom_field_30584448", "");
-    	}
-    },
-
-    check_user_groups: function(group_array) {
-    	// This function returns true if user is one of the groups
-		var current_user_groups = this.currentUser().groups();
-		var group_names = [];
-		var in_group;
-
-		// Add each group name to an array called group_names
-		_.each(current_user_groups, function(element, index, list){
-			group_names.push(element.name());
-		});
-
-		_.each(group_array, function(element, index, list){
-			if (_.contains(group_names, element)) {
-				in_group = true;
-			}
-		});
-		return in_group;
+	updateIncidentTicketDone: function(data){
+		// var ticket_id = data.ticket.id;
+		// var msg  = "Updated and linked incident ticket #<a href='#/tickets/%@'>%@</a>.";
+		// services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 5000);
 	},
 
-    growl_kb_needed: function(ticket) {
-		// https://developer.zendesk.com/apps/docs/agent/services
-		// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
-		var msg  = "Hey now! You didn't include a KB article or Help Topic, and this ticket needs one. <a href='#/tickets/%@'>%@</a>";
-		var life = parseInt(this.$('#life').val(), 10);
-		life = isNaN(life) ? 10 : life;
-		var ticket_id = ticket.id();
-		// services.notify(msg.fmt(life), 'notice', life * 1000);
-		// notice, alert, error
-		services.notify(msg.fmt(ticket_id, ticket_id), 'error', life * 1000);
-    },
+  'ticket.save': function() {
+    // do something
+    return "The ticket wasn't saved!";
+	},
 
-    growl_hold_status_needed: function(ticket) {
-		// https://developer.zendesk.com/apps/docs/agent/services
-		// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
-		var msg  = "Hold your horses, you didn't include a Hold Status. <a href='#/tickets/%@'>%@</a>";
-		var life = parseInt(this.$('#life').val(), 10);
-		life = isNaN(life) ? 6 : life;
-		var ticket_id = ticket.id();
-		// services.notify(msg.fmt(life), 'notice', life * 1000);
-		// notice, alert, error
-			this.$('#hold_modal').modal({
-				backdrop: true,
-				keyboard: true
-			});
-		services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
+  ticketSaveHandler: function() {
+  	var ticket = this.ticket();
+  	var type = ticket.type();
+  	var about = ticket.customField("custom_field_22222564");
 
+  	// KB Stuff
+  	var no_kb_necessary = KB.no_kb_needed_test(ticket);
+  	var has_kb_or_help = false;
+		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
+		var internal_kb_rec = KB.internal_kb_recommended(ticket);
 
-    },
-
-
-
-    initialize: function(data) { // function called when we load
-		// console.log("initialize");
-
-		// if (data.firstLoad) {
-		// //   // this.switchTo('main');
-		//   console.log("data.firstLoad");
-
-		// //   // this.generate_app_view();
-		// }
-		this.resetGlobals();
-
-		// _.defer(function(){ console.log("blah"); });
-		// this.$("#test_alert").fadeTo(2000, 500).slideUp(500, function(){
-		// 	// this.$("#test_alert").alert('close');
-		// 	console.log("blah");
-		// 	this.$("#test_alert").remove();
-		// });
-
-		// this.growl_kb_needed();
-
-		// Info.test_func(this);
-		// pass the app as an argument to info.js
-		// info.js looks like this:
-		// test_func: function (app) {
-		// 	console.log(app.ticket().id());
-		// },
-
-
-		// https://developer.zendesk.com/apps/docs/agent/interface
-		// var field = this.ticketFields('tags')
-		// field.hide();
-
-		// var myCustomField = this.ticketFields('custom_field_30584448');
-		// var option = _.find(myCustomField.options(), function(opt) {
-  //         return opt.value();
-  //       });
-  // myCustomField.options
-  		// myCustomField.required = true;
-  		// myCustomField.required();
-
-		// myCustomField.isRequired();
-		// console.log("required? " + myCustomField.isRequired());
-		// console.log(myCustomField);
-
-
-		// disable customer impact field from being changed by analyst
-		var customer_impact_field = this.ticketFields('custom_field_28972337');
-		customer_impact_field.disable();
-		// kb status
-		this.ticketFields('custom_field_22953480').disable();
-
-		// ticket source
-		this.ticketFields('custom_field_27286948').disable();
-
-		// chat dispatched
-		this.ticketFields('custom_field_29482057').disable();
-
-
-
-		// Disable PD Only fields for all groups except PSLs and PMs
-		var group_array = ["Product Support Leads", "Product Managers"];
-		if (!this.check_user_groups(group_array)) {
-			// Bug Review
-			this.ticketFields('custom_field_30520367').disable();
-			// Bug Priority
-			this.ticketFields('custom_field_30300358').disable();
-			// PD SLA
-			this.ticketFields('custom_field_31407407').disable();
+		if (kb_article_valid || help_topic_valid) {
+			has_kb_or_help = true;
 		}
 
+	// this.$('#test_popover').popover({
+	//     placement : 'right',
+	//     html : true,
+	//     delay: {
+	//        show: "0",
+	//        hide: "10"
+	//     }
+	// });
+	// 			// this.$('#test_popover').popover('show');
+
+	// this.$('#test_popover').on('show.bs.popover', function() {
+	// 	// console.log("shown");
+	//     setTimeout(function() {
+	//         this.$('#test_popover').popover('hide');
+	//     }, 1000);
+	// });
+	    				// this.$('#test_popover').popover('hide');
+			// console.log(hold_status);
 
 
-		// this.$("button.continue").html("Next Step...")
+	// Hold
+	if (ticket.status() == "hold") {
+		// Hold Stuff
+		var hold_status = ticket.customField("custom_field_30584448");
 
-		var ticket = this.ticket();
+		if (hold_status === "") {
+  			// this.growl_hold_status_needed(ticket);
 
-		// check to see if KB is attached.
-		// this.update_article_status();
+  			// This should only affect Support people
 
-		// See if globals data is stale
-		// if (this.appProperties.ticket_id == this.ticket().id()) {
-		//       console.log('ticket ID matches');
-		// } else {
-		//   console.log('ticket ID does not match!');
-		// }
+  			var group_array = ["Support", "Product Support Leads", "Support Relationship Manager"];
+  			if (this.check_user_groups(group_array)) {
 
-		// Check the ticket ID to see if things match
-		// this.appProperties.ticket_id === this.ticket().id()
 
-		// Check if it's a new ticket or not
 
-		var ticket_new;
-
-        if (ticket.status() == "new") {
-        	// ticket.isNew()
-			ticket_new = true;
-
-			if (ticket.requester()) {
-				this.get_organization_info();
-			}
-			else {
-				this.switchTo('new', {
-					// ticket_new: ticket_new,
-					user_id: this.currentUser().id(),
-					// organization: org_info,
-					// requester: requester
+    			this.$('#hold_modal').modal({
+					backdrop: true,
+					keyboard: true
 				});
-			}
+  				return "The ticket wasn't saved! You need a Hold Status before submitting again.";
+  			}
 
+  		}
+	} else {
+		// Remove Hold Status
+		if ( type == "problem" && about == "product_owner__bug" || type == "incident") {
+			// Don't remove the status if a problem ticket or it's an incident.
+		} else {
+			ticket.customField("custom_field_30584448", "");
+		}
+
+	}
+
+	// Solved
+	if (ticket.status() == "solved") {
+
+		if (no_kb_necessary === false && has_kb_or_help === false && internal_kb_rec === false) {
+  			this.growl_kb_needed(ticket);
+  		}
+	}
+
+
+  },
+
+
+
+
+// Ticket Field Changes --------------------
+
+	bug_priority_changed: function () {
+		this.set_pd_sla_date();
+		this.generate_app_view();
+	},
+
+  about_changed: function () {
+  	this.type_changed();
+  	this.generate_app_view();
+  },
+
+  type_changed: function () {
+  	var ticket = this.ticket();
+  	var type = ticket.type();
+  	var about = ticket.customField("custom_field_22222564");
+
+  	// console.log(ticket.type());
+  	if (type == "incident") {
+  		// Change the hold status
+  		ticket.customField("custom_field_30584448", "hold_incident");
+  	}
+  	else if (type == "problem" && about == "product_owner__bug") {
+  		ticket.customField("custom_field_30584448", "hold_bug");
+  	}
+  	else if (type == "problem" && about != "product_owner__bug") {
+  		ticket.customField("custom_field_30584448", "");
+  	}
+  },
+
+  check_user_groups: function(group_array) {
+  	// This function returns true if user is one of the groups
+	var current_user_groups = this.currentUser().groups();
+	var group_names = [];
+	var in_group;
+
+	// Add each group name to an array called group_names
+	_.each(current_user_groups, function(element, index, list){
+		group_names.push(element.name());
+	});
+
+	_.each(group_array, function(element, index, list){
+		if (_.contains(group_names, element)) {
+			in_group = true;
+		}
+	});
+	return in_group;
+},
+
+  growl_kb_needed: function(ticket) {
+	// https://developer.zendesk.com/apps/docs/agent/services
+	// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
+	var msg  = "Hey now! You didn't include a KB article or Help Topic, and this ticket needs one. <a href='#/tickets/%@'>%@</a>";
+	var life = parseInt(this.$('#life').val(), 10);
+	life = isNaN(life) ? 10 : life;
+	var ticket_id = ticket.id();
+	// services.notify(msg.fmt(life), 'notice', life * 1000);
+	// notice, alert, error
+	services.notify(msg.fmt(ticket_id, ticket_id), 'error', life * 1000);
+  },
+
+  growl_hold_status_needed: function(ticket) {
+	// https://developer.zendesk.com/apps/docs/agent/services
+	// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
+	var msg  = "Hold your horses, you didn't include a Hold Status. <a href='#/tickets/%@'>%@</a>";
+	var life = parseInt(this.$('#life').val(), 10);
+	life = isNaN(life) ? 6 : life;
+	var ticket_id = ticket.id();
+	// services.notify(msg.fmt(life), 'notice', life * 1000);
+	// notice, alert, error
+		this.$('#hold_modal').modal({
+			backdrop: true,
+			keyboard: true
+		});
+	services.notify(msg.fmt(ticket_id, ticket_id), 'alert', life * 1000);
+
+
+  },
+
+
+
+  initialize: function(data) { // function called when we load
+	// console.log("initialize");
+
+	// if (data.firstLoad) {
+	// //   // this.switchTo('main');
+	//   console.log("data.firstLoad");
+
+	// //   // this.generate_app_view();
+	// }
+	this.resetGlobals();
+
+	// _.defer(function(){ console.log("blah"); });
+	// this.$("#test_alert").fadeTo(2000, 500).slideUp(500, function(){
+	// 	// this.$("#test_alert").alert('close');
+	// 	console.log("blah");
+	// 	this.$("#test_alert").remove();
+	// });
+
+	// this.growl_kb_needed();
+
+	// Info.test_func(this);
+	// pass the app as an argument to info.js
+	// info.js looks like this:
+	// test_func: function (app) {
+	// 	console.log(app.ticket().id());
+	// },
+
+
+	// https://developer.zendesk.com/apps/docs/agent/interface
+	// var field = this.ticketFields('tags')
+	// field.hide();
+
+	// var myCustomField = this.ticketFields('custom_field_30584448');
+	// var option = _.find(myCustomField.options(), function(opt) {
+//         return opt.value();
+//       });
+// myCustomField.options
+		// myCustomField.required = true;
+		// myCustomField.required();
+
+	// myCustomField.isRequired();
+	// console.log("required? " + myCustomField.isRequired());
+	// console.log(myCustomField);
+
+
+	// disable customer impact field from being changed by analyst
+	var customer_impact_field = this.ticketFields('custom_field_28972337');
+	customer_impact_field.disable();
+	// kb status
+	this.ticketFields('custom_field_22953480').disable();
+
+	// ticket source
+	this.ticketFields('custom_field_27286948').disable();
+
+	// chat dispatched
+	this.ticketFields('custom_field_29482057').disable();
+
+
+
+	// Disable PD Only fields for all groups except PSLs and PMs
+	var group_array = ["Product Support Leads", "Product Managers"];
+	if (!this.check_user_groups(group_array)) {
+		// Bug Review
+		this.ticketFields('custom_field_30520367').disable();
+		// Bug Priority
+		this.ticketFields('custom_field_30300358').disable();
+		// PD SLA
+		this.ticketFields('custom_field_31407407').disable();
+	}
+
+
+
+	// this.$("button.continue").html("Next Step...")
+
+	var ticket = this.ticket();
+
+	// check to see if KB is attached.
+	// this.update_article_status();
+
+	// See if globals data is stale
+	// if (this.appProperties.ticket_id == this.ticket().id()) {
+	//       console.log('ticket ID matches');
+	// } else {
+	//   console.log('ticket ID does not match!');
+	// }
+
+	// Check the ticket ID to see if things match
+	// this.appProperties.ticket_id === this.ticket().id()
+
+	// Check if it's a new ticket or not
+
+	var ticket_new;
+
+      if (ticket.status() == "new") {
+      	// ticket.isNew()
+		ticket_new = true;
+
+		if (ticket.requester()) {
+			this.get_organization_info();
 		}
 		else {
-			ticket_new = false;
-			this.get_organization_info();
-			// var organization = this.ticket().organization();
-			// // console.log(typeof organization);
-			// this.appProperties.org_data = organization;
-			// console.log("init----");
-			// console.log(organization);
-			// console.log("end init----");
-
-			// this.generate_app_view();
+			this.switchTo('new', {
+				// ticket_new: ticket_new,
+				user_id: this.currentUser().id(),
+				// organization: org_info,
+				// requester: requester
+			});
 		}
 
+	}
+	else {
+		ticket_new = false;
+		this.get_organization_info();
+		// var organization = this.ticket().organization();
+		// // console.log(typeof organization);
+		// this.appProperties.org_data = organization;
+		// console.log("init----");
+		// console.log(organization);
+		// console.log("end init----");
 
-    },
-
-
-    chat_transcript_save: function() {
-		var ticket = this.ticket();
-		var comment = this.comment();
-		var modal_transcript = this.$('#chat_transcript').val();
-		// this.$('.modal-body textarea').text();
-		// console.log(this.$('#chat_transcript').val());
-
-		// ticket.customField('custom_field_30844127', modal_transcript);
-
-		// var name = ticket.requester().name().split(" ");
-		// name = name[0];
-
-		// var greeting = "Hi " + name + ", thanks for chatting today. Here is the transcript of our chat. You can reply by email with any further comments related to this ticket.";
-
-		// comment.appendMarkdown(greeting);
-		// comment.appendMarkdown('---');
-		// comment.appendMarkdown('## Chat Transcript:');
-
-		var full_comment;
-		// full_comment = '\r' + greeting + '\r\r';
-		full_comment = '\r';
-		full_comment += '---' + '\r';
-		full_comment += '## Chat Transcript:' + '\r';
-
-		var updated_transcript = this.format_chat_transcript();
-		// ticket.customField("custom_field_30844127");
-
-		full_comment += updated_transcript;
-
-		comment.appendMarkdown(full_comment);
-
-		this.$('#chat_transcript_modal').modal('hide');
+		// this.generate_app_view();
+	}
 
 
-	},
-
-    format_chat_transcript: function() {
-    	var ticket = this.ticket();
-    	var raw_chat_transcript = this.$('#chat_transcript').val();
+  },
 
 
-    	// console.log("chat transcript fixed");
-    	// console.log(this.$('#chat_transcript').val());
+  chat_transcript_save: function() {
+	var ticket = this.ticket();
+	var comment = this.comment();
+	var modal_transcript = this.$('#chat_transcript').val();
+	// this.$('.modal-body textarea').text();
+	// console.log(this.$('#chat_transcript').val());
 
-		// subject = raw_subject.replace(/(.+\s?\\)/, '');
+	// ticket.customField('custom_field_30844127', modal_transcript);
 
-		// // Remove any other backslashes
-		// subject = subject.replace('\\', '');
+	// var name = ticket.requester().name().split(" ");
+	// name = name[0];
 
-		// // Remove Five9 Call and CHAT:
-		// subject = subject.replace('Five9 Call', '');
-		// subject = subject.replace('CHAT:', '');
+	// var greeting = "Hi " + name + ", thanks for chatting today. Here is the transcript of our chat. You can reply by email with any further comments related to this ticket.";
 
-		// console.log("check the kb id");
-		// var pattern = new RegExp("---");
-		// var already_formatted = pattern.test(raw_chat_transcript);
-		// console.log("it's been formatted");
+	// comment.appendMarkdown(greeting);
+	// comment.appendMarkdown('---');
+	// comment.appendMarkdown('## Chat Transcript:');
 
-		// if (!already_formatted) {
-			var pattern = new RegExp(/^(([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] ?(AM|PM)) (\[(.*)\])/igm);
-			// var replacement = " --- \r\r\r*$1* **$5:**\r  \t";
-			var replacement = " \r\r\r*$1* **$5:**\r  \t";
-			var fixed_chat_transcript = raw_chat_transcript.replace(pattern, replacement);
-			// ticket.customField('custom_field_30844127', fixed_chat_transcript);
-			// console.log(fixed_chat_transcript);
-			return fixed_chat_transcript;
-		// }
+	var full_comment;
+	// full_comment = '\r' + greeting + '\r\r';
+	full_comment = '\r';
+	full_comment += '---' + '\r';
+	full_comment += '## Chat Transcript:' + '\r';
+
+	var updated_transcript = this.format_chat_transcript();
+	// ticket.customField("custom_field_30844127");
+
+	full_comment += updated_transcript;
+
+	comment.appendMarkdown(full_comment);
+
+	this.$('#chat_transcript_modal').modal('hide');
 
 
-    },
+},
+
+
+
+format_chat_transcript: function() {
+  	var ticket = this.ticket();
+  	var raw_chat_transcript = this.$('#chat_transcript').val();
+
+
+  	// console.log("chat transcript fixed");
+  	// console.log(this.$('#chat_transcript').val());
+
+	// subject = raw_subject.replace(/(.+\s?\\)/, '');
+
+	// // Remove any other backslashes
+	// subject = subject.replace('\\', '');
+
+	// // Remove Five9 Call and CHAT:
+	// subject = subject.replace('Five9 Call', '');
+	// subject = subject.replace('CHAT:', '');
+
+	// console.log("check the kb id");
+	// var pattern = new RegExp("---");
+	// var already_formatted = pattern.test(raw_chat_transcript);
+	// console.log("it's been formatted");
+
+	// if (!already_formatted) {
+		var pattern = new RegExp(/^(([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] ?(AM|PM)) (\[(.*)\])/igm);
+		// var replacement = " --- \r\r\r*$1* **$5:**\r  \t";
+		var replacement = " \r\r\r*$1* **$5:**\r  \t";
+		var fixed_chat_transcript = raw_chat_transcript.replace(pattern, replacement);
+		// ticket.customField('custom_field_30844127', fixed_chat_transcript);
+		// console.log(fixed_chat_transcript);
+		return fixed_chat_transcript;
+	// }
+
+
+  },
 
 
 
@@ -530,34 +535,34 @@
 		if(this.ticket().requester()){
 			this.get_organization_info();
 		}
-    },
+  },
 
 
-    update_zd_custom_field: function(field_id, value) {
-    	// ticket.customField("custom_field_22953480", "special_code");
-  	    return this.ticket().customField( helpers.fmt('custom_field_%@', field_id), value );
-    },
+  update_zd_custom_field: function(field_id, value) {
+  	// ticket.customField("custom_field_22953480", "special_code");
+	    return this.ticket().customField( helpers.fmt('custom_field_%@', field_id), value );
+  },
 
-    kb_id_changed: function () {
-		// this.update_article_status();
+  kb_id_changed: function () {
+	// this.update_article_status();
 
-		// var ticket = this.ticket();
+	// var ticket = this.ticket();
 
-		// // subject = ticket.subject();
-		// // this.update_app();
+	// // subject = ticket.subject();
+	// // this.update_app();
 
 
-		// // this.appProperties
-		// // var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
+	// // this.appProperties
+	// // var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
 
-		// // if (kb_article_valid) {
-		// // 	this.change_zd_custom_field(22930600,"special_code");
-		// // }
-		this.generate_app_view();
-		// console.log("kb id changed");
+	// // if (kb_article_valid) {
+	// // 	this.change_zd_custom_field(22930600,"special_code");
+	// // }
+	this.generate_app_view();
+	// console.log("kb id changed");
 	},
 
-    help_topic_changed: function () {
+  help_topic_changed: function () {
 		// this.update_article_status();
 		this.generate_app_view();
 		// var ticket = this.ticket();
@@ -580,12 +585,12 @@
 		// console.log("help topic changed");
 	},
 
-	test_jquery: function () {
-		var $test = this.$('#pop_test_toggle');
-		$test.hide();
-		// console.log($test.is(':visible'));
-		this.$('#pop_test').popover('show');
-	},
+	// test_jquery: function () {
+	// 	var $test = this.$('#pop_test_toggle');
+	// 	$test.hide();
+	// 	// console.log($test.is(':visible'));
+	// 	this.$('#pop_test').popover('show');
+	// },
 
 
 	update_article_status: function () {
@@ -667,6 +672,61 @@
 		this.generate_app_view();
 		// console.log("subject changed / setup search");
 	},
+
+
+
+
+	set_pd_sla_date: function () {
+		var ticket = this.ticket();
+		var bug_priority = ticket.customField("custom_field_30300358");
+		var sla_date = ticket.customField("custom_field_31407407");
+		var new_sla_date;
+		var today = new Date();
+
+		switch (bug_priority) {
+			case "0_critical_down":
+				// Set SLA to 1 day from today
+				today.setDate(today.getDate() + 1);
+				new_sla_date = this.format_date_object(today);
+				break;
+			case "1_critical":
+			// Set SLA to 30 days from today
+				today.setDate(today.getDate() + 30);
+				new_sla_date = this.format_date_object(today);
+				break;
+			case "2_high":
+			// Set SLA to 90 days from today
+				today.setDate(today.getDate() + 90);
+				new_sla_date = this.format_date_object(today);
+				break;
+			case "3_medium":
+				// Set SLA to 30 days from today
+					today.setDate(today.getDate() + 180);
+					new_sla_date = this.format_date_object(today);
+					break;
+			case "4_low":
+				// Don't set SLA date
+				new_sla_date = sla_date;
+				break;
+			case "5_cosmetic":
+				// Don't set SLA date
+				new_sla_date = sla_date;
+				break;
+			default:
+				new_sla_date = sla_date;
+		}
+
+		console.log(new_sla_date);
+		ticket.customField("custom_field_31407407", new_sla_date);
+	},
+
+	format_date_object: function (date_object) {
+		var formatted_date = date_object.getMonth() + 1 + "/" + date_object.getDate() + "/" + date_object.getFullYear();
+		return formatted_date;
+	},
+
+
+
 
 
 	// check_data: function() {

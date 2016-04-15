@@ -1,0 +1,16 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "name": "K-12 Support App",$/;"	function	line:2
+author	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "author": {$/;"	function	line:3
+name	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "name": "Jake Spirek",$/;"	function	line:4
+email	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "email": "jake.spirek@blackbaud.com",$/;"	function	line:5
+url	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^    "url": ""$/;"	function	line:6
+defaultLocale	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "defaultLocale": "en",$/;"	function	line:8
+private	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "private": true,$/;"	function	line:9
+location	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "location": ["ticket_sidebar", "new_ticket_sidebar"],$/;"	function	line:10
+version	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "version": "1.811",$/;"	function	line:11
+frameworkVersion	/Users/jake.spirek/Dropbox/BBWH/GitHub DropBox/zd-kb/bbkb/manifest.json	/^  "frameworkVersion": "1.0"$/;"	function	line:12
