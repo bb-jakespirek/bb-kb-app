@@ -674,17 +674,19 @@ format_chat_transcript: function() {
 				new_sla_date = this.format_date_object(today);
 				break;
 			case "3_medium":
-				// Set SLA to 30 days from today
+				// Set SLA to 180 days from today
 					today.setDate(today.getDate() + 180);
 					new_sla_date = this.format_date_object(today);
 					break;
 			case "4_low":
-				// Don't set SLA date
-				new_sla_date = sla_date;
+			// Set SLA to 365 days from today to follow up later
+				today.setDate(today.getDate() + 365);
+				new_sla_date = this.format_date_object(today);
 				break;
 			case "5_cosmetic":
-				// Don't set SLA date
-				new_sla_date = sla_date;
+				// Set SLA to 365 days from today to follow up later
+				today.setDate(today.getDate() + 365);
+				new_sla_date = this.format_date_object(today);
 				break;
 			default:
 				new_sla_date = sla_date;
@@ -695,15 +697,17 @@ format_chat_transcript: function() {
 	},
 
 	format_date_object: function (date_object) {
-		// This gets it to MM/DD/YYYY
-		var formatted_date = date_object.getMonth() + 1 + "/" + date_object.getDate() + "/" + date_object.getFullYear();
-		return formatted_date;
+		if (date_object !== null) {
+			// This changes it to MM/DD/YYYY
+			var formatted_date = date_object.getMonth() + 1 + "/" + date_object.getDate() + "/" + date_object.getFullYear();
+			return formatted_date;
+		}
 	},
 
 
 	fix_inverted_date_formatting: function (date_string) {
 		var formatted_date;
-		if (date_string != "") {
+		if (date_string !== "") {
 			//original is YYYY-MM-DD
 			var str = date_string.split("-");
 			// This gets it to MM/DD/YYYY
@@ -950,10 +954,13 @@ format_chat_transcript: function() {
 		var bug_info = {};
 		bug_info.show = false;
 
-		if (type === "problem" && bug_priority != "") {
+		if (type === "problem" && bug_priority !== "") {
 			bug_info.show = true;
 			bug_info.priority = bug_priority;
-			bug_info.sla_date = this.format_date_object(sla_date);
+			if (sla_date !== "") {
+				bug_info.sla_date = this.format_date_object(sla_date);
+			}
+
 		}
 		else if (type === "incident" && ticket.customField('problem_id') > 0) {
 			// console.log(this.appProperties.ticket_id);

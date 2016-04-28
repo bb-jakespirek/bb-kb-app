@@ -6,8 +6,8 @@ module.exports = {
 		var baseURL = "http://bbkb.blackbaud.com/#sort=relevancy";
 		var baseURLpkb = "http://search.blackbaud.com/#sort=relevancy";
 		var parent = base + "|";
-		var k12Products = base; 
-		var Core = parent+"core"; 
+		var k12Products = base;
+		var Core = parent+"core";
 		var onBoard = parent+"onboard";
 		var onCampus = parent+"oncampus";
 		var onMessage = parent+"onmessage";
@@ -41,7 +41,7 @@ module.exports = {
 				break;
 			case 'oncampus':
 				product = onCampus;
-				break;	
+				break;
 			case 'onmessage':
 				product = onMessage;
 				break;
@@ -49,7 +49,7 @@ module.exports = {
 				product = onRecord;
 				break;
 			default:
-				product = k12Products; 
+				product = k12Products;
 				break;
 		}
 
@@ -72,7 +72,7 @@ module.exports = {
 		kb_links.btn_internal_procedures_search = baseURL + "&f:@articlefilters=[internal procedure]" + kb_search_string_internal;
 
 		kb_links.ticket_subject = fixed_subject;
-		
+
 
 		return kb_links;
 	},
@@ -82,11 +82,11 @@ module.exports = {
 	fix_subject: function (raw_subject) {
 		var subject;
 		// Remove the first part of the subject up to the backslash
-		subject = raw_subject.replace(/(.+\s?\\)/, ''); 
+		subject = raw_subject.replace(/(.+\s?\\)/, '');
 
 		// Remove any other backslashes
 		subject = subject.replace('\\', '');
-		
+
 		// Remove Five9 Call and CHAT:
 		subject = subject.replace('Five9 Call', '');
 		subject = subject.replace('CHAT:', '');
@@ -130,7 +130,7 @@ module.exports = {
 
 
 		return kb_article_valid;
-		
+
 	},
 
 	check_help_topic: function (help_topic) {
@@ -146,11 +146,11 @@ module.exports = {
 
 		if (help_topic_test && help_topic !== "") {
 			help_topic_valid = true;
-		} 
+		}
 		else {
 			help_topic_valid = false;
 		}
-		
+
 		// this.update_article_status(ticket);
 
 		// this.update_app();
@@ -189,6 +189,7 @@ module.exports = {
 		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
 		// var article_num_test = pattern.test(kb_article_number);
 		// console.log(article_num_test + " article_num_test");
+		// About
 		var no_kb_necessary_list = [
 		"data__chargeable",
 		"data__export",
@@ -220,7 +221,7 @@ module.exports = {
 		"support_programmer__redirect",
 		];
 
-		
+
 
 		for (var i = no_kb_necessary_list.length - 1; i >= 0; i--) {
 			if (ticket_about == no_kb_necessary_list[i]) {
