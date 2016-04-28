@@ -693,7 +693,10 @@ format_chat_transcript: function() {
 		}
 
 		// console.log(new_sla_date);
-		ticket.customField("custom_field_31407407", new_sla_date);
+		// var group_array = ["Product Support Leads", "Product Managers"];
+		// if (this.check_user_groups(group_array)) {
+			ticket.customField("custom_field_31407407", new_sla_date);
+		// }
 	},
 
 	format_date_object: function (date_object) {
