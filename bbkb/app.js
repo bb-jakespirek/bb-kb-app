@@ -150,8 +150,10 @@
 
 
 	initialize: function(data) { // function called when we load
-	// console.log("initialize");
-
+	console.log("initialize");
+	var ticket = this.ticket();
+	var sla_date_before = ticket.customField("custom_field_31407407");
+console.log("sla_date_before",sla_date_before);
 	// if (data.firstLoad) {
 	// //   // this.switchTo('main');
 	//   console.log("data.firstLoad");
@@ -175,14 +177,17 @@
 	this.ticketFields('custom_field_29482057').disable();
 
 	// Disable PD Only fields for all groups except PSLs and PMs
+
 	var group_array = ["Product Support Leads", "Product Managers"];
-	if (!this.check_user_groups(group_array)) {
+if (!this.check_user_groups(group_array)) {
+		// user is not a PSL or PM
+		// disable the following:
 		// Bug Review
-		this.ticketFields('custom_field_30520367').disable();
+		this.ticketFields('custom_field_30520367').hide();
 		// Bug Priority
-		this.ticketFields('custom_field_30300358').disable();
+		this.ticketFields('custom_field_30300358').hide();
 		// PD SLA
-		this.ticketFields('custom_field_31407407').disable();
+		this.ticketFields('custom_field_31407407').hide();
 	}
 
 	var ticket = this.ticket();
@@ -296,7 +301,7 @@
   			// this.growl_hold_status_needed(ticket);
 
   			// This should only affect Support people
-
+				console.log("hold status check groups");
   			var group_array = ["Support", "Product Support Leads", "Support Relationship Manager"];
   			if (this.check_user_groups(group_array)) {
 
@@ -341,7 +346,16 @@
 // Ticket Field Changes --------------------
 
 	bug_priority_changed: function () {
-		this.set_pd_sla_date();
+		console.log("bug priority changed check groups");
+		var group_array = ["Product Support Leads", "Product Managers"];
+		if (this.check_user_groups(group_array)) {
+			console.log('current user is a PSL or PM');
+			// Only modify if they are a PSL or PM
+			this.set_pd_sla_date();
+		} else {
+			console.log("disabling the pd sla field");
+			this.ticketFields('custom_field_31407407').hide();
+		}
 		this.generate_app_view();
 	},
 
@@ -375,22 +389,30 @@
   },
 
   check_user_groups: function(group_array) {
+		console.log("check user groups");
   	// This function returns true if user is one of the groups
 	var current_user_groups = this.currentUser().groups();
 	var group_names = [];
 	var in_group;
 
+
 	// Add each group name to an array called group_names
 	_.each(current_user_groups, function(element, index, list){
+		// console.log(element.name());
 		group_names.push(element.name());
 	});
+	// console.log('Current groups',group_names);
 
 	_.each(group_array, function(element, index, list){
 		if (_.contains(group_names, element)) {
+			// console.log("returning true",element);
 			in_group = true;
+			return in_group;
 		}
 	});
-	return in_group;
+	if (in_group) {
+		return true;
+	}
 },
 
   growl_kb_needed: function(ticket) {
@@ -651,6 +673,8 @@ format_chat_transcript: function() {
 
 
 	set_pd_sla_date: function () {
+		console.log("set pd sla date");
+		// console.log("set pd sla date");
 		var ticket = this.ticket();
 		var bug_priority = ticket.customField("custom_field_30300358");
 		var sla_date = ticket.customField("custom_field_31407407");
@@ -693,10 +717,10 @@ format_chat_transcript: function() {
 		}
 
 		// console.log(new_sla_date);
-		// var group_array = ["Product Support Leads", "Product Managers"];
-		// if (this.check_user_groups(group_array)) {
+		// Make sure that the person cleared out the SLA Date field first.
+		if (sla_date == null) {
 			ticket.customField("custom_field_31407407", new_sla_date);
-		// }
+		}
 	},
 
 	format_date_object: function (date_object) {
@@ -842,6 +866,7 @@ format_chat_transcript: function() {
 	},
 
 	check_if_in_group: function(group_array) {
+		console.log("check if in group");
 		if (this.check_user_groups(group_array)) {
 			return true;
 		} else {
@@ -953,7 +978,7 @@ format_chat_transcript: function() {
 		var type = ticket.type();
 		var bug_priority = ticket.customField("custom_field_30300358");
 		var sla_date = ticket.customField("custom_field_31407407");
-
+console.log("get_bug_info", sla_date);
 		var bug_info = {};
 		bug_info.show = false;
 
