@@ -190,7 +190,7 @@ if (!this.check_user_groups(group_array)) {
 		this.ticketFields('custom_field_31407407').hide();
 	}
 
-	var ticket = this.ticket();
+	// var ticket = this.ticket();
 
 	// check to see if KB is attached.
 	// this.update_article_status();
@@ -389,7 +389,7 @@ if (!this.check_user_groups(group_array)) {
   },
 
   check_user_groups: function(group_array) {
-		console.log("check user groups");
+		// console.log("check user groups");
   	// This function returns true if user is one of the groups
 	var current_user_groups = this.currentUser().groups();
 	var group_names = [];
@@ -725,7 +725,11 @@ format_chat_transcript: function() {
 	format_date_object: function (date_object) {
 		if (date_object !== null) {
 			// This changes it to MM/DD/YYYY
-			var formatted_date = date_object.getMonth() + 1 + "/" + date_object.getDate() + "/" + date_object.getFullYear();
+			var month = date_object.getMonth() + 1;
+			var day = date_object.getDate();
+			day += 1;
+			var year = date_object.getFullYear();
+			var formatted_date = month + "/" + day + "/" + year;
 			return formatted_date;
 		}
 	},
@@ -977,7 +981,7 @@ format_chat_transcript: function() {
 		var type = ticket.type();
 		var bug_priority = ticket.customField("custom_field_30300358");
 		var sla_date = ticket.customField("custom_field_31407407");
-console.log("get_bug_info", sla_date);
+// console.log("get_bug_info", sla_date);
 		var bug_info = {};
 		bug_info.show = false;
 
