@@ -884,10 +884,12 @@ format_chat_transcript: function() {
 
 		var kb_info = this.appProperties.kb_info;
 
+		console.log("before ticket source");
 		var ticket_source = ticket.customField("custom_field_27286948");
+		console.log("after ticket source");
 		var is_chat_ticket = false;
 
-		var authorized_contact = ticket.requester().customField("authorized_contact");
+
 
 		if (ticket.isNew()) {
 			ticket_new = true;
@@ -908,6 +910,8 @@ format_chat_transcript: function() {
 			}
 			// console.log("this.appProperties.org_data.id");
 			// console.log(this.appProperties.org_data.id);
+			var authorized_contact = ticket.requester().customField("authorized_contact");
+
 			// this.$('#pop_test').popover('show');
 			this.switchTo('app', {
 			// this.switchTo('test', {
