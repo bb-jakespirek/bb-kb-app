@@ -118,7 +118,7 @@
     'click #create_bug_btn': function(event) {
 
 			// this.$("#phone_input").select();
-			console.log("create a new bug");
+			// console.log("create a new bug");
 			var ticket = this.ticket();
 
 			var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}];
@@ -150,10 +150,10 @@
 
 
 	initialize: function(data) { // function called when we load
-	console.log("initialize");
+	// console.log("initialize");
 	var ticket = this.ticket();
 	var sla_date_before = ticket.customField("custom_field_31407407");
-console.log("sla_date_before",sla_date_before);
+// console.log("sla_date_before",sla_date_before);
 	// if (data.firstLoad) {
 	// //   // this.switchTo('main');
 	//   console.log("data.firstLoad");
@@ -346,14 +346,14 @@ if (!this.check_user_groups(group_array)) {
 // Ticket Field Changes --------------------
 
 	bug_priority_changed: function () {
-		console.log("bug priority changed check groups");
+		// console.log("bug priority changed check groups");
 		var group_array = ["Product Support Leads", "Product Managers"];
 		if (this.check_user_groups(group_array)) {
-			console.log('current user is a PSL or PM');
+			// console.log('current user is a PSL or PM');
 			// Only modify if they are a PSL or PM
 			this.set_pd_sla_date();
 		} else {
-			console.log("disabling the pd sla field");
+			// console.log("disabling the pd sla field");
 			this.ticketFields('custom_field_31407407').hide();
 		}
 		this.generate_app_view();
@@ -673,7 +673,6 @@ format_chat_transcript: function() {
 
 
 	set_pd_sla_date: function () {
-		console.log("set pd sla date");
 		// console.log("set pd sla date");
 		var ticket = this.ticket();
 		var bug_priority = ticket.customField("custom_field_30300358");
@@ -818,7 +817,7 @@ format_chat_transcript: function() {
 	createTicketRequestDone: function(data){
 			var incident_ticket_id = this.ticket().id();
 			var problem_ticket_id = data.ticket.id;
-			console.log('Created Ticket ID: ' + data.ticket.id);
+			// console.log('Created Ticket ID: ' + data.ticket.id);
 			var msg  = "Created new ticket #<a href='#/tickets/%@'>%@</a>.";
 			this.ajax('updateIncidentTicket', incident_ticket_id, problem_ticket_id);
 			services.notify(msg.fmt(problem_ticket_id, problem_ticket_id), 'notice', 5000);
@@ -866,7 +865,7 @@ format_chat_transcript: function() {
 	},
 
 	check_if_in_group: function(group_array) {
-		console.log("check if in group");
+		// console.log("check if in group");
 		if (this.check_user_groups(group_array)) {
 			return true;
 		} else {
