@@ -666,15 +666,14 @@
 		var ticket = this.ticket();
 		var type = ticket.type();
 		var bug_priority = ticket.customField("custom_field_30300358");
-		var sla_date_str = ticket.customField("custom_field_31407407");
+		var sla_date_field = ticket.customField("custom_field_31407407");
 		var sla_date_obj;
 		var sla_date_as_str;
-		if (sla_date_str !== "") {
-			sla_date_obj = new Date(sla_date_str.to_s());
+		if (sla_date_field !== "" && sla_date_field !== null) {
+			sla_date_obj = new Date(sla_date_field.to_s());
 			sla_date_obj.setDate(sla_date_obj.getDate() + 1);
 			sla_date_as_str = this.format_date_object(sla_date_obj);
 			console.log("date object", sla_date_obj);
-
 		}
 
 		// for (item in sla_date) {
@@ -689,7 +688,7 @@
 		if (type === "problem" && bug_priority !== "") {
 			bug_info.show = true;
 			bug_info.priority = bug_priority;
-			if (sla_date_str !== null) {
+			if (sla_date_field !== null) {
 				bug_info.sla_date = sla_date_as_str;
 			}
 		}
