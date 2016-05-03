@@ -459,10 +459,10 @@
 
 	format_date_object: function (date_object) {
 		if (date_object !== null) {
+			// console.log(date_object.getDate());
 			// This changes it to MM/DD/YYYY
 			var month = date_object.getMonth() + 1;
 			var day = date_object.getDate();
-			day += 1;
 			var year = date_object.getFullYear();
 			var formatted_date = month + "/" + day + "/" + year;
 			return formatted_date;
@@ -666,15 +666,31 @@
 		var ticket = this.ticket();
 		var type = ticket.type();
 		var bug_priority = ticket.customField("custom_field_30300358");
-		var sla_date = ticket.customField("custom_field_31407407");
+		var sla_date_str = ticket.customField("custom_field_31407407");
+		var sla_date_obj;
+		var sla_date_as_str;
+		if (sla_date_str !== "") {
+			sla_date_obj = new Date(sla_date_str.to_s());
+			sla_date_obj.setDate(sla_date_obj.getDate() + 1);
+			sla_date_as_str = this.format_date_object(sla_date_obj);
+			console.log("date object", sla_date_obj);
+
+		}
+
+		// for (item in sla_date) {
+			// console.log("property:" + item);
+		// }
+		// console.log(sla_date.to_s());
+		// console.log(sla_date.strftime("%d-%m-%y"));
+
 		var bug_info = {};
 		bug_info.show = false;
 
 		if (type === "problem" && bug_priority !== "") {
 			bug_info.show = true;
 			bug_info.priority = bug_priority;
-			if (sla_date !== "") {
-				bug_info.sla_date = this.format_date_object(sla_date);
+			if (sla_date_str !== null) {
+				bug_info.sla_date = sla_date_as_str;
 			}
 		}
 		else if (type === "incident" && ticket.customField('problem_id') > 0) {
