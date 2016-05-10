@@ -110,6 +110,11 @@
 		this.ticketFields('custom_field_27286948').disable();
 		// chat dispatched
 		this.ticketFields('custom_field_29482057').disable();
+		// Sent to PSL Queue
+		this.ticketFields('custom_field_32268947').disable();
+		// Initial Assignee
+		this.ticketFields('custom_field_32248228').disable();
+
 
 		// Disable PD Only fields for all groups except PSLs and PMs
 		var group_array = ["Product Support Leads", "Product Managers"];
@@ -670,18 +675,12 @@
 		var sla_date_obj;
 		var sla_date_as_str;
 
-		// Rather than this:
-		// if (sla_date_field !== "" && sla_date_field !== null && sla_date_field !== undefined) {
-		// }
-		// Using this:
 		if (!sla_date_field) {
-			// Do nothing, it is blank
+			// Do nothing, it is blank/null
 		} else {
-			// console.log("sla_date_field", sla_date_field);
 			sla_date_obj = new Date(sla_date_field.to_s());
 			sla_date_obj.setDate(sla_date_obj.getDate() + 1);
 			sla_date_as_str = this.format_date_object(sla_date_obj);
-			// console.log("date object", sla_date_obj);
 		}
 
 
