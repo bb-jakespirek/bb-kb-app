@@ -585,6 +585,18 @@
 		}
 	},
 
+	get_preferred_contact: function() {
+		var ticket = this.ticket();
+		var preferred_contact_method = ticket.customField("custom_field_29175937");
+		if (preferred_contact_method == "email_preferred") {
+			return "Email Me";
+		} else if (preferred_contact_method == "phone_preferred") {
+			return "Call Me";
+		} else {
+			return false;
+		}
+
+	},
 
 	generate_app_view: function() {
 		var ticket = this.ticket();
@@ -631,6 +643,7 @@
 				kb_quotes: this.kb_quotes(),
 				organization: this.appProperties.school_info,
 				school_urls: this.appProperties.school_info.organization_fields,
+				preferred_contact_method: this.get_preferred_contact(),
 				authorized_contact: authorized_contact,
 				user_notes: ticket.requester().notes(),
 				chat_url: this.make_chat_link(),

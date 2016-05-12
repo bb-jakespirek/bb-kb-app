@@ -294,6 +294,10 @@
 
 	{{#if organization.csm}}<span class="label label-success" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Customer Success Manager">CSM: {{organization.csm}}</span>{{/if}}
 
+
+	{{#if preferred_contact_method}}<span class="label label-warning">{{preferred_contact_method}}</span>{{/if}}
+
+
 	{{#if edition}}<span class="label label-light">Full Edition</span>{{/if}}
 
 	{{#if bug_info.show}}
