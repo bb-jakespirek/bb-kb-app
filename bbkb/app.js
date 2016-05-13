@@ -45,6 +45,8 @@
 		'ticket.custom_field_22930600.changed' : 'kb_id_changed', // kb_id_changed
 		'ticket.custom_field_22790214.changed' : 'help_topic_changed', //help_topic_changed
 		'ticket.custom_field_22222564.changed' : 'about_changed', // About Field
+
+		'ticket.custom_field_22271994.changed' : 'product_module_changed', // Product Module field
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 		'ticket.custom_field_30300358.changed' : 'bug_priority_changed', // bug priority field
 
@@ -114,6 +116,14 @@
 		this.ticketFields('custom_field_32268947').disable();
 		// Initial Assignee
 		this.ticketFields('custom_field_32248228').disable();
+		// Product dropdown is now set automatically
+		this.ticketFields('custom_field_21744040').disable();
+		// Product Sub Module 1
+		this.ticketFields('custom_field_32341678').disable();
+		// Product Sub Module 2
+		this.ticketFields('custom_field_32363597').disable();
+
+
 
 
 		// Disable PD Only fields for all groups except PSLs and PMs
@@ -223,6 +233,38 @@
 
 
 // Ticket Field Changes --------------------
+
+	product_module_changed: function () {
+		// console.log("product module changed");
+  	var ticket = this.ticket();
+		var product_module = ticket.customField("custom_field_22271994");
+		var product = ticket.customField("custom_field_21744040");
+		var set_product, set_sub_1, set_sub_2;
+		var split_modules;
+
+		// console.log(product_module);
+		split_modules = product_module.split("__");
+		// console.log(split_modules);
+
+		set_product = split_modules[0];
+		set_sub_1 = split_modules[1];
+		if (split_modules[2]) {
+			set_sub_2 = split_modules[2];
+		} else {
+			set_sub_2 = "";
+		}
+
+		// Set the Product
+		ticket.customField("custom_field_21744040", set_product);
+		// Set the Sub Module 1
+		ticket.customField("custom_field_32341678", set_sub_1);
+		// Set the Sub Module 2
+		ticket.customField("custom_field_32363597", set_sub_2);
+
+
+// custom_field_32363597
+
+	},
 
 	bug_priority_changed: function () {
 		// console.log("bug priority changed check groups");
