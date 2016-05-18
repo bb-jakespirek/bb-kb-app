@@ -519,14 +519,15 @@
 
 	fix_inverted_date_formatting: function (date_string) {
 		var formatted_date;
-		if (date_string !== "") {
+		if (!date_string) {
+			// date_string is null or empty
+			formatted_date = "";
+		}
+		else {
 			//original is YYYY-MM-DD
 			var str = date_string.split("-");
 			// This gets it to MM/DD/YYYY
 			formatted_date = str[1] + "/" + str[2] + "/" + str[0];
-		}
-		else {
-			formatted_date = "";
 		}
 		return formatted_date;
 	},
