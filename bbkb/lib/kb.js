@@ -218,7 +218,7 @@ module.exports = {
 		"support_programmer__change_order",
 		"support_programmer__css",
 		"support_programmer__custom_page_bug",
-		"support_programmer__redirect",
+		"support_programmer__redirect"
 		];
 
 
@@ -255,7 +255,9 @@ module.exports = {
 		];
 
 		var about_int_kb_rec_list = [
-		"support__customer_specific"
+		"support__customer_specific",
+		"hosting__other",
+		"csa__internal_admin"
 		];
 
 		// _.each(invalid_article_numbers, function(element, index, list){ console.log(element + " = " + index ); });
