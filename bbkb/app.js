@@ -80,7 +80,9 @@
 
     'click #create_bug_btn': function(event) {
 			var ticket = this.ticket();
-			var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}];
+			// var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}];
+			var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}, {"id": 32248228, "value": this.currentUser().name()}];
+
 			this.ajax('createTicketRequest', ticket, custom_fields);
 		},
 
