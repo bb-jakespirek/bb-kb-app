@@ -66,6 +66,10 @@ module.exports = {
 		    "ticket": {
 					"type": "incident",
 					"problem_id": problem_ticket_id,
+					"custom_fields": [
+						{"id": 32756848, "value": "returned__other_resources_needed"}
+					]
+
 		    }
 		  })
 		};

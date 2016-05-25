@@ -81,7 +81,10 @@
     'click #create_bug_btn': function(event) {
 			var ticket = this.ticket();
 			// var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}];
-			var custom_fields = [{"id": 22222564, "value": "product_owner__bug"}, {"id": 32248228, "value": this.currentUser().name()}];
+			var custom_fields = [
+				{"id": 22222564, "value": "product_owner__bug"},
+				{"id": 32248228, "value": this.currentUser().name()}
+			];
 
 			this.ajax('createTicketRequest', ticket, custom_fields);
 		},
@@ -101,6 +104,7 @@
 	initialize: function(data) {
 		var ticket = this.ticket();
 		var sla_date_before = ticket.customField("custom_field_31407407");
+		var group_array;
 
 		this.resetGlobals();
 
@@ -126,10 +130,17 @@
 		this.ticketFields('custom_field_32363597').disable();
 
 
-
+		// Disable Returned to CSA field for all groups except PSLs
+		group_array = ["Product Support Leads"];
+		if (!this.check_user_groups(group_array)) {
+			// user is not a PSL
+			// disable the following:
+			// Returned to CSA
+			this.ticketFields('custom_field_32756848').hide();
+		}
 
 		// Disable PD Only fields for all groups except PSLs and PMs
-		var group_array = ["Product Support Leads", "Product Managers"];
+		group_array = ["Product Support Leads", "Product Managers"];
 		if (!this.check_user_groups(group_array)) {
 			// user is not a PSL or PM
 			// disable the following:
