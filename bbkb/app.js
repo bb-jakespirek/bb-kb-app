@@ -53,6 +53,7 @@
 		'click .save_button': 'chat_transcript_save',
 		'ticket.save': 'ticketSaveHandler',
 		'ticket.submit.done': 'ticketSaveDoneHandler',
+		'ticket.submit.always': 'ticketSubmitAlwaysHandler',
 
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
@@ -93,6 +94,14 @@
 		'click #pop_test_toggle': function(event) {
 			this.$('#kb_success_popover').popover('show');
 			var app = this;
+		},
+
+		'click #test_modal_btn': function(event) {
+			console.log("clicked test modal");
+			this.$('#solve_confirmation_modal').modal({
+				backdrop: true,
+				keyboard: true
+			});
 		},
 
 
@@ -184,6 +193,7 @@
 	},
 
 
+
   ticketSaveHandler: function() {
   	var ticket = this.ticket();
   	var type = ticket.type();
@@ -238,6 +248,16 @@
 
   },
 
+ticketSubmitAlwaysHandler: function() {
+	var ticket = this.ticket();
+	if (ticket.status() == "solved") {
+		this.$('#solve_confirmation_modal').modal({
+			backdrop: true,
+			keyboard: true
+		});
+	}
+
+},
 
 	ticketSaveDoneHandler: function() {
 		this.get_problem_ticket_info();
@@ -705,6 +725,9 @@
 				chat_url: this.make_chat_link(),
 				user_id: this.currentUser().id(),
 				requester: ticket.requester(),
+				product: ticket.customField("custom_field_21744040"),
+				product_module: ticket.customField("custom_field_22271994"),
+				root_cause: ticket.customField("custom_field_22222564")
 			});
 		} else {
 			// Don't update the view yet!

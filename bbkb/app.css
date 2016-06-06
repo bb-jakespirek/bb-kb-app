@@ -341,6 +341,13 @@ textarea#chat_transcript {
   height: 450px;
 }
 
+#solve_confirmation_modal {
+  /*width: 700px;*/
+  /*height: 450px;*/
+}
+.capitalize {
+  text-transform: uppercase;
+}
 
 .kb_popover {
   width: 100%;
@@ -399,36 +406,3 @@ textarea#chat_transcript {
 .popover {
   background-color: red;
 }
-
-
-
-/* Sparkle */
-
-$buttonBackground: #2c3e50;
-$buttonColor: rgba(255,255,255,1);
-
-.sparkley {
-
-  background: lighten( $buttonBackground , 10% );
-  color: $buttonColor;
-  border: none;
-
-  padding: 16px 36px;
-  font-weight: normal;
-
-  border-radius: 3px;
-  transition: all 0.25s ease;
-
-  box-shadow: 0 38px 32px -23px black;
-  margin: 0 1em 1em;
-
-  &:hover {
-
-    background: $buttonBackground;
-    color: transparentize( $buttonColor,0.8 );
-
-  }
-
-}
-
-/* END Sparkle */

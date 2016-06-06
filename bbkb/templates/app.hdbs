@@ -272,6 +272,30 @@
 </div>
 
 
+
+
+<!-- Solve Confirmation Modal -->
+<div id="solve_confirmation_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="solve_confirmation_modal_title" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="solve_confirmation_modal_title">Everything look good?</h3>
+  </div>
+  <div class="modal-body">
+    <!-- <h4>This is what you submitted:</h4> -->
+    <ul>
+      <li><span class="label label-default">Product:</span> <span class="label label-info capitalize">{{product}}</span></li>
+      <li><span class="label label-default">Product Module:</span> <span class="label label-info capitalize">{{product_module}}</span></li>
+      <li><span class="label label-default">Root Cause:</span> <span class="label label-info capitalize">{{root_cause}}</span></li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    <!-- <button class="btn btn-primary save_button" aria-hidden="true">Solve Ticket</button> -->
+  </div>
+</div>
+
+<!-- <button id="test_modal_btn" type="button" target="_blank" class="label label-warning" >Test Pop</button> -->
+
 <!-- School Info Fields -->
 <div class="school-info">
 	{{#if school_url}}<a href="{{school_url}}" target="_blank" class="label label-default">Hosted URL</a>{{/if}}
