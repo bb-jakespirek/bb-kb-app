@@ -53,7 +53,7 @@
 		'click .save_button': 'chat_transcript_save',
 		'ticket.save': 'ticketSaveHandler',
 		'ticket.submit.done': 'ticketSaveDoneHandler',
-		'ticket.submit.always': 'ticketSubmitAlwaysHandler',
+		// 'ticket.submit.always': 'ticketSubmitAlwaysHandler',
 
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
@@ -248,16 +248,16 @@
 
   },
 
-ticketSubmitAlwaysHandler: function() {
-	var ticket = this.ticket();
-	if (ticket.status() == "solved") {
-		this.$('#solve_confirmation_modal').modal({
-			backdrop: true,
-			keyboard: true
-		});
-	}
-
-},
+	// ticketSubmitAlwaysHandler: function() {
+	// 	var ticket = this.ticket();
+	// 	if (ticket.status() == "solved") {
+	// 		this.$('#solve_confirmation_modal').modal({
+	// 			backdrop: true,
+	// 			keyboard: true
+	// 		});
+	// 	}
+	//
+	// },
 
 	ticketSaveDoneHandler: function() {
 		this.get_problem_ticket_info();
