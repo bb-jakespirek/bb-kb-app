@@ -1,4 +1,57 @@
 
+<!-- Helpful Links button -->
+<div class="btn-group kb-links">
+  <button id="helpful_links" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Helpful links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Top K-12 KB Articles</a></li>
+	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="https://community.blackbaud.com/blogs/46" target="_blank">Support &amp; Product News Blog</a></li>
+    <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
+    <li><a href="http://goo.gl/forms/ZJZBFTNgNh" target="_blank">Update Product Documentation Form</a></li>
+    <!-- <li role="separator" class="divider"></li> -->
+    <!-- <li><a id="create_bug_btn" target="_blank">Create bug (PSLs)</a></li> -->
+  </ul>
+</div>
+
+
+<!-- School Links button -->
+<div class="btn-group kb-links">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    School links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-center">
+  	{{#if school_urls.hosted_url}}<li><a href="{{school_urls.hosted_url}}" target="_blank"><span class="label label-primary">LIVE</span> Website</a></li>{{/if}}
+	{{#if school_urls.app_url}}<li><a href="{{school_urls.app_url}}" target="_blank"><span class="label label-primary">LIVE</span> App</a></li>{{/if}}
+	{{#if school_urls.prog_url}}<li><a href="{{school_urls.prog_url}}" target="_blank"><span class="label label-info">PROG</span> App</a></li>{{/if}}
+	{{#if school_urls.prog_web}}<li><a href="{{school_urls.prog_web}}" target="_blank"><span class="label label-info">PROG</span> Website</a></li>{{/if}}
+
+
+<!--     <li role="separator" class="divider"></li>
+
+	{{#if site_specs}}<li><a href="{{site_specs}}" title="Site Specs" target="_blank">Site Specs</a></li>{{else}}<li><p>No Site Specs Docs</p></li>{{/if}}
+	{{#if support_handoffs}}<li><a href="{{support_handoffs}}" title="Support Handoffs" target="_blank">Support Handoffs</a></li>{{/if}} -->
+  </ul>
+</div>
+
+
+<!-- AE button -->
+<div class="btn-group kb-links">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    AE links <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right">
+	<li><p>{{organization.ae_info.ae_name}}<br><span class="js-phonelink">{{organization.ae_info.ae_phone}}</span></p></li>
+    <li role="separator" class="divider"></li>
+	<li><a href="mailto:{{organization.ae_info.ae_email}}" target="_blank"><i class="fa fa-send"></i> Send Email</a></li>
+	<li><a data-toggle="modal" data-target="#phone_modal" data-backdrop="true" data-show="true"><i class="fa fa-clipboard"></i> Copy Phone</a></li>
+    </ul>
+</div>
+
+<div style="clear:both;"></div>
+
 <div class="btn-group btn-group-justified" role="group" aria-label="Justified button group">
   <a href="{{kb_links.btn_blank_kb_search}}" target="_blank" class="btn btn-kb full highlight" role="button"><span class="fa fa-search-plus fa-lg"></span>New Blank KB Search</a>
 </div>
@@ -141,56 +194,6 @@
 <div style="clear:both;"></div>
 
 
-<!-- Helpful Links button -->
-<div class="btn-group kb-links">
-  <button id="helpful_links" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Helpful links <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a href="https://na14.salesforce.com/articles/Article/86934" title="Style Guide and help" target="_blank">Top K-12 KB Articles</a></li>
-	<li><a href="https://docs.google.com/document/d/1q8GeAEdm8lRraV2a8lNQ22JCPvyJyeMvrdKZZxyNqdI" target="_blank">Handling Enhancement Requests</a></li>
-    <li role="separator" class="divider"></li>
-    <li><a href="https://community.blackbaud.com/blogs/46" target="_blank">Support &amp; Product News Blog</a></li>
-    <li><a href="https://www.blackbaud.com/files/support/helpfiles/education/k12/full-help/Content/Home.html" target="_blank">How-To Material</a></li>
-    <li><a href="http://goo.gl/forms/ZJZBFTNgNh" target="_blank">Update Product Documentation Form</a></li>
-    <!-- <li role="separator" class="divider"></li> -->
-    <!-- <li><a id="create_bug_btn" target="_blank">Create bug (PSLs)</a></li> -->
-  </ul>
-</div>
-
-
-<!-- School Links button -->
-<div class="btn-group kb-links">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    School links <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-center">
-  	{{#if school_urls.hosted_url}}<li><a href="{{school_urls.hosted_url}}" target="_blank"><span class="label label-primary">LIVE</span> Website</a></li>{{/if}}
-	{{#if school_urls.app_url}}<li><a href="{{school_urls.app_url}}" target="_blank"><span class="label label-primary">LIVE</span> App</a></li>{{/if}}
-	{{#if school_urls.prog_url}}<li><a href="{{school_urls.prog_url}}" target="_blank"><span class="label label-info">PROG</span> App</a></li>{{/if}}
-	{{#if school_urls.prog_web}}<li><a href="{{school_urls.prog_web}}" target="_blank"><span class="label label-info">PROG</span> Website</a></li>{{/if}}
-
-
-<!--     <li role="separator" class="divider"></li>
-
-	{{#if site_specs}}<li><a href="{{site_specs}}" title="Site Specs" target="_blank">Site Specs</a></li>{{else}}<li><p>No Site Specs Docs</p></li>{{/if}}
-	{{#if support_handoffs}}<li><a href="{{support_handoffs}}" title="Support Handoffs" target="_blank">Support Handoffs</a></li>{{/if}} -->
-  </ul>
-</div>
-
-
-<!-- AE button -->
-<div class="btn-group kb-links">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    AE links <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-right">
-	<li><p>{{organization.ae_info.ae_name}}<br><span class="js-phonelink">{{organization.ae_info.ae_phone}}</span></p></li>
-    <li role="separator" class="divider"></li>
-	<li><a href="mailto:{{organization.ae_info.ae_email}}" target="_blank"><i class="fa fa-send"></i> Send Email</a></li>
-	<li><a data-toggle="modal" data-target="#phone_modal" data-backdrop="true" data-show="true"><i class="fa fa-clipboard"></i> Copy Phone</a></li>
-    </ul>
-</div>
 
 
 

@@ -342,11 +342,11 @@ textarea#chat_transcript {
 }
 
 #solve_confirmation_modal {
-  /*width: 700px;*/
+  width: 700px;
   /*height: 450px;*/
 }
-.capitalize {
-  text-transform: uppercase;
+.upper {
+  text-transform: capitalize;
 }
 
 .kb_popover {
@@ -405,4 +405,8 @@ textarea#chat_transcript {
 
 .popover {
   background-color: red;
+}
+.btn-group.kb-links > .dropdown-toggle {
+  padding: 5px 11px;
+  margin-bottom: 4px;
 }
