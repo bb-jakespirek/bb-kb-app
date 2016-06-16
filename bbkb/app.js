@@ -139,8 +139,8 @@
 		this.ticketFields('custom_field_32363597').disable();
 
 
-		// Disable Returned to CSA field for all groups except PSLs
-		group_array = ["Product Support Leads"];
+		// Disable Returned to CSA field for all groups except PSLs & NHCCTM
+		group_array = ["Product Support Leads", "NHCCTM"];
 		if (!this.check_user_groups(group_array)) {
 			// user is not a PSL
 			// disable the following:
