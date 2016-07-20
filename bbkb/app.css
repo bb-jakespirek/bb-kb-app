@@ -406,7 +406,8 @@ textarea#chat_transcript {
 .popover {
   background-color: red;
 }
+
 .btn-group.kb-links > .dropdown-toggle {
-  padding: 5px 11px;
+  padding: 5px 10px;
   margin-bottom: 4px;
 }

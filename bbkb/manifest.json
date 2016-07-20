@@ -8,6 +8,6 @@
   "defaultLocale": "en",
   "private": true,
   "location": ["ticket_sidebar", "new_ticket_sidebar"],
-  "version": "1.824",
+  "version": "1.825",
   "frameworkVersion": "1.0"
 }

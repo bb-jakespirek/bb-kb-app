@@ -75,6 +75,25 @@ module.exports = {
 		};
 	},
 
+	updateProblemTicket: function(incident_ticket_id, problem_ticket_id) {
+		// Uncheck the Sent to PSL queue checkbox (32268947) on the bugman ticket
+		return {
+		  url: '/api/v2/tickets/'+problem_ticket_id+'.json',
+		  dataType: 'json',
+		  type: 'PUT',
+		  contentType: 'application/json',
+		  data: JSON.stringify({
+		    "ticket": {
+					"type": "incident",
+					"problem_id": problem_ticket_id,
+					"custom_fields": [
+						{"id": 32268947, "value": false}
+					]
+
+		    }
+		  })
+		};
+	},
 
 	// fetchOrganizationFields: function(id) {
 	// 	console.log("fetchOrganizationFields ran");
