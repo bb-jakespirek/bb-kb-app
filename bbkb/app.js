@@ -129,6 +129,8 @@
 		this.ticketFields('custom_field_29482057').disable();
 		// Sent to PSL Queue
 		this.ticketFields('custom_field_32268947').disable();
+		// Sent to Programming Queue
+		this.ticketFields('custom_field_35330927').disable();
 		// Initial Assignee
 		this.ticketFields('custom_field_32248228').disable();
 		// Product dropdown is now set automatically
