@@ -208,6 +208,7 @@ a.label-danger:hover {
 .alert {
   margin-top: 8px;
   margin-bottom: 8px;
+  padding-right: 15px;
 }
 
 .btn-group-justified {
