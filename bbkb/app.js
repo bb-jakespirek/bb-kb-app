@@ -15,6 +15,7 @@
 		"kb_info": {},
 		"school_info":{},
 		"bug_info":{},
+		"ticket_info":{},
 		ticket_id: 0
     },
 
@@ -49,6 +50,8 @@
 		'ticket.custom_field_22271994.changed' : 'product_module_changed', // Product Module field
 		'ticket.custom_field_21744040.changed' : 'field_changed', // Product field
 		'ticket.custom_field_30300358.changed' : 'bug_priority_changed', // bug priority field
+
+		'ticket.assignee.group.id.changed' : 'assignee_changed',
 
 		'click .save_button': 'chat_transcript_save',
 		'ticket.save': 'ticketSaveHandler',
@@ -97,7 +100,7 @@
 		},
 
 		'click #test_modal_btn': function(event) {
-			console.log("clicked test modal");
+			// console.log("clicked test modal");
 			this.$('#solve_confirmation_modal').modal({
 				backdrop: true,
 				keyboard: true
@@ -116,6 +119,8 @@
 		var group_array;
 
 		this.resetGlobals();
+
+		// this.appProperties.ticket_info.starting_assignee.group = this.ticket().assignee().group().name();
 
 		// https://developer.zendesk.com/apps/docs/agent/interface
 
@@ -173,6 +178,8 @@
 
 			if (ticket.requester()) {
 				this.get_organization_info();
+				this.set_initial_assignee();
+
 			}
 			else {
 				this.switchTo('new', {
@@ -197,7 +204,6 @@
 	},
 
 
-
   ticketSaveHandler: function() {
   	var ticket = this.ticket();
   	var type = ticket.type();
@@ -214,9 +220,18 @@
 			has_kb_or_help = true;
 		}
 
+		// this.check_psl_sending_to_support();
+		if (this.check_return_to_csa_status()) {
+			// Returned to CSA is filled out
+		} else {
+			// this.growl_returned_to_csa_needed(ticket);
+			return "The ticket wasn't saved! 'Returned to CSA' is not filled out.";
+		}
+
 		// Hold
 		if (ticket.status() == "hold") {
 			// Show Hold Status Modal when tickets don't have a hold status and are put on hold
+
 			var hold_status = ticket.customField("custom_field_30584448");
 
 			if (hold_status === "") {
@@ -247,9 +262,10 @@
 	  			this.growl_kb_needed(ticket);
 	  		}
 		}
+		// Reset the initial assignee
+		this.set_initial_assignee();
 
 		this.generate_app_view();
-
   },
 
 	// ticketSubmitAlwaysHandler: function() {
@@ -271,6 +287,14 @@
 
 // Ticket Field Changes --------------------
 
+	assignee_changed: function() {
+		// console.log("assignee changed");
+		var ticket = this.ticket();
+		if (ticket.requester()) {
+			this.check_psl_sending_to_support();
+		}
+	},
+
 	product_module_changed: function () {
 		// console.log("product module changed");
   	var ticket = this.ticket();
@@ -280,23 +304,28 @@
 		var split_modules;
 
 		// console.log(product_module);
-		split_modules = product_module.split("__");
-		// console.log(split_modules);
-
-		set_product = split_modules[0];
-		set_sub_1 = split_modules[1];
-		if (split_modules[2]) {
-			set_sub_2 = split_modules[2];
+		if (!product_module) {
+			// product_module is null or empty
 		} else {
-			set_sub_2 = "";
-		}
+			split_modules = product_module.split("__");
+			// console.log(split_modules);
 
-		// Set the Product
-		ticket.customField("custom_field_21744040", set_product);
-		// Set the Sub Module 1
-		ticket.customField("custom_field_32341678", set_sub_1);
-		// Set the Sub Module 2
-		ticket.customField("custom_field_32363597", set_sub_2);
+			set_product = split_modules[0];
+			set_sub_1 = split_modules[1];
+			if (split_modules[2]) {
+				set_sub_2 = split_modules[2];
+			} else {
+				set_sub_2 = "";
+			}
+
+			// Set the Product
+			ticket.customField("custom_field_21744040", set_product);
+			// Set the Sub Module 1
+			ticket.customField("custom_field_32341678", set_sub_1);
+			// Set the Sub Module 2
+			ticket.customField("custom_field_32363597", set_sub_2);
+
+		}
 
 
 // custom_field_32363597
@@ -342,6 +371,8 @@
   },
 
 
+
+
   check_user_groups: function(group_array) {
   	// This function returns true if user is one of the groups
 		var current_user_groups = this.currentUser().groups();
@@ -376,6 +407,15 @@
 		services.notify(msg.fmt(ticket_id, ticket_id), 'error', life * 1000); // notice, alert, error
   },
 
+	growl_returned_to_csa_needed: function(ticket) {
+		// https://developer.zendesk.com/apps/docs/agent/services
+		// https://developer.zendesk.com/apps/docs/agent/events#ticket.save-hook
+		var msg  = "Hey! Don't forget to set the 'Returned to CSA' field. <a href='#/tickets/%@'>%@</a>";
+		var life = parseInt(this.$('#life').val(), 10);
+		life = isNaN(life) ? 10 : life;
+		var ticket_id = ticket.id();
+		services.notify(msg.fmt(ticket_id, ticket_id), 'error', life * 1000); // notice, alert, error
+  },
 
   growl_hold_status_needed: function(ticket) {
 		var msg  = "Hold your horses, you didn't include a Hold Status. <a href='#/tickets/%@'>%@</a>";
@@ -437,6 +477,61 @@
 		this.generate_app_view();
 	},
 
+	set_initial_assignee: function() {
+		console.log("initial assignee group");
+		// console.log(this.ticket().assignee().user().name());
+		// console.log(this.ticket().assignee().group().name());
+		var ticket_info = this.appProperties.ticket_info;
+		var starting_assignee = {};
+		this.appProperties.ticket_info.starting_assignee = starting_assignee;
+
+		// starting_assignee.name = this.ticket().assignee().user().name();
+		starting_assignee.group = this.ticket().assignee().group().name();
+		ticket_info.psl_to_support = false;
+	},
+
+
+	check_psl_sending_to_support: function() {
+		// console.log("check_psl_sending_to_support");
+		if (this.appProperties.ticket_info.starting_assignee) {
+			var starting_assignee = this.appProperties.ticket_info.starting_assignee;
+			var new_assignee = {};
+			new_assignee.group = this.ticket().assignee().group().name();
+
+			// console.log("starting assignee group:");
+			// console.log( starting_assignee.group);
+			// console.log("new assignee group:");
+			// console.log(new_assignee.group);
+
+			// starting_assignee.name;
+			if (starting_assignee.group == "Product Support Leads" && new_assignee.group == "Support") {
+				// console.log("Changed from PSL to Support");
+				this.appProperties.ticket_info.psl_to_support = true;
+			}
+		} else {
+			// console.log("check_psl_sending_to_support // starting_assignee not set");
+		}
+	},
+
+	check_return_to_csa_status: function() {
+		// console.log("check_return_to_csa_status");
+		var ticket = this.ticket();
+		var returned_to_csa = ticket.customField("custom_field_32756848");
+
+		if (this.appProperties.ticket_info.psl_to_support) {
+			if (returned_to_csa === "") {
+				// console.log("returned to CSA is NOT filled out");
+				return false;
+			} else {
+				// console.log("returned to CSA is filled out");
+				return true;
+			}
+		}
+		else {
+			return true;
+		}
+
+	},
 
 	update_article_status: function () {
 		var ticket = this.ticket();
@@ -753,12 +848,14 @@
 
 
   resetGlobals: function(){
+		// console.log("resetGlobals");
     var ticket_id = this.ticket().id();
     this.appProperties = {
 			"org_data": {},
 			"kb_info": {},
 			"school_info":{},
 			"bug_info":{},
+			"ticket_info":{},
 			ticket_id: ticket_id
     };
   },
