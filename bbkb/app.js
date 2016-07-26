@@ -119,6 +119,10 @@
 
   requests: require('requests.js'),
 
+	// init: function(data) {
+	// 	var app = this;
+	// 	_.defer(function(){ app.initialize(data); });
+	// },
 
 	initialize: function(data) {
 		var ticket = this.ticket();
@@ -126,6 +130,10 @@
 		var group_array;
 
 		this.resetGlobals();
+
+		// temporary fix for a Zendesk bug 7/26/16
+		this.appProperties.ticket_info.bug_priority_changed = 0;
+		// console.log(this.appProperties.ticket_info.bug_priority_changed);
 
 		// this.appProperties.ticket_info.starting_assignee.group = this.ticket().assignee().group().name();
 
@@ -340,7 +348,9 @@
 	},
 
 	bug_priority_changed: function () {
-		// console.log("bug priority changed check groups");
+		// temporary fix for a Zendesk bug 7/26/16
+		this.appProperties.ticket_info.bug_priority_changed += 1;
+
 		var group_array = ["Product Support Leads", "Product Managers"];
 		if (this.check_user_groups(group_array)) {
 			// console.log('current user is a PSL or PM');
@@ -653,7 +663,10 @@
 		if (!sla_date) {
 			ticket.customField("custom_field_31407407", new_sla_date);
 		} else {
-			this.growl_check_SLA_date();
+			// temporary fix for a Zendesk bug 7/26/16
+			if (this.appProperties.ticket_info.bug_priority_changed > 1) {
+				this.growl_check_SLA_date();
+			}
 		}
 	},
 
