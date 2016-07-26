@@ -23,9 +23,11 @@ module.exports = {
 
 	createTicketRequest: function(ticket, custom_fields) {
 		// Create single ticket clone
-		console.log(ticket.tags());
+
+		// add Bugman tag
 		var tags = ticket.tags();
 		tags.push('bugman');
+
 		return {
 		  url: '/api/v2/tickets.json',
 		  dataType: 'json',
