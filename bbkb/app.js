@@ -93,19 +93,26 @@
 			this.ajax('createTicketRequest', ticket, custom_fields);
 		},
 
+		// 'click #set_pd_date_link': function(event) {
+		// 	console.log("set_pd_date_link");
+		// 	var ticket = this.ticket();
+		// 	ticket.customField("custom_field_31407407", "");
+		// 	this.set_pd_sla_date();
+		// 	// var app = this;
+		// },
 
-		'click #pop_test_toggle': function(event) {
-			this.$('#kb_success_popover').popover('show');
-			var app = this;
-		},
-
-		'click #test_modal_btn': function(event) {
-			// console.log("clicked test modal");
-			this.$('#solve_confirmation_modal').modal({
-				backdrop: true,
-				keyboard: true
-			});
-		},
+		// 'click #pop_test_toggle': function(event) {
+		// 	this.$('#kb_success_popover').popover('show');
+		// 	var app = this;
+		// },
+		//
+		// 'click #test_modal_btn': function(event) {
+		// 	// console.log("clicked test modal");
+		// 	this.$('#solve_confirmation_modal').modal({
+		// 		backdrop: true,
+		// 		keyboard: true
+		// 	});
+		// },
 
 
 	},
@@ -397,7 +404,7 @@
 	},
 
 	growl_check_SLA_date: function(ticket) {
-    var msg  = "<b>Hey %@!</b><br/> Don't forget to set the PD SLA Date! <br/><img src=%@ />",
+    var msg  = "<b>Hey %@!</b><br/> Don't forget to set the PD SLA Date! <br/><img src=%@ /><br/>Tip: clear out the PD SLA Date before changing the Bug Priority if you want it to automatically set a new date based on the new priority.",
         life = parseInt(this.$('#life').val(), 10);
     life = isNaN(life) ? 10 : life;
 		var user = this.currentUser().name();
