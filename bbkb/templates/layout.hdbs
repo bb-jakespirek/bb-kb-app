@@ -2,8 +2,9 @@
 <!-- Latest compiled and minified JavaScript -->
 <!-- Causes conflicts -->
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/2.3.2/js/bootstrap.min.js"></script> -->
 <script>
-var timeoutHandle;
+// var timeoutHandle;
 
 $(document).ready(function() {
     $("body").tooltip({ selector: '[data-toggle=tooltip]' });

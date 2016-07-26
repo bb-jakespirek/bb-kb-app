@@ -396,6 +396,19 @@
 		}
 	},
 
+	growl_check_SLA_date: function(ticket) {
+    var msg  = "<b>Hey %@!</b><br/> Don't forget to set the PD SLA Date! <br/><img src=%@ />",
+        life = parseInt(this.$('#life').val(), 10);
+    life = isNaN(life) ? 10 : life;
+		var user = this.currentUser().name();
+		var temp_user = user.split(' ');
+		user = temp_user[0];
+		var img = this.assetURL("e-boom.gif");
+    services.notify(msg.fmt(user,img), 'alert', life * 1000);
+
+		// console.log('growl_check_SLA_date');
+
+  },
 
   growl_kb_needed: function(ticket) {
 		// https://developer.zendesk.com/apps/docs/agent/services
@@ -630,8 +643,10 @@
 		}
 
 		// Make sure that the person cleared out the SLA Date field first.
-		if (sla_date == null) {
+		if (!sla_date) {
 			ticket.customField("custom_field_31407407", new_sla_date);
+		} else {
+			this.growl_check_SLA_date();
 		}
 	},
 
