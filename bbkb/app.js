@@ -740,7 +740,6 @@
 			this.ajax('updateIncidentTicket', incident_ticket_id, problem_ticket_id);
 			services.notify(msg.fmt(problem_ticket_id, problem_ticket_id), 'notice', 5000);
 			this.ajax('updateProblemTicket', incident_ticket_id, problem_ticket_id);
-
   },
 
 

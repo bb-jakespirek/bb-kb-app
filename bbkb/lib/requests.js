@@ -84,8 +84,6 @@ module.exports = {
 		  contentType: 'application/json',
 		  data: JSON.stringify({
 		    "ticket": {
-					"type": "incident",
-					"problem_id": problem_ticket_id,
 					"custom_fields": [
 						{"id": 32268947, "value": false}
 					]
