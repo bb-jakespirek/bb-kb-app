@@ -23,6 +23,9 @@ module.exports = {
 
 	createTicketRequest: function(ticket, custom_fields) {
 		// Create single ticket clone
+		console.log(ticket.tags());
+		var tags = ticket.tags();
+		tags.push('bugman');
 		return {
 		  url: '/api/v2/tickets.json',
 		  dataType: 'json',
@@ -40,7 +43,8 @@ module.exports = {
 		      "priority": ticket.priority(),
 		      // "type": ticket.type(),
 		      "type": "problem",
-		      "tags": ticket.tags(),
+		      // "tags": ticket.tags(),
+		      "tags": tags,
 		      "assignee_id": (ticket.assignee().user() && ticket.assignee().user().id()) || null,
 		      "group_id": (ticket.assignee().group() && ticket.assignee().group().id()) || null,
 		      // "requester_id": ticket.requester().id(),
