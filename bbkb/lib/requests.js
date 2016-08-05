@@ -13,6 +13,26 @@ module.exports = {
 		};
 	},
 
+	findPrimaryContact: function(org_id) {
+		// console.log("fetchOrganization ran");
+		// /api/v2/search.json?query={search_string}
+		// var search_string = "query=type:ticket status:closed&sort_by=status&sort_order=desc"
+		// organization:"Blackbaud" type:user tags:primary_contact
+		// var search_string = 'query=organization:"Blackbaud"&type:user&tags:test_tag_123&sort_order=desc'
+		// var search_string = 'type:user&tags:test_tag_123&sort_order=desc';
+		// var search_queries = ['type:user','tags:test_tag_123','organization:"Blackbaud"'];
+		var search_queries = ['type:user','tags:primary_contact','organization:"Blackbaud"'];
+		var search_string = search_queries.join("+");
+		// type%3Auser+tags%3Atest_tag_123
+		search_string = escape(search_string);
+		return {
+			// url:  '/api/v2/search.json?query={'+search_string+'}',
+			url:  '/api/v2/search.json?query='+search_string,
+			// url:  '/api/v2/search.json?query=type%3Auser+tags%3Atest_tag_123',
+			type: 'GET'
+		};
+	},
+
 	fetchProblemTicketInfo: function(problem_id) {
 		// console.log("fetchOrganization ran");
 		return {

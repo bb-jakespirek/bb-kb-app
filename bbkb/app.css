@@ -203,7 +203,9 @@ a.label-warning:hover, button.label-warning:hover {
 a.label-danger:hover {
     background-color: #F25C57;
 }
-
+a.label {
+    padding-bottom: 0;
+}
 
 .alert {
   margin-top: 8px;

@@ -324,6 +324,8 @@
 
 	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<span class="label label-danger" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Unauthorized Contact">Unauthorized</span>{{/if}}
 
+  <button type="button" id="contact_primary" class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Contact Primary if unauthorized">Contact Primary</button>
+
 	{{#if status}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Support Status">{{status}}</span>{{/if}}
 
 	{{#if school_urls.school_id}}<button type="button" target="_blank" id="school_id" class="label label-light" data-toggle="popover" data-placement="top"  title="Site ID's" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: {{school_urls.clarify_site_id}}" data-trigger="hover">ID: {{school_urls.school_id}}</button>{{/if}}

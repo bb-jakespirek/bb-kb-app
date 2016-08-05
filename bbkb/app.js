@@ -60,6 +60,66 @@
 
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
+		'findPrimaryContact.done': 'findPrimaryContactDone',
+
+		'click .carbon_copy': 'clickedCarbonCopy',
+
+
+		'click #contact_primary': function(event) {
+			console.log("contact_primary clicked");
+			if(this.ticket().organization()){
+				var organization = this.ticket().organization();
+				// This response will be handled by fetchOrganizationDone if it's a success
+				// It will then run generate_app_view
+				this.ajax('findPrimaryContact', organization.id());
+				// Show the App layout
+			};
+		},
+
+
+		// 'click .carbon_copy': function(event) {
+		// 	var curElm = this.$(this);
+		// 	console.log(curElm);
+		// 	event.preventDefault();
+		// 	// console.log(this);
+		// 	// var results = this.$('#results')[0];    // get the DOM element
+		// 	//
+		// 	// if (results.value.length == 0) {
+		// 	//   services.notify('This field can\'t be blank.', 'error');
+		// 	//
+		// 	// } else if (isNaN(results.value)) {
+		// 	//   services.notify('Specify a number.', 'error');
+		// 	//
+		// 	// } else if (results.value < 1 || results.value > 15) {
+		// 	//   services.notify('Specify a number between 1 and 15.', 'error');
+		// 	//
+		// 	// } else {
+		// 	//   this.processForm();       // good to go
+		// 	// }
+		// 	// console.log(event);
+		// 	// // console.log(event.data("test"));
+		// 	// // var targetField = this.findMe(event, this);
+		// 	// // console.log(targetField);
+		// 	// console.log(event.currentTarget);
+		// 	// console.log(event.handleObj);
+		// 	// console.log(event.handleObj.attr);
+		// 	// $(this).data("id")
+		// 	console.log("cc clicked");
+		//
+		// 	if(this.ticket().organization()){
+		// 		var organization = this.ticket().organization();
+		// 		// This response will be handled by fetchOrganizationDone if it's a success
+		// 		// It will then run generate_app_view
+		// 		this.ajax('findPrimaryContact', organization.id());
+		// 		// Show the App layout
+		// 	};
+		// },
+
+
+		'click #back': function(event) {
+			console.log("back clicked");
+			this.generate_app_view();
+		},
 
 		'click #phone_btn': function(event) {
 			this.$('#phone_modal').modal({
@@ -213,6 +273,19 @@
 
   },
 
+	clickedCarbonCopy: function (event) {
+		console.log("clickedCarbonCopy");
+
+		// $(event.target).attr("note");
+		var myInfo = this.$(event.currentTarget).parent().data("id");
+		// console.log(myInfo);
+		console.log(this.$(event.currentTarget).data("test"));
+
+		// console.log(event);
+		// console.log(event.name);
+		// console.log(this);
+		// $(event.target).attr("note");
+	},
 
   'ticket.save': function() {
     return "The ticket wasn't saved!";
@@ -724,6 +797,23 @@
 		}
 	},
 
+	findPrimaryContactDone: function(data) {
+		console.log("findPrimaryContactDone");
+		// console.log(data);
+		// console.log(data.results[0]);
+		// console.log(data.results);
+		this.switchTo('contact_primary', {
+			contacts_array: data.results,
+			// ticket_new: ticket_new,
+			// authorized_contact: authorized_contact,
+			// user_id: this.currentUser().id(),
+			// requester: ticket.requester(),
+		});
+		// var org_data = data.organization;
+		// this.appProperties.org_data = org_data;
+		// this.appProperties.school_info = Info.fix_org_data(org_data);
+		// this.generate_app_view();
+	},
 
 	fetchOrganizationDone: function(data) {
 		var org_data = data.organization;

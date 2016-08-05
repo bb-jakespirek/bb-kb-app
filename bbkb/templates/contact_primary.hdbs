@@ -1,0 +1,28 @@
+<div id="loader" class="alert alert-info single-alert">
+	<ul class="fa-ul">
+		<li><i class="fa fa-spinner fa-spin fa-li fa-lg"></i><p>Contact primary info...</p></li>
+	</ul>
+</div>
+<div style="clear:both;"></div>
+{{#if contacts_array}}
+<script>
+	$('#loader').hide();
+</script>
+<div class="alert alert-info single-alert">
+	<h3>Primary Contacts</h3>
+	<ul class="fa-ul">
+		{{#each contacts_array}}
+		<li class="contact" data-id="{{name}}">
+			<i class="fa fa-user fa-li fa-lg"></i>{{name}}
+			<a class="label label-primary carbon_copy" data-test="{{@index}}" target='_blank'><i class="fa fa-comments-o"></i> CC</a>
+			<a class="label label-info" href='https://kb.blackbaud.com/articles/Article/{{kb_article_number}}' target='_blank'><i class="fa fa-plus"></i> New Ticket</a>
+		</li>
+		{{/each}}
+	</ul>
+</div>
+{{/if}}
+
+<div style="clear:both;"></div>
+<div style="margin-top: 15px;">
+	<button class="btn btn-success btn-xs" id="back">Back</button>
+</div>
