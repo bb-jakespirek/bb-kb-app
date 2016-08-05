@@ -348,6 +348,7 @@
 	},
 
 	bug_priority_changed: function () {
+		console.log("bug_priority_changed");
 		// temporary fix for a Zendesk bug 7/26/16
 		this.appProperties.ticket_info.bug_priority_changed += 1;
 
@@ -508,7 +509,7 @@
 	},
 
 	set_initial_assignee: function() {
-		console.log("initial assignee group");
+		// console.log("initial assignee group");
 		// console.log(this.ticket().assignee().user().name());
 		// console.log(this.ticket().assignee().group().name());
 		var ticket_info = this.appProperties.ticket_info;
