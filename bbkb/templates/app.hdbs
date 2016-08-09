@@ -29,6 +29,8 @@
 	{{#if school_urls.prog_url}}<li><a href="{{school_urls.prog_url}}" target="_blank"><span class="label label-info">PROG</span> App</a></li>{{/if}}
 	{{#if school_urls.prog_web}}<li><a href="{{school_urls.prog_web}}" target="_blank"><span class="label label-info">PROG</span> Website</a></li>{{/if}}
 
+  <li role="separator" class="divider"></li>
+  <li><a class="contact_primary"><i class="fa fa-search"></i> Find Primary Contact</a></li>
 
 <!--     <li role="separator" class="divider"></li>
 
@@ -322,9 +324,9 @@
 
 	{{#if user_notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="User Notes" data-content="{{user_notes}}" data-trigger="hover">User Notes</button>{{/if}}
 
-	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<span class="label label-danger" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Unauthorized Contact">Unauthorized</span>{{/if}}
+	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<button type="button" class="label label-danger contact_primary" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Click to contact the primary">Unauthorized</button>{{/if}}
 
-  <button type="button" id="contact_primary" class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Contact Primary if unauthorized">Contact Primary</button>
+
 
 	{{#if status}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Support Status">{{status}}</span>{{/if}}
 

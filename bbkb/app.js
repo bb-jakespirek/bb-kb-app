@@ -60,21 +60,26 @@
 
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
-		'findPrimaryContact.done': 'findPrimaryContactDone',
 
+		'findPrimaryContact.done': 'findPrimaryContactDone',
+		'createPrimaryTicket.done': 'createPrimaryTicketDone',
+
+
+
+		'click .contact_primary': 'clickedContactPrimary',
+		'click .ticket_to_primary': 'clickedTicketToPrimary',
 		'click .carbon_copy': 'clickedCarbonCopy',
 
-
-		'click #contact_primary': function(event) {
-			console.log("contact_primary clicked");
-			if(this.ticket().organization()){
-				var organization = this.ticket().organization();
-				// This response will be handled by fetchOrganizationDone if it's a success
-				// It will then run generate_app_view
-				this.ajax('findPrimaryContact', organization.id());
-				// Show the App layout
-			};
-		},
+		// 'click #contact_primary': function(event) {
+		// 	console.log("contact_primary clicked");
+		// 	if(this.ticket().organization()){
+		// 		var organization = this.ticket().organization();
+		// 		// This response will be handled by fetchOrganizationDone if it's a success
+		// 		// It will then run generate_app_view
+		// 		this.ajax('findPrimaryContact', organization.id());
+		// 		// Show the App layout
+		// 	};
+		// },
 
 
 		// 'click .carbon_copy': function(event) {
@@ -273,13 +278,45 @@
 
   },
 
+	clickedContactPrimary: function (event) {
+		console.log("contact_primary clicked");
+		if(this.ticket().organization()){
+			var organization = this.ticket().organization();
+			// This response will be handled by fetchOrganizationDone if it's a success
+			// It will then run generate_app_view
+			this.ajax('findPrimaryContact', organization.id());
+			// Show the App layout
+		};
+	},
+
+	clickedTicketToPrimary: function (event) {
+		console.log("clickedTicketToPrimary");
+		// Old
+		var index = this.$(event.currentTarget).parent().data("index");
+		var user_id = this.$(event.currentTarget).data("userId");
+		var name = this.$(event.currentTarget).data("name");
+
+		var primary = {};
+		primary.index = this.$(event.currentTarget).parent().data("index");
+		primary.id = this.$(event.currentTarget).data("userId");
+		primary.name = this.$(event.currentTarget).data("name");
+		console.log(primary.name);
+		this.ajax('createPrimaryTicket', this.ticket(), primary);
+		this.ajax('updateTicketWithPrimaryCC', this.ticket().id(), primary.id);
+
+	},
+
 	clickedCarbonCopy: function (event) {
 		console.log("clickedCarbonCopy");
 
 		// $(event.target).attr("note");
-		var myInfo = this.$(event.currentTarget).parent().data("id");
+		var myInfo = this.$(event.currentTarget).parent().data("index");
 		// console.log(myInfo);
-		console.log(this.$(event.currentTarget).data("test"));
+		var user_id = this.$(event.currentTarget).data("userId");
+
+		console.log(this.$(event.currentTarget).data("userId"));
+
+		this.ajax('updateTicketWithPrimaryCC', this.ticket().id(), user_id);
 
 		// console.log(event);
 		// console.log(event.name);
@@ -487,13 +524,21 @@
 		}
 	},
 
+	helper_grab_current_user_first_name: function () {
+		var user = this.currentUser().name();
+		var temp_user = user.split(' ');
+		var first_name = temp_user[0];
+		return first_name;
+	},
+
 	growl_check_SLA_date: function(ticket) {
     var msg  = "<b>Hey %@!</b><br/> Don't forget to set the PD SLA Date! <br/><img src=%@ /><br/>Tip: clear out the PD SLA Date before changing the Bug Priority if you want it to automatically set a new date based on the new priority.",
         life = parseInt(this.$('#life').val(), 10);
     life = isNaN(life) ? 10 : life;
-		var user = this.currentUser().name();
-		var temp_user = user.split(' ');
-		user = temp_user[0];
+		// var user = this.currentUser().name();
+		// var temp_user = user.split(' ');
+		// user = temp_user[0];
+		user = this.helper_grab_current_user_first_name();
 		var img = this.assetURL("e-boom.gif");
     services.notify(msg.fmt(user,img), 'alert', life * 1000);
 
@@ -590,7 +635,10 @@
 		this.appProperties.ticket_info.starting_assignee = starting_assignee;
 
 		// starting_assignee.name = this.ticket().assignee().user().name();
-		starting_assignee.group = this.ticket().assignee().group().name();
+		if (!this.ticket().assignee().group()) {
+		} else {
+			starting_assignee.group = this.ticket().assignee().group().name();
+		}
 		ticket_info.psl_to_support = false;
 	},
 
@@ -802,6 +850,7 @@
 		// console.log(data);
 		// console.log(data.results[0]);
 		// console.log(data.results);
+		// console.log(data.results[0].id);
 		this.switchTo('contact_primary', {
 			contacts_array: data.results,
 			// ticket_new: ticket_new,
@@ -809,6 +858,37 @@
 			// user_id: this.currentUser().id(),
 			// requester: ticket.requester(),
 		});
+		// var org_data = data.organization;
+		// this.appProperties.org_data = org_data;
+		// this.appProperties.school_info = Info.fix_org_data(org_data);
+		// this.generate_app_view();
+	},
+
+	createPrimaryTicketDone: function(data) {
+		console.log("createPrimaryTicketDone");
+		this.$('#primary_contact_done').show();
+
+		var ticket_id = data.ticket.id; //NOT this.ticket().id();
+		var primary_contact_id = data.ticket.collaborator_ids[0];
+		// console.log("collaborators:");
+		// console.log(data.ticket.collaborator_ids[0]);
+		// console.log(data.ticket);
+		var msg  = "Created new primary contact ticket #<a href='#/tickets/%@'>%@</a>.";
+		services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 6000);
+
+		// Update the ticket and change the requester to the primary contact
+		this.ajax('changeRequesterToPrimary', ticket_id, primary_contact_id);
+
+		// console.log(data);
+		// console.log(data.results[0]);
+		// console.log(data.results);
+		// this.switchTo('contact_primary', {
+			// contacts_array: data.results,
+			// ticket_new: ticket_new,
+			// authorized_contact: authorized_contact,
+			// user_id: this.currentUser().id(),
+			// requester: ticket.requester(),
+		// });
 		// var org_data = data.organization;
 		// this.appProperties.org_data = org_data;
 		// this.appProperties.school_info = Info.fix_org_data(org_data);

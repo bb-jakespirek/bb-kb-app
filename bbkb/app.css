@@ -414,3 +414,7 @@ textarea#chat_transcript {
   padding: 5px 10px;
   margin-bottom: 4px;
 }
+
+#primary_contact_done {
+  margin-bottom: 20px;
+}
