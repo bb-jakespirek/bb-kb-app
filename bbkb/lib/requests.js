@@ -56,10 +56,10 @@ module.exports = {
 		// var body = "Hey %@, please see below and copy and paste this into a public comment to the customer. \r\r --- \r\r Hi %@, I just wanted to let you know %@ contacted Support today regarding ticket #%@. Should this person be an authorized contact?";
 		// body = body.fmt(current_user, primary, unauth_user, ticket_number);
 
-		var body = "Hi %@, I wanted to let you know %@ contacted Support today regarding ticket #%@. Should this person be an authorized contact? \r\r Please note: to click the ticket number link above, please access this ticket from within Case Central via the ON products Help Panel.";
+		var body = "Hi %@, \r I just wanted to let you know %@ contacted Support today regarding ticket #%@. \r\r Even though the user is not currently an authorized contact, we were happy to help them with their request today. \r\r If the user should be authorized to contact Support on a regular basis, please respond to this ticket and include their name, email, and phone number. \r\r Please note: to click the ticket number link above, please access this ticket from within Case Central via the ON products Help Panel. As usual, you can reply to this message via email.";
 		body = body.fmt(primary, unauth_user, ticket_number);
 
-		var subject = "Authorized User Verification: regarding ticket #" + ticket_number;
+		var subject = "Authorization: " + unauth_user + " #" + ticket_number;
 
 		return {
 		  url: '/api/v2/tickets.json',
@@ -74,7 +74,7 @@ module.exports = {
 		        "body": body,
 		        "public": true
 		      },
-		      "status": "pending", //ticket.status(),
+		      // "status": "pending", //ticket.status(),
 		      // "priority": ticket.priority(),
 		      // "type": ticket.type(),
 		      "type": "question",
@@ -93,10 +93,7 @@ module.exports = {
 					// "custom_fields": [
 					// 	{"id": 32756848, "value": "returned__other_resources_needed"}
 					// ]
-
 					// "requester_id": primary_contact.id,
-
-
 		      // "collaborator_ids": _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
 		      // "custom_fields": custom_fields
 		    }
@@ -116,6 +113,7 @@ module.exports = {
 					// "additional_collaborators": [collaborator_id], //collaborator_ids SETS all the collaborators so would potentially overwrite existing ones
 					"requester_id": primary_contact_id,
 					"collaborator_ids": [],
+					// "status": "solved", //ticket.status(),
 					// "type": "incident",
 					// "problem_id": problem_ticket_id,
 					// "custom_fields": [
