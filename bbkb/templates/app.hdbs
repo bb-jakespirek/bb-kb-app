@@ -1,4 +1,13 @@
-
+{{#if loaded}}
+<script>
+	$('#loader').hide();
+</script>
+{{/if}}
+<div id="loader" class="alert alert-info single-alert">
+	<ul class="fa-ul">
+		<li><i class="fa fa-spinner fa-spin fa-li fa-lg"></i><p>Loading...</p></li>
+	</ul>
+</div>
 <!-- <button id='set_pd_date_link' type='button' class='label label-warning' >Set PD SLA Date</button> -->
 <!-- Helpful Links button -->
 <div class="btn-group kb-links">
@@ -93,6 +102,21 @@
 </div>
 <div style="clear:both"></div>
 {{/if}}
+
+
+
+{{#if consultant_buttons}}
+<div class="consultant_buttons">
+  {{#each consultant_buttons}}
+  	<a class="label label-primary consultant_button" data-index="{{@index}}" data-user-id="{{id}}" data-name-tag="{{name_tag}}" data-name="{{name}}" target='_blank'>{{name}}</a>
+	{{/each}}
+</div>
+{{/if}}
+
+
+
+
+
 
 <!-- Test -->
 <!-- <div target="_blank" id="pop_test" class="alert alert-warning" data-toggle="popover" data-placement="top"  title="" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: sdfsdfs">Test</div> -->

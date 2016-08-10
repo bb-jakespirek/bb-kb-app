@@ -13,10 +13,19 @@ module.exports = {
 		};
 	},
 
-
+	findUsersByTag: function(tag, org_id = 23965884) {
+		// Default org is Blackbaud
+		var search_queries = ['type:user','tags:' + tag, 'organization:' + org_id ];
+		var search_string = search_queries.join("+");
+		search_string = escape(search_string);
+		return {
+			url:  '/api/v2/search.json?query='+search_string,
+			type: 'GET'
+		};
+	},
 
 	findPrimaryContact: function(org_id) {
-		/*global escape: true */
+
 		var org = 'organization:' + org_id;
 		var search_queries = ['type:user','tags:primary_contact', org ];
 		var search_string = search_queries.join("+");
@@ -112,6 +121,40 @@ module.exports = {
 			})
 		};
 	},
+
+
+
+
+	assignConsultant: function(ticket_id, consultant) {
+		console.log("assignConsultant");
+		console.log(consultant);
+		var consultants_user_id = 506009190; //currently my user
+		var consultants_group_id = 30355887;
+		var tags = this.ticket().tags();
+		tags.push('initial_assignee');
+		tags.push('consultants');
+		tags.push(consultant.name_tag);
+
+		return {
+		  url: '/api/v2/tickets/'+ticket_id+'.json',
+		  dataType: 'json',
+		  type: 'PUT',
+		  contentType: 'application/json',
+		  data: JSON.stringify({
+		    "ticket": {
+					"additional_collaborators": [consultant.user_id],
+					"assignee_id": consultants_user_id,
+					"group_id": consultants_group_id,
+					"tags": tags,
+					"custom_fields": [
+						{"id": 32248228, "value": consultant.name}
+					]
+
+		    }
+		  })
+		};
+	},
+
 
 	updateTicketWithPrimaryCC: function(ticket_id, collaborator_id) {
 

@@ -178,6 +178,13 @@ module.exports = {
 
 		}
 
+		// Check to see if ticket is for consultants
+		// in the future, maybe check this way:  this.check_user_groups(["Consultants"])
+		// The problem is you need to send "this" as app and none of them are referencing that currently
+		if (_.contains(ticket.tags(), "consultants")) {
+			no_kb_needed = true;
+			return no_kb_needed;
+		}
 
 		if (ticket_source == "follow_up") {
 			no_kb_needed = true;
@@ -240,6 +247,8 @@ module.exports = {
 			no_kb_needed = true;
 			return no_kb_needed;
 		}
+
+
 
 		// TRUE = no KB is necessary
 		return no_kb_needed;

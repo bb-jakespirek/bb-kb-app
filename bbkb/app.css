@@ -203,7 +203,7 @@ a.label-warning:hover, button.label-warning:hover {
 a.label-danger:hover {
     background-color: #F25C57;
 }
-a.label {
+a.label, .label {
     padding-bottom: 0;
 }
 
@@ -417,4 +417,7 @@ textarea#chat_transcript {
 
 #primary_contact_done {
   margin-bottom: 20px;
+}
+div.consultant_buttons {
+  margin-top: 4px;
 }

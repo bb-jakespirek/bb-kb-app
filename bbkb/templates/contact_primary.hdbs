@@ -33,9 +33,6 @@
 {{/if}}
 
 {{#if alternate_array}}
-<script>
-	$('#loader').hide();
-</script>
 <div class="alert alert-warning single-alert">
 	<h3>Alternate Contacts</h3>
 	<ul class="fa-ul">
