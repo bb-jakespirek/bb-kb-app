@@ -13,16 +13,35 @@
 </script>
 <div style="clear:both;"></div>
 
-{{#if contacts_array}}
+{{#if primary_array}}
 <script>
 	$('#loader').hide();
 </script>
 <div class="alert alert-info single-alert">
 	<h3>Primary Contact</h3>
 	<ul class="fa-ul">
-		{{#each contacts_array}}
+		{{#each primary_array}}
 		<li class="contact" data-index="{{@index}}">
 			<i class="fa fa-user fa-li"></i><a href="#/users/{{id}}">{{name}}</a>&nbsp;
+			<a class="label label-info ticket_to_primary" data-user-id="{{id}}" data-name="{{name}}" target='_blank'><i class="fa fa-plus"></i> New Ticket &amp; CC</a>
+			<a class="label label-primary carbon_copy" data-user-id="{{id}}" target='_blank'> CC</a>
+		</li>
+		{{/each}}
+	</ul>
+</div>
+<br/>
+{{/if}}
+
+{{#if alternate_array}}
+<script>
+	$('#loader').hide();
+</script>
+<div class="alert alert-warning single-alert">
+	<h3>Alternate Contacts</h3>
+	<ul class="fa-ul">
+		{{#each alternate_array}}
+		<li class="contact" data-index="{{@index}}">
+			<i class="fa fa-user fa-li"></i><a class="text-warning" href="#/users/{{id}}">{{name}}</a>&nbsp;
 			<a class="label label-info ticket_to_primary" data-user-id="{{id}}" data-name="{{name}}" target='_blank'><i class="fa fa-plus"></i> New Ticket &amp; CC</a>
 			<a class="label label-primary carbon_copy" data-user-id="{{id}}" target='_blank'> CC</a>
 		</li>
@@ -32,6 +51,7 @@
 {{/if}}
 
 <div style="clear:both;"></div>
+
 <div style="margin-top: 15px;">
 	<button class="btn btn-success btn-xs" id="back">Back</button>
 </div>

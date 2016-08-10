@@ -61,7 +61,10 @@
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
 
-		'findPrimaryContact.done': 'findPrimaryContactDone',
+		// These callbacks are now done via findContacts method
+		// 'findPrimaryContact.done': 'findPrimaryContactDone',
+		// 'findAlternateContact.done': 'findAlternateContactDone',
+
 		'createPrimaryTicket.done': 'createPrimaryTicketDone',
 
 
@@ -278,19 +281,38 @@
 
   },
 
+	findContacts: function(org_id) {
+    var promise1 = this.ajax('findPrimaryContact', org_id);
+    var promise2 = this.ajax('findAlternateContact', org_id);
+		var app = this;
+    this.when(promise1, promise2).then(
+			function(data1, data2){
+				app.findContactsDone(data1, data2);
+			}
+    )
+	},
+
+	findContactsDone: function (primary_contact, alternate_contact) {
+		// console.log("findContactsDone");
+		// console.log(primary_contact);
+		// console.log(alternate_contact);
+		this.switchTo('contact_primary', {
+			primary_array: primary_contact[0].results,
+			alternate_array: alternate_contact[0].results
+		});
+	},
+
 	clickedContactPrimary: function (event) {
-		console.log("contact_primary clicked");
+		// console.log("contact_primary clicked");
 		if(this.ticket().organization()){
 			var organization = this.ticket().organization();
-			// This response will be handled by fetchOrganizationDone if it's a success
-			// It will then run generate_app_view
-			this.ajax('findPrimaryContact', organization.id());
-			// Show the App layout
+			// this.ajax('findPrimaryContact', organization.id());
+			this.findContacts(organization.id());
 		};
 	},
 
 	clickedTicketToPrimary: function (event) {
-		console.log("clickedTicketToPrimary");
+		// console.log("clickedTicketToPrimary");
 		// Old
 		var index = this.$(event.currentTarget).parent().data("index");
 		var user_id = this.$(event.currentTarget).data("userId");
@@ -303,25 +325,14 @@
 		console.log(primary.name);
 		this.ajax('createPrimaryTicket', this.ticket(), primary);
 		this.ajax('updateTicketWithPrimaryCC', this.ticket().id(), primary.id);
-
 	},
 
 	clickedCarbonCopy: function (event) {
-		console.log("clickedCarbonCopy");
-
+		// console.log("clickedCarbonCopy");
 		// $(event.target).attr("note");
 		var myInfo = this.$(event.currentTarget).parent().data("index");
-		// console.log(myInfo);
 		var user_id = this.$(event.currentTarget).data("userId");
-
-		console.log(this.$(event.currentTarget).data("userId"));
-
 		this.ajax('updateTicketWithPrimaryCC', this.ticket().id(), user_id);
-
-		// console.log(event);
-		// console.log(event.name);
-		// console.log(this);
-		// $(event.target).attr("note");
 	},
 
   'ticket.save': function() {
@@ -847,21 +858,27 @@
 
 	findPrimaryContactDone: function(data) {
 		console.log("findPrimaryContactDone");
+		var primary_array = data.results;
+		// this.ajax('findAlternateContact', organization.id());
+
+		// console.log(data);
+		// console.log(data.results[0]);
+		// console.log(data.results);
+		// console.log(data.results[0].id);
+		// this.switchTo('contact_primary', {
+		// 	contacts_array: data.results,
+		// });
+	},
+
+	findAlternateContactDone: function(data) {
+		console.log("findPrimaryContactDone");
 		// console.log(data);
 		// console.log(data.results[0]);
 		// console.log(data.results);
 		// console.log(data.results[0].id);
 		this.switchTo('contact_primary', {
 			contacts_array: data.results,
-			// ticket_new: ticket_new,
-			// authorized_contact: authorized_contact,
-			// user_id: this.currentUser().id(),
-			// requester: ticket.requester(),
 		});
-		// var org_data = data.organization;
-		// this.appProperties.org_data = org_data;
-		// this.appProperties.school_info = Info.fix_org_data(org_data);
-		// this.generate_app_view();
 	},
 
 	createPrimaryTicketDone: function(data) {
