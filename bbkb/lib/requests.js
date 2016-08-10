@@ -16,6 +16,7 @@ module.exports = {
 
 
 	findPrimaryContact: function(org_id) {
+		/*global escape: true */
 		var org = 'organization:' + org_id;
 		var search_queries = ['type:user','tags:primary_contact', org ];
 		var search_string = search_queries.join("+");

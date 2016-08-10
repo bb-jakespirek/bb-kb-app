@@ -289,7 +289,7 @@
 			function(data1, data2){
 				app.findContactsDone(data1, data2);
 			}
-    )
+    );
 	},
 
 	findContactsDone: function (primary_contact, alternate_contact) {
@@ -308,7 +308,7 @@
 			var organization = this.ticket().organization();
 			// this.ajax('findPrimaryContact', organization.id());
 			this.findContacts(organization.id());
-		};
+		}
 	},
 
 	clickedTicketToPrimary: function (event) {
@@ -549,7 +549,7 @@
 		// var user = this.currentUser().name();
 		// var temp_user = user.split(' ');
 		// user = temp_user[0];
-		user = this.helper_grab_current_user_first_name();
+		var user = this.helper_grab_current_user_first_name();
 		var img = this.assetURL("e-boom.gif");
     services.notify(msg.fmt(user,img), 'alert', life * 1000);
 
