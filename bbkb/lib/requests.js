@@ -51,10 +51,10 @@ module.exports = {
 		var ticket_number = ticket.id();
 		var current_user = this.helper_grab_current_user_first_name();
 
-		console.log("createPrimaryTicket");
-		console.log(primary);
-		console.log(unauth_user);
-		console.log(ticket_number);
+		// console.log("createPrimaryTicket");
+		// console.log(primary);
+		// console.log(unauth_user);
+		// console.log(ticket_number);
 
 		// var body = "Hey %@, please see below and copy and paste this into a public comment to the customer. \r\r --- \r\r Hi %@, I just wanted to let you know %@ contacted Support today regarding ticket #%@. Should this person be an authorized contact?";
 		// body = body.fmt(current_user, primary, unauth_user, ticket_number);
@@ -77,28 +77,13 @@ module.exports = {
 		        "body": body,
 		        "public": true
 		      },
-		      // "status": "pending", //ticket.status(),
-		      // "priority": ticket.priority(),
-		      // "type": ticket.type(),
 		      "type": "question",
-		      // "tags": ticket.tags(),
 		      "tags": tags,
 		      "assignee_id": (ticket.assignee().user() && ticket.assignee().user().id()) || null,
 		      "group_id": (ticket.assignee().group() && ticket.assignee().group().id()) || null,
-		      // "requester_id": ticket.requester().id(),
-
-					// Testing with Jamie
-					// "requester_id": 456903040,
-
 					// Setting requester to the current agent will make this look like it's them sending it. Adding the primary as the CC and then will swap it out in the next update
 					"requester_id": this.currentUser().id(),
 					"collaborator_ids": [primary_contact.id], //collaborator_ids SETS all the collaborators which is what we want in this case so there's only one
-					// "custom_fields": [
-					// 	{"id": 32756848, "value": "returned__other_resources_needed"}
-					// ]
-					// "requester_id": primary_contact.id,
-		      // "collaborator_ids": _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
-		      // "custom_fields": custom_fields
 		    }
 		  })
 		};

@@ -856,60 +856,17 @@
 		}
 	},
 
-	findPrimaryContactDone: function(data) {
-		console.log("findPrimaryContactDone");
-		var primary_array = data.results;
-		// this.ajax('findAlternateContact', organization.id());
-
-		// console.log(data);
-		// console.log(data.results[0]);
-		// console.log(data.results);
-		// console.log(data.results[0].id);
-		// this.switchTo('contact_primary', {
-		// 	contacts_array: data.results,
-		// });
-	},
-
-	findAlternateContactDone: function(data) {
-		console.log("findPrimaryContactDone");
-		// console.log(data);
-		// console.log(data.results[0]);
-		// console.log(data.results);
-		// console.log(data.results[0].id);
-		this.switchTo('contact_primary', {
-			contacts_array: data.results,
-		});
-	},
-
 	createPrimaryTicketDone: function(data) {
 		console.log("createPrimaryTicketDone");
 		this.$('#primary_contact_done').show();
-
 		var ticket_id = data.ticket.id; //NOT this.ticket().id();
 		var primary_contact_id = data.ticket.collaborator_ids[0];
-		// console.log("collaborators:");
-		// console.log(data.ticket.collaborator_ids[0]);
 		// console.log(data.ticket);
 		var msg  = "Created new primary contact ticket #<a href='#/tickets/%@'>%@</a>.";
 		services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 6000);
 
 		// Update the ticket and change the requester to the primary contact
 		this.ajax('changeRequesterToPrimary', ticket_id, primary_contact_id);
-
-		// console.log(data);
-		// console.log(data.results[0]);
-		// console.log(data.results);
-		// this.switchTo('contact_primary', {
-			// contacts_array: data.results,
-			// ticket_new: ticket_new,
-			// authorized_contact: authorized_contact,
-			// user_id: this.currentUser().id(),
-			// requester: ticket.requester(),
-		// });
-		// var org_data = data.organization;
-		// this.appProperties.org_data = org_data;
-		// this.appProperties.school_info = Info.fix_org_data(org_data);
-		// this.generate_app_view();
 	},
 
 	fetchOrganizationDone: function(data) {
