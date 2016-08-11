@@ -143,31 +143,31 @@
 {{/if}}
 
 
+{{#unless hide_kb_warning}}
 
-{{#if no_kb_necessary}}
-	{{#if internal_kb_rec}}
-		<div class="alert alert-warning">
-			<ul class="fa-ul">
-				<li >
-					<i class="fa fa-life-ring fa-li fa-lg"></i>An internal KB article about this would be super helpful for your teammates.<br>
-				</li>
-			</ul>
-		</div>
-	{{else}}
-		<div class="alert alert-success">
-			<ul class="fa-ul">
-				<li>
-					<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom<br>
-					<!-- {{kb_quotes.kb_success.txt}} -->
-					<!-- <img src="{{kb_quotes.kb_success.pic}}"> -->
-					<!-- <img src="{{assetURL 'emoticons/boom.gif'}}"> -->
-				</li>
-			</ul>
-		</div>
+	{{#if no_kb_necessary}}
+		{{#if internal_kb_rec}}
+			<div class="alert alert-warning">
+				<ul class="fa-ul">
+					<li >
+						<i class="fa fa-life-ring fa-li fa-lg"></i>An internal KB article about this would be super helpful for your teammates.<br>
+					</li>
+				</ul>
+			</div>
+		{{else}}
+			<div class="alert alert-success">
+				<ul class="fa-ul">
+					<li>
+						<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom<br>
+						<!-- {{kb_quotes.kb_success.txt}} -->
+						<!-- <img src="{{kb_quotes.kb_success.pic}}"> -->
+						<!-- <img src="{{assetURL 'emoticons/boom.gif'}}"> -->
+					</li>
+				</ul>
+			</div>
+		{{/if}}
 	{{/if}}
-
-{{/if}}
-
+{{/unless}}
 
 {{#if kb_article_valid}}
 
