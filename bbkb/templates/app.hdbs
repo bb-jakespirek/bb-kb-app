@@ -1,13 +1,4 @@
-{{#if loaded}}
-<script>
-	$('#loader').hide();
-</script>
-{{/if}}
-<div id="loader" class="alert alert-info single-alert">
-	<ul class="fa-ul">
-		<li><i class="fa fa-spinner fa-spin fa-li fa-lg"></i><p>Loading...</p></li>
-	</ul>
-</div>
+
 <!-- <button id='set_pd_date_link' type='button' class='label label-warning' >Set PD SLA Date</button> -->
 <!-- Helpful Links button -->
 <div class="btn-group kb-links">

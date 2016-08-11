@@ -1,10 +1,8 @@
 module.exports = {
-	// fetchBookmarks: function() {
-	// 	return {
-	// 	  url:  '/api/v2/bookmarks.json',
-	// 	  type: 'GET'
-	// 	};
-	// },
+	// Fixes for JSHint:
+	/*global escape: true */
+	/*jshint esnext: true */
+
 	fetchOrganization: function(org_id) {
 		// console.log("fetchOrganization ran");
 		return {

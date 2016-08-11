@@ -1,8 +1,5 @@
 	(function() {
 
-	// Fix for JSHint:
-	/*global escape: true */
-
 	var KB =  require('kb.js');
 	var Info =  require('info.js');
 	var Consultants =  require('consultants.js');
@@ -121,7 +118,7 @@
 	initialize: function(data) {
 		var ticket = this.ticket();
 		var sla_date_before = ticket.customField("custom_field_31407407");
-		var group_array;
+
 		this.resetGlobals();
 		// this.setupConsultants();
 
@@ -158,6 +155,7 @@
 
 
 	hideFields: function() {
+		var group_array;
 		// https://developer.zendesk.com/apps/docs/agent/interface
 		// disable customer impact field from being changed by analyst
 		this.ticketFields('custom_field_28972337').disable();
@@ -275,7 +273,7 @@
   	var about = ticket.customField("custom_field_22222564");
 
   	// KB Stuff
-  	var no_kb_necessary = KB.no_kb_needed_test(ticket);
+  	var no_kb_necessary = KB.no_kb_needed_test(this);
   	var has_kb_or_help = false;
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
@@ -625,7 +623,7 @@
 
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
-		var no_kb_necessary = KB.no_kb_needed_test(ticket);
+		var no_kb_necessary = KB.no_kb_needed_test(this);
 
 		this.appProperties.kb_info.kb_article_valid = kb_article_valid;
 		this.appProperties.kb_info.help_topic_valid = help_topic_valid;
@@ -928,7 +926,7 @@
 				loaded: true,
 				ticket_new: ticket_new,
 				kb_links: KB.make_kb_links(ticket),
-				no_kb_necessary: KB.no_kb_needed_test(ticket),
+				no_kb_necessary: KB.no_kb_needed_test(this),
 				internal_kb_rec: KB.internal_kb_recommended(ticket),
 				help_topic_valid: kb_info.help_topic_valid,
 				kb_article_valid: kb_info.kb_article_valid,
@@ -1103,6 +1101,7 @@
 		if (!this.appConsultants) {
 			return false;
 		} else {
+			this.appConsultants = _.sortBy( this.appConsultants, 'name');
 			return this.appConsultants;
 		}
 	},
