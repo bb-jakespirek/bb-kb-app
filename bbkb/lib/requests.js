@@ -124,9 +124,9 @@ module.exports = {
 
 
 	assignConsultant: function(ticket_id, consultant) {
-		console.log("assignConsultant");
-		console.log(consultant);
-		var consultants_user_id = 506009190; //currently my user
+		// console.log("assignConsultant");
+		// console.log(consultant);
+		var consultants_user_id = 9228315187; //K12 Consultants User
 		var consultants_group_id = 30355887;
 		var tags = this.ticket().tags();
 		tags.push('initial_assignee');
