@@ -905,7 +905,8 @@
 			ticket_new = true;
 		}
 
-		if (ticket_source == "chat") {
+
+		if (ticket_source == "chat" && this.check_user_groups(["Support"])) {
 			is_chat_ticket = true;
 		}
 
@@ -1037,8 +1038,6 @@
 			// user is a Consultant
 			this.appConsultants = [];
 			this.findConsultants();
-
-			// this.consultantButtons();
 		}
 	},
 
@@ -1053,51 +1052,32 @@
 	},
 
 	showConsultants: function(consultants_array) {
-		console.log("consultants_array");
-		console.log(consultants_array);
 		var app = this;
 		_.each(consultants_array, function(element, index, list){
-			console.log("each");
 			// Object {id: 8417809287, url: "https://whipplehill.zendesk.com/api/v2/users/8417809287.json", name: "Matt.Drown@blackbaud.com", email: "matt.drown@blackbaud.com", created_at: "2016-07-22T17:23:42Z"…}
-			console.log(element);
 			app.formatConsultant(element);
 		});
 		this.generate_app_view();
-
-		// _.each(group_array, function(element, index, list){
-		// 	if (_.contains(group_names, element)) {
-		// 		in_group = true;
-		// 		return in_group;
-		// 	}
-		// });
-		// console.log(data);
 	},
 
 	formatConsultant: function(r) {
-		console.log("formatConsultant");
-		// console.log(r);
+		// console.log("formatConsultant");
 		var t = {};
 		t.id = r.id;
 		t.name = r.name;
 		t.email = r.email;
 		t.name_tag = "ps_" + r.name.replace(" ", "_").toLowerCase();
-		// var product_listed = _.contains(products_int_kb_rec_list, ticket_product);
 		// var indexes = [ {'id': 1, 'name': 'jake' }, {'id':4, 'name': 'jenny'},  {'id': 9, 'name': 'nick'}, {'id': 1, 'name': 'jake' }, {'id':4, 'name': 'jenny'} ];
-
-		// if (_.findWhere(indexes, {'id':1, 'name': 'jake'})) {
 		if (_.findWhere(this.appConsultants, t)) {
 			console.log("already exists");
 		}	else {
 			this.appConsultants.push(t);
 		}
-
-		// console.log(t);
-		// console.log(this.appConsultants);
 	},
 
 
 	consultantButtons: function() {
-		console.log("consultantButtons");
+		// console.log("consultantButtons");
 		if (!this.appConsultants) {
 			return false;
 		} else {
@@ -1111,25 +1091,18 @@
 		var ticket = this.ticket();
 		ticket.customField("custom_field_22953480", "no_kb_necessary");
 
-		// var index = this.$(event.currentTarget).parent().data("index");
-		// var index = this.$(event.currentTarget).data("index");
-		// var name_tag = this.$(event.currentTarget).data("nameTag");
-		// var user_id = this.$(event.currentTarget).data("userId");
-		//
 		var consultant = {};
 		consultant.index = this.$(event.currentTarget).data("index");
 		consultant.name = this.$(event.currentTarget).data("name");
 		consultant.name_tag = this.$(event.currentTarget).data("nameTag");
 		consultant.user_id = this.$(event.currentTarget).data("userId");
 
-		var test = this.ajax('assignConsultant', this.ticket().id(), consultant);
-		// console.log(test);
+		this.ajax('assignConsultant', this.ticket().id(), consultant);
 	},
 
 	assignConsultantDone: function (data) {
-		console.log("assignConsultantDone");
-		console.log(data);
-
+		// console.log("assignConsultantDone");
+		// console.log(data);
 	},
 
 
