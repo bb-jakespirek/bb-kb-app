@@ -1,7 +1,7 @@
 module.exports = {
 	// Fixes for JSHint:
 	/*global escape: true */
-	/*jshint esnext: true */
+
 
 	fetchOrganization: function(org_id) {
 		// console.log("fetchOrganization ran");
@@ -11,7 +11,10 @@ module.exports = {
 		};
 	},
 
-	findUsersByTag: function(tag, org_id = 23965884) {
+	findUsersByTag: function(tag, org_id) {
+		if (!org_id) {
+			org_id = 23965884;
+		}
 		// Default org is Blackbaud
 		var search_queries = ['type:user','tags:' + tag, 'organization:' + org_id ];
 		var search_string = search_queries.join("+");
