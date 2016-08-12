@@ -448,3 +448,12 @@
 
 <!-- {{#unless requester.email}}disabled{{/unless}} -->
 <!-- http://handlebarsjs.com/builtin_helpers.html -->
+
+
+
+
+
+
+
+
+<button type="button" target="_blank" id="test_button" class="label label-info">Test</button>

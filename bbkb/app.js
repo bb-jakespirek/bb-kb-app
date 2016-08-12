@@ -75,6 +75,9 @@
 		'assignConsultant.done': 'assignConsultantDone',
 
 
+		'click #test_button': 'testTicket',
+
+
 		'click #back': function(event) {
 			this.generate_app_view();
 		},
@@ -153,32 +156,45 @@
 		}
   },
 
+	fieldHelper: function(fields_obj_array, action) {
+		var app = this;
+		_.each(fields_obj_array, function(element, index, list){
+			// console.log(element.id + " = " + index );
+			if (action == 'hide') {
+				app.ticketFields('custom_field_' + element.id).hide();
+			}
+			else if (action == 'disable') {
+				app.ticketFields('custom_field_' + element.id).disable();
+			}
+			else {
+				console.log('invalid request for fieldHelper');
+			}
+		});
+	},
 
 	hideFields: function() {
 		var group_array;
 		// https://developer.zendesk.com/apps/docs/agent/interface
-		// disable customer impact field from being changed by analyst
-		this.ticketFields('custom_field_28972337').disable();
-		// kb status
-		this.ticketFields('custom_field_22953480').disable();
-		// ticket source
-		this.ticketFields('custom_field_27286948').disable();
-		// chat dispatched
-		this.ticketFields('custom_field_29482057').disable();
-		// Sent to PSL Queue
-		this.ticketFields('custom_field_32268947').disable();
-		// Sent to Programming Queue
-		this.ticketFields('custom_field_35330927').disable();
-		// Sent to Data Queue
-		this.ticketFields('custom_field_35357707').disable();
-		// Initial Assignee
-		this.ticketFields('custom_field_32248228').disable();
-		// Product dropdown is now set automatically
-		this.ticketFields('custom_field_21744040').disable();
-		// Product Sub Module 1
-		this.ticketFields('custom_field_32341678').disable();
-		// Product Sub Module 2
-		this.ticketFields('custom_field_32363597').disable();
+		var fields_to_disable = [
+			{id: 28972337, name: 'customer_impact'},
+			{id: 22953480, name: 'kb_status'},
+			{id: 27286948, name: 'ticket_source'},
+			{id: 29482057, name: 'chat_dispatched'},
+			{id: 32268947, name: 'sent_to_psl_queue'},
+			{id: 35330927, name: 'sent_to_programming_queue'},
+			{id: 35357707, name: 'sent_to_data_queue'},
+			{id: 32248228, name: 'initial_assignee'},
+			{id: 36619948, name: 'pulled_from_queue'},
+			{id: 21744040, name: 'product'},
+			{id: 32341678, name: 'product_sub_1'},
+			{id: 32363597, name: 'product_sub_2'},
+		];
+		var fields_to_hide = [
+			{id: 22472594, name: 'netsuite_link'},
+		];
+
+		this.fieldHelper(fields_to_disable, "disable");
+		this.fieldHelper(fields_to_hide, "hide");
 
 		// Disable Returned to CSA field for all groups except PSLs & NHCCTM
 		group_array = ["Product Support Leads", "NHCCTM"];
@@ -1030,6 +1046,28 @@
 
 		return bug_info;
 	},
+
+// ------------ Test Functions ---------------- //
+testTicket: function() {
+	console.log("TestTicket");
+	var promise1 = this.ajax('createChatTicketTest', this.ticket());
+	var app = this;
+	this.when(promise1).then(
+		function(data1){
+			app.testTicketResult(data1);
+		}
+	);
+},
+testTicketResult: function (data) {
+	console.log(data);
+	var ticket_id = data.ticket.id; //NOT this.ticket().id();
+	var primary_contact_id = data.ticket.collaborator_ids[0];
+	// console.log(data.ticket);
+	var msg  = "Created new test ticket #<a href='#/tickets/%@'>%@</a>.";
+	services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 6000);
+},
+
+
 
 
 // ------------ Consultant Functions ---------------- //

@@ -266,6 +266,76 @@ module.exports = {
 		};
 	},
 
+
+	createChatTicketTest: function(ticket) {
+		// Create single ticket clone
+
+		// add Bugman tag
+
+		// tags.push('auth_user_verification');
+		//
+		// var primary = primary_contact.name;
+		// var unauth_user = ticket.requester().name();
+		// var ticket_number = ticket.id();
+		// var current_user = this.helper_grab_current_user_first_name();
+
+		// console.log("createPrimaryTicket");
+		// console.log(primary);
+		// console.log(unauth_user);
+		// console.log(ticket_number);
+
+		// var body = "Hey %@, please see below and copy and paste this into a public comment to the customer. \r\r --- \r\r Hi %@, I just wanted to let you know %@ contacted Support today regarding ticket #%@. Should this person be an authorized contact?";
+		// body = body.fmt(current_user, primary, unauth_user, ticket_number);
+
+		// var body = "Hi %@, \r I just wanted to let you know %@ contacted Support today regarding ticket #%@. \r\r Even though the user is not currently an authorized contact, we were happy to help them with their request today. \r\r If the user should be authorized to contact Support on a regular basis, please respond to this ticket and include their name, email, and phone number. \r\r Please note: to click the ticket number link above, please access this ticket from within Case Central via the ON products Help Panel. As usual, you can reply to this message via email.";
+		// body = body.fmt(primary, unauth_user, ticket_number);
+		var body = "This is my question...";
+		var subject = " IGNORE // TESTING // test ticket ";
+		// var tags = ticket.tags();
+		tags.push('initial_assignee');
+
+		return {
+		  url: '/api/v2/tickets.json',
+		  dataType: 'json',
+		  type: 'POST',
+		  contentType: 'application/json',
+		  data: JSON.stringify({
+		    "ticket": {
+		      "subject": subject, //ticket.subject(),
+		      "comment": {
+		        // "body":  ticket.description(),
+		        "body": body,
+		        "public": true
+		      },
+		      "type": "question",
+
+					// Testing
+					"status": "open",
+					// "assignee_id": 7928076648, //Alyssa for testing
+					"group_id": 20747244, //Support
+					"requester_id": 9213159448, // John Doe for testing
+					// "tags": tags,
+					"tags": ["initial_assignee"],
+					"custom_fields": [
+						{"id": 32248228, "value": "Alyssa Metts"}
+					],
+
+		      // "assignee_id": (ticket.assignee().user() && ticket.assignee().user().id()) || null,
+		      // "group_id": (ticket.assignee().group() && ticket.assignee().group().id()) || null,
+					// Setting requester to the current agent will make this look like it's them sending it. Adding the primary as the CC and then will swap it out in the next update
+					// "requester_id": this.currentUser().id(),
+					// "collaborator_ids": [primary_contact.id], //collaborator_ids SETS all the collaborators which is what we want in this case so there's only one
+		    }
+		  })
+		};
+	},
+
+
+
+
+
+
+
 	// fetchOrganizationFields: function(id) {
 	// 	console.log("fetchOrganizationFields ran");
 	// 	return {
