@@ -291,7 +291,7 @@ module.exports = {
 		// body = body.fmt(primary, unauth_user, ticket_number);
 		var body = "This is my question...";
 		var subject = " IGNORE // TESTING // test ticket ";
-		// var tags = ticket.tags();
+		var tags = ticket.tags();
 		tags.push('initial_assignee');
 
 		return {
