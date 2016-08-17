@@ -181,7 +181,7 @@ module.exports = {
 
 		// needs to also work for PS so need to fix this
 		// if (_.contains(ticket.tags(), "consultants")) {
-		if (app.check_user_groups(["Consultants", "Professional Services"])) {
+		if (app.check_user_groups(["Consultants", "Professional Services", "Support Relationship Manager"])) {
 			no_kb_needed = true;
 			return no_kb_needed;
 		}

@@ -966,7 +966,7 @@
 				product_module: ticket.customField("custom_field_22271994"),
 				root_cause: ticket.customField("custom_field_22222564"),
 				consultant_buttons: this.consultantButtons(),
-				hide_kb_warning: this.check_user_groups(["Consultants", "Professional Services"])
+				hide_kb_warning: this.check_user_groups(["Consultants", "Professional Services", "Support Relationship Manager"])
 			});
 		} else {
 			// Don't update the view yet!
