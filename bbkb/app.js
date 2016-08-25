@@ -77,6 +77,8 @@
 
 		'click #test_button': 'testTicket',
 
+		'click #createChatTicket': 'clickedCreateChatTicket',
+
 
 		'click #back': function(event) {
 			this.generate_app_view();
@@ -1067,6 +1069,41 @@ testTicketResult: function (data) {
 	services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 6000);
 },
 
+
+
+// ------------ Chat Functions ---------------- //
+
+clickedCreateChatTicket: function() {
+	var ticket = this.ticket();
+	var requester_id = ticket.requester().id();
+
+	console.log("clickedCreateChatTicket");
+	var promise1 = this.ajax('createChatTicket', ticket, requester_id);
+	// var promise2 = this.ajax('findAlternateContact', org_id);
+	var app = this;
+	this.when(promise1).then(
+		function(data1){
+			app.createChatDone(data1);
+		}
+	);
+	// var newTicket = services.newTicket();
+  // newTicket.subject('My Prefilled Ticket');
+  // newTicket.open();
+},
+
+createChatDone: function (data) {
+	console.log(data.ticket.id);
+	this.ajax('openTicketTab', data.ticket.id, this.currentUser().id());
+	// data.ticket.open();
+	// console.log("findContactsDone");
+	// console.log(primary_contact);
+	// console.log(alternate_contact);
+
+	// this.switchTo('contact_primary', {
+	// 	primary_array: primary_contact[0].results
+	// 	// alternate_array: alternate_contact[0].results
+	// });
+},
 
 
 
