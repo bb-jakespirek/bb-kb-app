@@ -270,7 +270,7 @@ module.exports = {
 	createChatTicket: function(ticket, requester_id) {
 		console.log("createChatTicket");
 		var body = "Chat initiated.";
-		var subject = "CHAT: // TESTING // test ticket ";
+		var subject = "CHAT: ";
 		var tags = ticket.tags();
 		// tags.push('initial_assignee');
 		tags.push('no_creation_notification');
@@ -300,6 +300,9 @@ module.exports = {
 					// "group_id": 20747244, //Support
 					"requester_id": requester_id, // John Doe for testing
 					// "requester_id": 9213159448, // John Doe for testing
+					"custom_fields": [
+						{"id": 27286948, "value": 'chat'}
+					]
 		    }
 		  })
 		};
