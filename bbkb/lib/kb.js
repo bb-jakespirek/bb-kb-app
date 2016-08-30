@@ -171,6 +171,7 @@ module.exports = {
 
 		// console.log("ticket type");
 		// console.log(ticket.type());
+
 		// Incidents don't need KB's
 		if (ticket.type() == "incident") {
 			no_kb_needed = true;
@@ -196,7 +197,8 @@ module.exports = {
 		// var pattern = new RegExp(/^[0-9]{5,6}$/g);
 		// var article_num_test = pattern.test(kb_article_number);
 		// console.log(article_num_test + " article_num_test");
-		// About
+
+		// These are from the Root Cause field
 		var no_kb_necessary_list = [
 		"csa__enhancement",
 		"csa__internal_admin",
@@ -263,13 +265,21 @@ module.exports = {
 
 		var products_int_kb_rec_list = [
 		"podium",
-		"support_systems"
+		"support_systems",
+		"hosting"
 		];
 
 		var about_int_kb_rec_list = [
 		"support__customer_specific",
+		"csa__internal_admin",
+		"hosting__aws",
+		"hosting__dns",
+		"hosting__firewall_access",
+		"hosting__ldap",
 		"hosting__other",
-		"csa__internal_admin"
+		"hosting__pci_security",
+		"hosting__performance",
+		"hosting__ssl"
 		];
 
 		// _.each(invalid_article_numbers, function(element, index, list){ console.log(element + " = " + index ); });
