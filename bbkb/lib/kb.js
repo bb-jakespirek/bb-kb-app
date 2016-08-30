@@ -160,8 +160,9 @@ module.exports = {
 
 
 
-	no_kb_needed_test: function (ticket) {
-		// var ticket = this.ticket();
+	no_kb_needed_test: function (app) {
+
+		var ticket = app.ticket();
 		var kb_article_number = ticket.customField("custom_field_22930600");
 
 		var ticket_about = ticket.customField("custom_field_22222564");
@@ -178,6 +179,12 @@ module.exports = {
 
 		}
 
+		// needs to also work for PS so need to fix this
+		// if (_.contains(ticket.tags(), "consultants")) {
+		if (app.check_user_groups(["Consultants", "Professional Services", "Support Relationship Manager"])) {
+			no_kb_needed = true;
+			return no_kb_needed;
+		}
 
 		if (ticket_source == "follow_up") {
 			no_kb_needed = true;
@@ -240,6 +247,8 @@ module.exports = {
 			no_kb_needed = true;
 			return no_kb_needed;
 		}
+
+
 
 		// TRUE = no KB is necessary
 		return no_kb_needed;

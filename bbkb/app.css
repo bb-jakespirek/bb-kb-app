@@ -178,7 +178,7 @@ li.ticket.internal > a:hover {
   line-height: 10px;
   text-shadow: none;
   margin-bottom: 2px;
-  padding-top: 2px;
+  padding: 2px 4px;
   display: inline-block;
 }
 
@@ -203,7 +203,9 @@ a.label-warning:hover, button.label-warning:hover {
 a.label-danger:hover {
     background-color: #F25C57;
 }
-
+a.label, .label {
+    padding-bottom: 0;
+}
 
 .alert {
   margin-top: 8px;
@@ -291,6 +293,7 @@ button.btn-kb.full {
 .school-info {
   padding: 2px 0 0;
   margin: 0;
+  line-height: 14px;
 }
 
 
@@ -411,4 +414,11 @@ textarea#chat_transcript {
 .btn-group.kb-links > .dropdown-toggle {
   padding: 5px 10px;
   margin-bottom: 4px;
+}
+
+#primary_contact_done {
+  margin-bottom: 20px;
+}
+div.consultant_buttons {
+  margin-top: 3px;
 }

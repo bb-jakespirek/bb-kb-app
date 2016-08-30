@@ -29,6 +29,8 @@
 	{{#if school_urls.prog_url}}<li><a href="{{school_urls.prog_url}}" target="_blank"><span class="label label-info">PROG</span> App</a></li>{{/if}}
 	{{#if school_urls.prog_web}}<li><a href="{{school_urls.prog_web}}" target="_blank"><span class="label label-info">PROG</span> Website</a></li>{{/if}}
 
+  <li role="separator" class="divider"></li>
+  <li><a class="contact_primary"><i class="fa fa-search"></i> Find Primary Contact</a></li>
 
 <!--     <li role="separator" class="divider"></li>
 
@@ -92,6 +94,21 @@
 <div style="clear:both"></div>
 {{/if}}
 
+
+
+{{#if consultant_buttons}}
+<div class="consultant_buttons">
+  {{#each consultant_buttons}}
+  	<a class="label label-primary consultant_button" data-index="{{@index}}" data-user-id="{{id}}" data-name-tag="{{name_tag}}" data-name="{{name}}" target='_blank'>{{name}}</a>
+	{{/each}}
+</div>
+{{/if}}
+
+
+
+
+
+
 <!-- Test -->
 <!-- <div target="_blank" id="pop_test" class="alert alert-warning" data-toggle="popover" data-placement="top"  title="" data-html="true" data-content="Site ID: {{school_urls.school_id}}<br />Clarify Site ID: sdfsdfs">Test</div> -->
 
@@ -126,31 +143,31 @@
 {{/if}}
 
 
+{{#unless hide_kb_warning}}
 
-{{#if no_kb_necessary}}
-	{{#if internal_kb_rec}}
-		<div class="alert alert-warning">
-			<ul class="fa-ul">
-				<li >
-					<i class="fa fa-life-ring fa-li fa-lg"></i>An internal KB article about this would be super helpful for your teammates.<br>
-				</li>
-			</ul>
-		</div>
-	{{else}}
-		<div class="alert alert-success">
-			<ul class="fa-ul">
-				<li>
-					<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom<br>
-					<!-- {{kb_quotes.kb_success.txt}} -->
-					<!-- <img src="{{kb_quotes.kb_success.pic}}"> -->
-					<!-- <img src="{{assetURL 'emoticons/boom.gif'}}"> -->
-				</li>
-			</ul>
-		</div>
+	{{#if no_kb_necessary}}
+		{{#if internal_kb_rec}}
+			<div class="alert alert-warning">
+				<ul class="fa-ul">
+					<li >
+						<i class="fa fa-life-ring fa-li fa-lg"></i>An internal KB article about this would be super helpful for your teammates.<br>
+					</li>
+				</ul>
+			</div>
+		{{else}}
+			<div class="alert alert-success">
+				<ul class="fa-ul">
+					<li>
+						<i class="fa fa-hand-peace-o fa-li fa-lg"></i>This type of ticket doesn't need a KB article attached. #boom<br>
+						<!-- {{kb_quotes.kb_success.txt}} -->
+						<!-- <img src="{{kb_quotes.kb_success.pic}}"> -->
+						<!-- <img src="{{assetURL 'emoticons/boom.gif'}}"> -->
+					</li>
+				</ul>
+			</div>
+		{{/if}}
 	{{/if}}
-
-{{/if}}
-
+{{/unless}}
 
 {{#if kb_article_valid}}
 
@@ -322,7 +339,9 @@
 
 	{{#if user_notes}}<button type="button" target="_blank" class="label label-warning" data-toggle="popover" data-placement="top"  title="User Notes" data-content="{{user_notes}}" data-trigger="hover">User Notes</button>{{/if}}
 
-	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<span class="label label-danger" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Unauthorized Contact">Unauthorized</span>{{/if}}
+	{{#if authorized_contact}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Authorized Contact">Authorized</span>{{else}}<button type="button" class="label label-danger contact_primary" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Click to contact the primary">Unauthorized</button>{{/if}}
+
+
 
 	{{#if status}}<span class="label label-light" data-placement="top" data-toggle="tooltip" data-trigger="hover" title="Support Status">{{status}}</span>{{/if}}
 
@@ -429,3 +448,12 @@
 
 <!-- {{#unless requester.email}}disabled{{/unless}} -->
 <!-- http://handlebarsjs.com/builtin_helpers.html -->
+
+
+
+
+
+
+
+
+<!-- <button type="button" target="_blank" id="test_button" class="label label-info">Test</button> -->

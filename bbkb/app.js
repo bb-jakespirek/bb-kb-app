@@ -2,32 +2,30 @@
 
 	var KB =  require('kb.js');
 	var Info =  require('info.js');
+	var Consultants =  require('consultants.js');
 
 	return {
 
 	appProperties: {
-      // This is available globally in your functions via this.appProperties.org_data
-      // We need to be very careful here though. When setting this, it might be possible previous data or unrelated data is served.
-      // This would also be shared among different instances of the app (per user) so if the agent switches tabs the data might be
-      // in the object may no longer be relevant. One way to get around that would be to make sure when setting data to include the
-      // current ticket_id in the object, so we can check that this.appProperties.ticket_id === this.ticket().id() before we trust the data.
+    // This is available globally in your functions via this.appProperties
+    // We need to be very careful here though. When setting this, it might be possible previous data or unrelated data is served.
+    // This would also be shared among different instances of the app (per user) so if the agent switches tabs the data might be
+    // in the object may no longer be relevant. One way to get around that would be to make sure when setting data to include the
+    // current ticket_id in the object, so we can check that this.appProperties.ticket_id === this.ticket().id() before we trust the data.
 		"org_data": {},
 		"kb_info": {},
 		"school_info":{},
 		"bug_info":{},
 		"ticket_info":{},
 		ticket_id: 0
-    },
+  },
 
-  //   requests: {
-  //   	fetchOrganization: function() {
-		// 	console.log("fetchOrganization ran");
-		// 	return {
-		// 		url:  '/api/v2/organizations/28110694.json', //hard coded for now
-		// 		type: 'GET'
-		// 	};
-		// }
-  //   },
+	appConsultants: {
+	},
+
+
+
+
 
 	events: {
 
@@ -61,6 +59,29 @@
 		'createTicketRequest.always': 'createTicketRequestDone',
 		'updateIncidentTicket.always': 'updateIncidentTicketDone',
 
+		// These callbacks are now done via findContacts method
+		// 'findPrimaryContact.done': 'findPrimaryContactDone',
+		// 'findAlternateContact.done': 'findAlternateContactDone',
+
+		'createPrimaryTicket.done': 'createPrimaryTicketDone',
+
+
+
+		'click .contact_primary': 'clickedContactPrimary',
+		'click .ticket_to_primary': 'clickedTicketToPrimary',
+		'click .carbon_copy': 'clickedCarbonCopy',
+
+		'click .consultant_button': 'clickedConsultantButton',
+		'assignConsultant.done': 'assignConsultantDone',
+
+
+		'click #test_button': 'testTicket',
+
+
+		'click #back': function(event) {
+			this.generate_app_view();
+		},
+
 		'click #phone_btn': function(event) {
 			this.$('#phone_modal').modal({
 				backdrop: true,
@@ -93,75 +114,87 @@
 			this.ajax('createTicketRequest', ticket, custom_fields);
 		},
 
-		// 'click #set_pd_date_link': function(event) {
-		// 	console.log("set_pd_date_link");
-		// 	var ticket = this.ticket();
-		// 	ticket.customField("custom_field_31407407", "");
-		// 	this.set_pd_sla_date();
-		// 	// var app = this;
-		// },
-
-		// 'click #pop_test_toggle': function(event) {
-		// 	this.$('#kb_success_popover').popover('show');
-		// 	var app = this;
-		// },
-		//
-		// 'click #test_modal_btn': function(event) {
-		// 	// console.log("clicked test modal");
-		// 	this.$('#solve_confirmation_modal').modal({
-		// 		backdrop: true,
-		// 		keyboard: true
-		// 	});
-		// },
-
-
 	},
 
   requests: require('requests.js'),
 
-	// init: function(data) {
-	// 	var app = this;
-	// 	_.defer(function(){ app.initialize(data); });
-	// },
-
 	initialize: function(data) {
 		var ticket = this.ticket();
 		var sla_date_before = ticket.customField("custom_field_31407407");
-		var group_array;
 
 		this.resetGlobals();
+		// this.setupConsultants();
+
+		// TO DO:
+		// REWORK HOW EVERYTHING LOADS IN THE BEGINNING.
+		// DO A CHECK TO SEE WHAT AJAX CALLS NEED TO BE RUN
+		// DO THEM WITH PROMISES SO THEY CAN ALL RUN AT THE RIGHT TIME
 
 		// temporary fix for a Zendesk bug 7/26/16
 		this.appProperties.ticket_info.bug_priority_changed = 0;
-		// console.log(this.appProperties.ticket_info.bug_priority_changed);
+		this.hideFields();
+		// Check if it's a new ticket or not
+		var ticket_new;
+	  if (ticket.status() === "new") {
+			ticket_new = true;
+			if (ticket.requester()) {
+				this.get_organization_info();
+				this.set_initial_assignee();
+			}
+			else {
+				this.switchTo('new', {
+					user_id: this.currentUser().id(),
+				});
+			}
+		}
+		else {
+			ticket_new = false;
+			this.get_organization_info();
+			if (ticket.type() === "incident") {
+				this.get_problem_ticket_info();
+			}
+		}
+  },
 
-		// this.appProperties.ticket_info.starting_assignee.group = this.ticket().assignee().group().name();
+	fieldHelper: function(fields_obj_array, action) {
+		var app = this;
+		_.each(fields_obj_array, function(element, index, list){
+			// console.log(element.id + " = " + index );
+			if (action == 'hide') {
+				app.ticketFields('custom_field_' + element.id).hide();
+			}
+			else if (action == 'disable') {
+				app.ticketFields('custom_field_' + element.id).disable();
+			}
+			else {
+				console.log('invalid request for fieldHelper');
+			}
+		});
+	},
 
+	hideFields: function() {
+		var group_array;
 		// https://developer.zendesk.com/apps/docs/agent/interface
+		var fields_to_disable = [
+			{id: 28972337, name: 'customer_impact'},
+			{id: 22953480, name: 'kb_status'},
+			{id: 27286948, name: 'ticket_source'},
+			{id: 29482057, name: 'chat_dispatched'},
+			{id: 32268947, name: 'sent_to_psl_queue'},
+			{id: 35330927, name: 'sent_to_programming_queue'},
+			{id: 35357707, name: 'sent_to_data_queue'},
+			{id: 32248228, name: 'initial_assignee'},
+			{id: 36619948, name: 'pulled_from_queue'},
+			{id: 21744040, name: 'product'},
+			{id: 32341678, name: 'product_sub_1'},
+			{id: 32363597, name: 'product_sub_2'},
+		];
+		var fields_to_hide = [
+			{id: 22472594, name: 'netsuite_link'},
+		];
 
-		// disable customer impact field from being changed by analyst
-		this.ticketFields('custom_field_28972337').disable();
-		// kb status
-		this.ticketFields('custom_field_22953480').disable();
-		// ticket source
-		this.ticketFields('custom_field_27286948').disable();
-		// chat dispatched
-		this.ticketFields('custom_field_29482057').disable();
-		// Sent to PSL Queue
-		this.ticketFields('custom_field_32268947').disable();
-		// Sent to Programming Queue
-		this.ticketFields('custom_field_35330927').disable();
-		// Sent to Data Queue
-		this.ticketFields('custom_field_35357707').disable();
-		// Initial Assignee
-		this.ticketFields('custom_field_32248228').disable();
-		// Product dropdown is now set automatically
-		this.ticketFields('custom_field_21744040').disable();
-		// Product Sub Module 1
-		this.ticketFields('custom_field_32341678').disable();
-		// Product Sub Module 2
-		this.ticketFields('custom_field_32363597').disable();
-
+		this.fieldHelper(fields_to_disable, "disable");
+		this.fieldHelper(fields_to_hide, "hide");
 
 		// Disable Returned to CSA field for all groups except PSLs & NHCCTM
 		group_array = ["Product Support Leads", "NHCCTM"];
@@ -184,35 +217,66 @@
 			// PD SLA
 			this.ticketFields('custom_field_31407407').hide();
 		}
+	},
 
-		// Check if it's a new ticket or not
-		var ticket_new;
 
-	  if (ticket.status() === "new") {
-			ticket_new = true;
-
-			if (ticket.requester()) {
-				this.get_organization_info();
-				this.set_initial_assignee();
-
+	findContacts: function(org_id) {
+    var promise1 = this.ajax('findPrimaryContact', org_id);
+    var promise2 = this.ajax('findAlternateContact', org_id);
+		var app = this;
+    this.when(promise1, promise2).then(
+			function(data1, data2){
+				app.findContactsDone(data1, data2);
 			}
-			else {
-				this.switchTo('new', {
-					user_id: this.currentUser().id(),
-				});
-			}
+    );
+	},
 
+	findContactsDone: function (primary_contact, alternate_contact) {
+		// console.log("findContactsDone");
+		// console.log(primary_contact);
+		// console.log(alternate_contact);
+		this.switchTo('contact_primary', {
+			primary_array: primary_contact[0].results,
+			alternate_array: alternate_contact[0].results
+		});
+	},
+
+
+
+// ------------ Button Click Functions ---------------- //
+
+	clickedContactPrimary: function (event) {
+		// console.log("contact_primary clicked");
+		if(this.ticket().organization()){
+			var organization = this.ticket().organization();
+			// this.ajax('findPrimaryContact', organization.id());
+			this.findContacts(organization.id());
 		}
-		else {
-			ticket_new = false;
-			this.get_organization_info();
-			if (ticket.type() === "incident") {
-				this.get_problem_ticket_info();
-			}
-		}
+	},
 
-  },
+	clickedTicketToPrimary: function (event) {
+		// console.log("clickedTicketToPrimary");
+		// Old
+		var index = this.$(event.currentTarget).parent().data("index");
+		var user_id = this.$(event.currentTarget).data("userId");
+		var name = this.$(event.currentTarget).data("name");
 
+		var primary = {};
+		primary.index = this.$(event.currentTarget).parent().data("index");
+		primary.id = this.$(event.currentTarget).data("userId");
+		primary.name = this.$(event.currentTarget).data("name");
+		console.log(primary.name);
+		this.ajax('createPrimaryTicket', this.ticket(), primary);
+		this.ajax('updateTicketWithPrimaryCC', this.ticket().id(), primary.id);
+	},
+
+	clickedCarbonCopy: function (event) {
+		// console.log("clickedCarbonCopy");
+		// $(event.target).attr("note");
+		var myInfo = this.$(event.currentTarget).parent().data("index");
+		var user_id = this.$(event.currentTarget).data("userId");
+		this.ajax('updateTicketWithPrimaryCC', this.ticket().id(), user_id);
+	},
 
   'ticket.save': function() {
     return "The ticket wasn't saved!";
@@ -225,7 +289,7 @@
   	var about = ticket.customField("custom_field_22222564");
 
   	// KB Stuff
-  	var no_kb_necessary = KB.no_kb_needed_test(ticket);
+  	var no_kb_necessary = KB.no_kb_needed_test(this);
   	var has_kb_or_help = false;
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
@@ -300,7 +364,7 @@
 	},
 
 
-// Ticket Field Changes --------------------
+// ------------ Ticket Field Changes ---------------- //
 
 	assignee_changed: function() {
 		// console.log("assignee changed");
@@ -339,12 +403,7 @@
 			ticket.customField("custom_field_32341678", set_sub_1);
 			// Set the Sub Module 2
 			ticket.customField("custom_field_32363597", set_sub_2);
-
 		}
-
-
-// custom_field_32363597
-
 	},
 
 	bug_priority_changed: function () {
@@ -414,13 +473,21 @@
 		}
 	},
 
+	helper_grab_current_user_first_name: function () {
+		var user = this.currentUser().name();
+		var temp_user = user.split(' ');
+		var first_name = temp_user[0];
+		return first_name;
+	},
+
 	growl_check_SLA_date: function(ticket) {
     var msg  = "<b>Hey %@!</b><br/> Don't forget to set the PD SLA Date! <br/><img src=%@ /><br/>Tip: clear out the PD SLA Date before changing the Bug Priority if you want it to automatically set a new date based on the new priority.",
         life = parseInt(this.$('#life').val(), 10);
     life = isNaN(life) ? 10 : life;
-		var user = this.currentUser().name();
-		var temp_user = user.split(' ');
-		user = temp_user[0];
+		// var user = this.currentUser().name();
+		// var temp_user = user.split(' ');
+		// user = temp_user[0];
+		var user = this.helper_grab_current_user_first_name();
 		var img = this.assetURL("e-boom.gif");
     services.notify(msg.fmt(user,img), 'alert', life * 1000);
 
@@ -517,7 +584,10 @@
 		this.appProperties.ticket_info.starting_assignee = starting_assignee;
 
 		// starting_assignee.name = this.ticket().assignee().user().name();
-		starting_assignee.group = this.ticket().assignee().group().name();
+		if (!this.ticket().assignee().group()) {
+		} else {
+			starting_assignee.group = this.ticket().assignee().group().name();
+		}
 		ticket_info.psl_to_support = false;
 	},
 
@@ -569,7 +639,7 @@
 
 		var help_topic_valid = KB.check_help_topic(ticket.customField("custom_field_22790214"));
 		var kb_article_valid = KB.check_kb_id(ticket.customField("custom_field_22930600"));
-		var no_kb_necessary = KB.no_kb_needed_test(ticket);
+		var no_kb_necessary = KB.no_kb_needed_test(this);
 
 		this.appProperties.kb_info.kb_article_valid = kb_article_valid;
 		this.appProperties.kb_info.help_topic_valid = help_topic_valid;
@@ -724,12 +794,42 @@
 		}
 	},
 
+	findConsultantsxxxx: function() {
+		var promise1 = this.ajax('findUsersByTag', "consultant_cc");
+		var app = this;
+		this.when(promise1).then(
+			function(data1){
+				app.showConsultants(data1.results);
+			}
+		);
+	},
+
+	createPrimaryTicketDone: function(data) {
+		console.log("createPrimaryTicketDone");
+		this.$('#primary_contact_done').show();
+		var ticket_id = data.ticket.id; //NOT this.ticket().id();
+		var primary_contact_id = data.ticket.collaborator_ids[0];
+		// console.log(data.ticket);
+		var msg  = "Created new primary contact ticket #<a href='#/tickets/%@'>%@</a>.";
+		services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 6000);
+
+		// Update the ticket and change the requester to the primary contact
+		this.ajax('changeRequesterToPrimary', ticket_id, primary_contact_id);
+	},
 
 	fetchOrganizationDone: function(data) {
 		var org_data = data.organization;
   	this.appProperties.org_data = org_data;
   	this.appProperties.school_info = Info.fix_org_data(org_data);
-  	this.generate_app_view();
+		// Check to see if user is part of Consultants group and appConsultants has already been set up
+		if (this.check_user_groups(["Consultants"]) && !this.appConsultants[0]) {
+			this.setupConsultants();
+			// Will run this.generate_app_view() in showConsultants method
+
+		} else {
+			this.generate_app_view();
+		}
+
   },
 
 
@@ -821,7 +921,8 @@
 			ticket_new = true;
 		}
 
-		if (ticket_source == "chat") {
+
+		if (ticket_source == "chat" && this.check_user_groups(["Support"])) {
 			is_chat_ticket = true;
 		}
 
@@ -839,9 +940,10 @@
 
 			// Show the App layout
 			this.switchTo('app', {
+				loaded: true,
 				ticket_new: ticket_new,
 				kb_links: KB.make_kb_links(ticket),
-				no_kb_necessary: KB.no_kb_needed_test(ticket),
+				no_kb_necessary: KB.no_kb_needed_test(this),
 				internal_kb_rec: KB.internal_kb_recommended(ticket),
 				help_topic_valid: kb_info.help_topic_valid,
 				kb_article_valid: kb_info.kb_article_valid,
@@ -862,7 +964,9 @@
 				requester: ticket.requester(),
 				product: ticket.customField("custom_field_21744040"),
 				product_module: ticket.customField("custom_field_22271994"),
-				root_cause: ticket.customField("custom_field_22222564")
+				root_cause: ticket.customField("custom_field_22222564"),
+				consultant_buttons: this.consultantButtons(),
+				hide_kb_warning: this.check_user_groups(["Consultants", "Professional Services", "Support Relationship Manager"])
 			});
 		} else {
 			// Don't update the view yet!
@@ -941,6 +1045,103 @@
 		}
 
 		return bug_info;
+	},
+
+// ------------ Test Functions ---------------- //
+testTicket: function() {
+	console.log("TestTicket");
+	var promise1 = this.ajax('createChatTicketTest', this.ticket());
+	var app = this;
+	this.when(promise1).then(
+		function(data1){
+			app.testTicketResult(data1);
+		}
+	);
+},
+testTicketResult: function (data) {
+	console.log(data);
+	var ticket_id = data.ticket.id; //NOT this.ticket().id();
+	var primary_contact_id = data.ticket.collaborator_ids[0];
+	// console.log(data.ticket);
+	var msg  = "Created new test ticket #<a href='#/tickets/%@'>%@</a>.";
+	services.notify(msg.fmt(ticket_id, ticket_id), 'notice', 6000);
+},
+
+
+
+
+// ------------ Consultant Functions ---------------- //
+
+	setupConsultants: function () {
+		if (this.check_user_groups(["Consultants"])) {
+			// user is a Consultant
+			this.appConsultants = [];
+			this.findConsultants();
+		}
+	},
+
+	findConsultants: function() {
+		var promise1 = this.ajax('findUsersByTag', "consultant_cc");
+		var app = this;
+		this.when(promise1).then(
+			function(data1){
+				app.showConsultants(data1.results);
+			}
+		);
+	},
+
+	showConsultants: function(consultants_array) {
+		var app = this;
+		_.each(consultants_array, function(element, index, list){
+			// Object {id: 8417809287, url: "https://whipplehill.zendesk.com/api/v2/users/8417809287.json", name: "Matt.Drown@blackbaud.com", email: "matt.drown@blackbaud.com", created_at: "2016-07-22T17:23:42Z"…}
+			app.formatConsultant(element);
+		});
+		this.generate_app_view();
+	},
+
+	formatConsultant: function(r) {
+		// console.log("formatConsultant");
+		var t = {};
+		t.id = r.id;
+		t.name = r.name;
+		t.email = r.email;
+		t.name_tag = "ps_" + r.name.replace(" ", "_").toLowerCase();
+		// var indexes = [ {'id': 1, 'name': 'jake' }, {'id':4, 'name': 'jenny'},  {'id': 9, 'name': 'nick'}, {'id': 1, 'name': 'jake' }, {'id':4, 'name': 'jenny'} ];
+		if (_.findWhere(this.appConsultants, t)) {
+			console.log("already exists");
+		}	else {
+			this.appConsultants.push(t);
+		}
+	},
+
+
+	consultantButtons: function() {
+		// console.log("consultantButtons");
+		if (!this.appConsultants) {
+			return false;
+		} else {
+			this.appConsultants = _.sortBy( this.appConsultants, 'name');
+			return this.appConsultants;
+		}
+	},
+
+	clickedConsultantButton: function (event) {
+		// console.log("clickedConsultantButton");
+		var ticket = this.ticket();
+		ticket.customField("custom_field_22953480", "no_kb_necessary");
+
+		var consultant = {};
+		consultant.index = this.$(event.currentTarget).data("index");
+		consultant.name = this.$(event.currentTarget).data("name");
+		consultant.name_tag = this.$(event.currentTarget).data("nameTag");
+		consultant.user_id = this.$(event.currentTarget).data("userId");
+
+		this.ajax('assignConsultant', this.ticket().id(), consultant);
+	},
+
+	assignConsultantDone: function (data) {
+		// console.log("assignConsultantDone");
+		// console.log(data);
 	},
 
 
