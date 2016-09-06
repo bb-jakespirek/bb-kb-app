@@ -189,9 +189,7 @@
 			{id: 32341678, name: 'product_sub_1'},
 			{id: 32363597, name: 'product_sub_2'},
 			// move these to hide when it's ready
-			{id: 40298267, name: 'sent_to_psl_date'},
 			{id: 40628208, name: 'sent_to_psl_date_v2'},
-			{id: 40168628, name: 'sent_to_csa_date'},
 			{id: 40629348, name: 'sent_to_csa_date_v2'},
 			{id: 40302407, name: 'psl_sla_met'}
 		];
@@ -694,10 +692,7 @@
 
 		total = total - (13 * num_holidays); // if 0 holidays, will subtract nothing.
 
-		// TO DO
-		// If total days is greater than 7, then spans a weekend needs adjusting
-		// If total days is greater than the SLA, automatically mark it as missed.
-		// Set up SLA's
+
 
 		console.log("sent_to_psl_date");
 		console.log(sent_to_psl_date);
@@ -721,6 +716,7 @@
 		console.log("total");
 		console.log(total);
 
+		BizTime.check_priorities(total, ticket);
 		// var test_date = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
 		// console.log("num holidays");
 		// console.log(test_date);
