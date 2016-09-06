@@ -1,9 +1,9 @@
 	(function() {
 
-	var KB =  require('kb.js');
-	var Info =  require('info.js');
-	var Consultants =  require('consultants.js');
-	var BizTime =  require('biztime.js');
+	var KB = require('kb.js');
+	var Info = require('info.js');
+	var Consultants = require('consultants.js');
+	var BizTime = require('biztime.js');
 
 	return {
 
@@ -20,19 +20,6 @@
 		"ticket_info":{},
 		ticket_id: 0
   },
-
-	appConsultants: {
-	},
-
-	workingHours: {
-		0: null,
-		1: ['08:00:00', '20:00:00'],
-		2: ['08:00:00', '20:00:00'],
-		3: ['08:00:00', '20:00:00'],
-		4: ['08:00:00', '20:00:00'],
-		5: ['08:00:00', '20:00:00'],
-		6: null
-	},
 
 
 	events: {
@@ -693,6 +680,8 @@
 		var number_of_days = BizTime.number_of_days(sent_to_psl_date, sent_to_csa_date);
 		var night_hours = number_of_days * 11; // 13 hours of biz, 11 at night
 		var spans_a_weekend = BizTime.spans_a_weekend(sent_to_psl_date, sent_to_csa_date);
+		// var spans_a_holiday = BizTime.spans_a_holiday(sent_to_psl_date, sent_to_csa_date);
+		var num_holidays = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
 		var subtotal_with_weekends =
 			total_duration - biz_hours_till_end_of_day - biz_hours_from_beginning_of_day - night_hours;
 		var total;
@@ -702,6 +691,14 @@
 		} else {
 			total = subtotal_with_weekends;
 		}
+
+		total = total - (13 * num_holidays); // if 0 holidays, will subtract nothing.
+
+		// TO DO
+		// If total days is greater than 7, then spans a weekend needs adjusting
+		// If total days is greater than the SLA, automatically mark it as missed.
+		// Set up SLA's
+
 		console.log("sent_to_psl_date");
 		console.log(sent_to_psl_date);
 		// console.log(sent_to_psl_date.toTimeString());
@@ -723,6 +720,10 @@
 		console.log(subtotal_with_weekends);
 		console.log("total");
 		console.log(total);
+
+		// var test_date = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
+		// console.log("num holidays");
+		// console.log(test_date);
 
 	},
 
@@ -748,7 +749,7 @@
 	test_set_date_fields: function() {
 		var ticket = this.ticket();
 		var sent_to_psl_date = new Date(2016, 08, 01, 19, 00, 00, 00);
-		var sent_to_csa_date = new Date(2016, 08, 05, 10, 00, 00, 00);
+		var sent_to_csa_date = new Date(2016, 08, 06, 10, 00, 00, 00);
 		console.log("sent_to_psl_date");
 		console.log(sent_to_psl_date);
 		// console.log(sent_to_psl_date.toTimeString());
