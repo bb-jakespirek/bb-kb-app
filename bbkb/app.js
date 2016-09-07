@@ -77,6 +77,9 @@
 		'click #set_dates': 'test_set_date_fields',
 
 
+		'click #create_test_ticket': 'testTicket',
+
+
 		'click #back': function(event) {
 			this.generate_app_view();
 		},
@@ -189,8 +192,8 @@
 			{id: 32341678, name: 'product_sub_1'},
 			{id: 32363597, name: 'product_sub_2'},
 			// move these to hide when it's ready
-			{id: 40628208, name: 'sent_to_psl_date_v2'},
-			{id: 40629348, name: 'sent_to_csa_date_v2'},
+			// {id: 40628208, name: 'sent_to_psl_date_v2'},
+			// {id: 40629348, name: 'sent_to_csa_date_v2'},
 			{id: 40302407, name: 'psl_sla_met'}
 		];
 		var fields_to_hide = [
@@ -667,55 +670,82 @@
 	test_biz_hours: function() {
 		// console.log(BizTime.showWorkingHours(this));
 		var ticket = this.ticket();
+		var hours = BizTime.get_work_hours();
 		// var sent_to_psl_date = ticket.customField("custom_field_40298267");
 		var sent_to_psl_date = new Date(ticket.customField("custom_field_40628208"));
 		// var sent_to_csa_date = ticket.customField("custom_field_40168628");
 		var sent_to_csa_date = new Date(ticket.customField("custom_field_40629348"));
 
 		var total_duration = BizTime.hours_difference(sent_to_psl_date, sent_to_csa_date);
+
 		var biz_hours_till_end_of_day = BizTime.biz_hours_till_end_of_day(sent_to_psl_date);
 		var biz_hours_from_beginning_of_day = BizTime.biz_hours_from_beginning_of_day(sent_to_csa_date);
 		var number_of_days = BizTime.number_of_days(sent_to_psl_date, sent_to_csa_date);
-		var night_hours = number_of_days * 11; // 13 hours of biz, 11 at night
+		var night_hours = number_of_days * hours.night_hours; // 11 hours of biz, 11 at night
 		var spans_a_weekend = BizTime.spans_a_weekend(sent_to_psl_date, sent_to_csa_date);
 		// var spans_a_holiday = BizTime.spans_a_holiday(sent_to_psl_date, sent_to_csa_date);
 		var num_holidays = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
-		var subtotal_with_weekends =
-			total_duration - biz_hours_till_end_of_day - biz_hours_from_beginning_of_day - night_hours;
+		var subtotal_multiple_days =
+			total_duration - night_hours;
+			// total_duration - biz_hours_till_end_of_day - biz_hours_from_beginning_of_day - night_hours;
 		var total;
-
 		if (spans_a_weekend) {
-			total = subtotal_with_weekends - 26; // 13 hr days * 2
+			total = subtotal_multiple_days - hours.weekend_hours; // 13 hr days * 2
+			// console.log(total+ " spans a weekend");
 		} else {
-			total = subtotal_with_weekends;
+			if (number_of_days > 0 ) {
+				// console.log(total+ " multiple days");
+				total = subtotal_multiple_days;
+			} else {
+				total = total_duration;
+			}
 		}
+		// console.log("sent_to_psl_during_biz_hours");
+		// console.log(biz_hours_from_beginning_of_day);
+		console.log(BizTime.sent_to_psl_during_biz_hours(sent_to_psl_date));
 
-		total = total - (13 * num_holidays); // if 0 holidays, will subtract nothing.
+		// console.log(total);
+		total = total - (hours.day_hours * num_holidays); // if 0 holidays, will subtract nothing.
+
+		console.log("count num biz hours");
+		console.log(BizTime.count_num_biz_hours(sent_to_psl_date, sent_to_csa_date));
 
 
+		// console.log("day_hours");
+		// console.log(hours.day_hours);
 
-		console.log("sent_to_psl_date");
-		console.log(sent_to_psl_date);
-		// console.log(sent_to_psl_date.toTimeString());
-		console.log("sent_to_csa_date");
-		console.log(sent_to_csa_date);
-		console.log("-----");
-		console.log("Total duration of all hours");
-		console.log(total_duration);
+		// console.log("sent_to_psl_date");
+		// console.log(sent_to_psl_date);
+		// // console.log(sent_to_psl_date.toTimeString());
+		// console.log("sent_to_csa_date");
+		// console.log(sent_to_csa_date);
+		// console.log("-----");
+		// console.log("Total duration of all hours");
+		// console.log(total_duration);
+		// //
+		// console.log("Biz hours till end of day");
+		// console.log(biz_hours_till_end_of_day);
+		// console.log("Biz hours from beginning of day");
+		// console.log(biz_hours_from_beginning_of_day);
+		// console.log("Number of days / difference between days");
+		// console.log(number_of_days);
+		// console.log("spans_a_weekend");
+		// console.log(spans_a_weekend);
+		// console.log("subtotal_with_weekends");
+		// console.log(subtotal_with_weekends);
+		// console.log("hours.day_hours * num_holidays");
+		// console.log(hours.day_hours * num_holidays);
+		// console.log("hours.day_hours");
+		// console.log(hours.day_hours);
+		// console.log("weekend_hours");
+		// console.log(hours.weekend_hours);
+		// console.log("night_hours");
+		// console.log(night_hours);
 
-		console.log("Biz hours till end of day");
-		console.log(biz_hours_till_end_of_day);
-		console.log("Biz hours from beginning of day");
-		console.log(biz_hours_from_beginning_of_day);
-		console.log("Number of days / difference between days");
-		console.log(number_of_days);
-		console.log("spans_a_weekend");
-		console.log(spans_a_weekend);
-		console.log("subtotal_with_weekends");
-		console.log(subtotal_with_weekends);
-		console.log("total");
-		console.log(total);
+		// console.log("total");
+		// console.log(total);
 
+		total = BizTime.count_num_biz_hours(sent_to_psl_date, sent_to_csa_date);
 		BizTime.check_priorities(total, ticket);
 		// var test_date = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
 		// console.log("num holidays");
@@ -744,8 +774,19 @@
 
 	test_set_date_fields: function() {
 		var ticket = this.ticket();
-		var sent_to_psl_date = new Date(2016, 08, 01, 19, 00, 00, 00);
-		var sent_to_csa_date = new Date(2016, 08, 06, 10, 00, 00, 00);
+
+		// Span a weekend and a holiday.
+		// var sent_to_psl_date = new Date(2016, 08, 01, 18, 00, 00, 00);
+		// var sent_to_csa_date = new Date(2016, 08, 06, 19, 00, 00, 00);
+
+		// Span 24 hrs. Aug 30 - Sep 1
+		// var sent_to_psl_date = new Date(2016, 07, 30, 10, 00, 00, 00);
+		// var sent_to_csa_date = new Date(2016, 08, 01, 12, 00, 00, 00);
+
+		// Span 1 hr
+		var sent_to_psl_date = new Date(2016, 07, 30, 10, 00, 00, 00);
+		var sent_to_csa_date = new Date(2016, 07, 30, 11, 00, 00, 00);
+
 		console.log("sent_to_psl_date");
 		console.log(sent_to_psl_date);
 		// console.log(sent_to_psl_date.toTimeString());
@@ -1329,7 +1370,8 @@ testDate2: function() {
 
 testTicket: function() {
 	console.log("TestTicket");
-	var promise1 = this.ajax('createChatTicketTest', this.ticket());
+	// var promise1 = this.ajax('createChatTicketTest', this.ticket());
+	var promise1 = this.ajax('createTestTicket', this.ticket());
 	var app = this;
 	this.when(promise1).then(
 		function(data1){

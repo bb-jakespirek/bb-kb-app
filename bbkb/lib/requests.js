@@ -363,7 +363,7 @@ module.exports = {
 
 // ------------- Create Tickets for Testing ----------------- //
 
-createTestTicket_: function(ticket) {
+createTestTicket: function(ticket) {
 	// Create single ticket clone
 
 	// add Bugman tag
@@ -387,8 +387,8 @@ createTestTicket_: function(ticket) {
 	// body = body.fmt(primary, unauth_user, ticket_number);
 	var body = "This is my question...";
 	var subject = " IGNORE // TESTING // test ticket ";
-	var tags = ticket.tags();
-	tags.push('initial_assignee');
+	// var tags = ticket.tags();
+	// tags.push('initial_assignee');
 
 	return {
 		url: '/api/v2/tickets.json',
@@ -404,17 +404,17 @@ createTestTicket_: function(ticket) {
 					"public": true
 				},
 				"type": "question",
-
+				"priority": "normal",
 				// Testing
 				"status": "open",
 				// "assignee_id": 7928076648, //Alyssa for testing
 				"group_id": 20747244, //Support
 				"requester_id": 9213159448, // John Doe for testing
 				// "tags": tags,
-				"tags": ["initial_assignee"],
-				"custom_fields": [
-					{"id": 32248228, "value": "Alyssa Metts"}
-				],
+				// "tags": ["initial_assignee"],
+				// "custom_fields": [
+				// 	{"id": 32248228, "value": "Alyssa Metts"}
+				// ],
 
 				// "assignee_id": (ticket.assignee().user() && ticket.assignee().user().id()) || null,
 				// "group_id": (ticket.assignee().group() && ticket.assignee().group().id()) || null,
