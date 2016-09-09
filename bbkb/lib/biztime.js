@@ -1,10 +1,6 @@
 module.exports = {
-  // TO DO
-  // If total days is greater than 7, then spans a weekend needs adjusting
-  // If total days is greater than the SLA, automatically mark it as missed.
-  // Set up SLA's
-  // Get fractions of an hour to work...
-  // Have it check when reassigned, take out buttons
+  // TODO:
+  // Remove logs
 
   // RAINY DAY
   // Use Zendesk holidays / schedule https://developer.zendesk.com/rest_api/docs/core/schedules#list-all-schedules
@@ -34,7 +30,7 @@ module.exports = {
       night_hours: night_hours,
       weekend_hours: weekend_hours
     };
-    return work_hours
+    return work_hours;
   },
 
   check_holidays: function (start_date, end_date) {
@@ -58,15 +54,6 @@ module.exports = {
   },
 
   check_priorities: function (total_hours, ticket) {
-
-    // Urgent	  High	Normal	Low
-    // 1	       24	   48    	120
-    // console.log("-----");
-    // console.log("ticket_priority");
-    // console.log(ticket.priority());
-    // console.log("total_hours");
-    // console.log(total_hours);
-
     var priorities = [
       {priority: 'urgent', hours: 1, days: 1},
       {priority: 'high', hours: 24, days: 2},
@@ -75,11 +62,11 @@ module.exports = {
     ];
     var sla = _.findWhere(priorities, {priority: ticket.priority()});
     if (total_hours <= sla.hours) {
-      console.log("Met SLA!! (" + sla.hours + " hours)");
+      // console.log("Met SLA!! (" + sla.hours + " hours)");
       ticket.customField("custom_field_40302407", 'sla_met');
       return true;
     } else {
-      console.log("Didn't meet SLA...(" + sla.hours + " hours)");
+      // console.log("Didn't meet SLA...(" + sla.hours + " hours)");
       ticket.customField("custom_field_40302407", 'sla_not_met');
       return false;
     }
@@ -120,7 +107,7 @@ module.exports = {
 
   biz_hours_till_end_of_day: function(date_object) {
     var end_of_day = this.get_work_hours().end_of_day;
-    var hours = end_of_day - date_object.getHours()
+    var hours = end_of_day - date_object.getHours();
     return hours;
   },
 
@@ -177,13 +164,13 @@ module.exports = {
 
     var biz_hours = this.sent_to_psl_during_biz_hours(sent_to_psl_date);
     var biz_hours_psl_date = this.biz_hours_from_beginning_of_day(sent_to_psl_date);
-    console.log(biz_hours_psl_date + ": biz_hours_psl_date");
+    // console.log(biz_hours_psl_date + ": biz_hours_psl_date");
     var biz_hours_csa_date = this.biz_hours_till_end_of_day(sent_to_csa_date);
-    console.log(biz_hours_csa_date + ": biz_hours_csa_date");
+    // console.log(biz_hours_csa_date + ": biz_hours_csa_date");
     var number_of_days = this.number_of_days(sent_to_psl_date, sent_to_csa_date);
     var num_holidays = this.check_holidays(sent_to_psl_date, sent_to_csa_date);
-    console.log("number_of_days");
-    console.log(number_of_days);
+    // console.log("number_of_days");
+    // console.log(number_of_days);
     var total = 0;
 
     // var days = [];
@@ -205,11 +192,11 @@ module.exports = {
     if (biz_hours_psl_date > this.get_work_hours().day_hours) {
       // Sent after hours
       sent_to_psl_after_hours = true;
-      console.log("sent_to_psl_after_hours");
+      // console.log("sent_to_psl_after_hours");
     } else if (biz_hours_psl_date < 0) {
       // Sent before biz hours
       sent_to_psl_before_hours = true;
-      console.log("sent_to_psl_before_hours");
+      // console.log("sent_to_psl_before_hours");
     }
 
     var sent_to_csa_after_hours, sent_to_csa_before_hours;
@@ -229,34 +216,8 @@ module.exports = {
         // If multi-day, take off the last day because an extra day got added because it was sent to CSA after hours
         number_of_days -= 1;
       }
-      console.log("sent_to_csa_after_hours");
+      // console.log("sent_to_csa_after_hours");
     }
-
-
-    // if (sent_to_psl_after_hours) {
-    //   //   // Sent after hours, skip the first day
-    //   console.log("skipping a day");
-    //   number_of_days -= 1;
-    // }
-
-
-    // if (biz_hours_psl_date > this.get_work_hours().day_hours) {
-    //   // Sent after hours, skip the first day
-    //   console.log("skipping a day");
-    //   sent_to_psl_after_hours = true;
-    //   number_of_days -= 1;
-    // } else if (biz_hours_psl_date < 0) {
-    //   // Sent before biz hours, subtract the difference first
-    //   sent_to_psl_before_hours = true;
-    //   total += biz_hours_psl_date; // adding a negative number
-    //   console.log(total + " adding a negative number");
-    //   total += this.get_work_hours().day_hours - biz_hours_psl_date;
-    //   console.log(total + " subtracted biz_hours_psl_date");
-    // } else {
-    //   // was within biz hours, take out the difference
-    //   console.log("was within biz hours, take out the difference");
-    //   total += this.get_work_hours().day_hours - biz_hours_psl_date - biz_hours_csa_date;
-    // }
 
     // Account for holidays
     if (num_holidays > 0) {
@@ -269,23 +230,21 @@ module.exports = {
       number_of_days = 1;
     }
 
-    // TODO:
-
 
     // Figure out if we're dealing with 1 day or multiple
     if (number_of_days === 1) {
       // This is happening on the same day
-      console.log("This is happening on the same day");
+      // console.log("This is happening on the same day");
       if (sent_to_psl_before_hours) {
         total += biz_hours_psl_date; // adding a negative number
-        console.log(biz_hours_psl_date);
+        // console.log(biz_hours_psl_date);
       }
       total += this.convert_time_difference_to_hours(sent_to_csa_date - sent_to_psl_date);
       // total += biz_hours_csa_date;
-      console.log(total + " sent_to_csa_date - sent_to_psl_date");
+      // console.log(total + " sent_to_csa_date - sent_to_psl_date");
     } else {
       // This spans multiple days
-      console.log("---------");
+      // console.log("---------");
       // Cycle through each day and add hours
       for (var i = 1; i <= number_of_days; i++) {
         // console.log("ran x: " + i );
@@ -294,25 +253,25 @@ module.exports = {
           if (sent_to_psl_before_hours) {
             // Since this is multiple days, we'll count the full day since it was sent before hours
             total += this.get_work_hours().day_hours; // adding a negative number
-            console.log("Adding: " + this.get_work_hours().day_hours + " // Sent before hours, multi-day");
+            // console.log("Adding: " + this.get_work_hours().day_hours + " // Sent before hours, multi-day");
           }
           else if (sent_to_psl_after_hours) {
             // Sent after hours, skip the first day
-            console.log("Skipping first day");
+            // console.log("Skipping first day");
           }
           else {
             // Sent during the day
             total += this.get_work_hours().day_hours - biz_hours_psl_date;
-            console.log("Adding: " + this.get_work_hours().day_hours - biz_hours_psl_date);
+            // console.log("Adding: " + this.get_work_hours().day_hours - biz_hours_psl_date);
           }
-          console.log("Day 1: //" + total + "\n ------------");
+          // console.log("Day 1: //" + total + "\n ------------");
         } else if (i === number_of_days) {
           // Last day, just add the actual biz hours
           if (sent_to_csa_after_hours) {
             // The last day, if it was sent to CSA after hours, it will think there's a whole other day
             // Don't subtract anything
             total += this.get_work_hours().day_hours ;
-            console.log("Sent to CSA after hours");
+            // console.log("Sent to CSA after hours");
           }
           else if (sent_to_csa_before_hours) {
             // if it's sent before hours on the day it's due
@@ -321,36 +280,29 @@ module.exports = {
           else {
             total += this.get_work_hours().day_hours - biz_hours_csa_date;
           }
-          console.log("Adding: " + biz_hours_csa_date);
-          console.log("Last Day, Day: " + i + " // " + total + "\n ------------");
+          // console.log("Adding: " + biz_hours_csa_date);
+          // console.log("Last Day, Day: " + i + " // " + total + "\n ------------");
         }
         else {
           total += this.get_work_hours().day_hours;
-          console.log("Adding: " + this.get_work_hours().day_hours + " // Normal full day");
-          console.log("Day: " + i + " // " + total + "\n ------------");
+          // console.log("Adding: " + this.get_work_hours().day_hours + " // Normal full day");
+          // console.log("Day: " + i + " // " + total + "\n ------------");
         }
       }
       // this.cycle_through_days(total);
     }
-
-
-
-    console.log("number_of_days");
-    console.log(number_of_days);
-    console.log("biz_hours_psl_date");
-    console.log(biz_hours_psl_date);
-    console.log("biz_hours_csa_date");
-    console.log(biz_hours_csa_date);
-
-    console.log(" ---- total ---- ");
-    console.log(total);
+    // console.log("number_of_days");
+    // console.log(number_of_days);
+    // console.log("biz_hours_psl_date");
+    // console.log(biz_hours_psl_date);
+    // console.log("biz_hours_csa_date");
+    // console.log(biz_hours_csa_date);
+    //
+    // console.log(" ---- total ---- ");
+    // console.log(total);
     return total;
-  },
 
-  // cycle_through_days: function(total) {
-  //
-  //   return total
-  // },
+  },
 
 
 

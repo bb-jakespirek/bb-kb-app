@@ -627,8 +627,8 @@
 		var starting_assignee = this.appProperties.ticket_info.starting_assignee;
 		var new_assignee = {};
 		new_assignee.group = this.ticket().assignee().group().name();
-		var starting_group = starting_assignee.group;
-		var new_group = new_assignee.group;
+		starting_group = starting_assignee.group;
+		new_group = new_assignee.group;
 
 		if (starting_group == "Product Support Leads" && new_group == "Support") {
 			return "psl_to_support";
@@ -640,231 +640,9 @@
 
 
 	// ------------ PSL SLA ---------------- //
-	// To do:
-	// hide the new fields
-		// 40298267 = sent to PSL date
-		// 40168628 = sent to CSA date
-		// 40302407 = PSL SLA met / not met
 
-	// hours_difference: function(date1, date2) {
-	// 	var difference = Math.abs(date1 - date2);
-	// 	return this.convert_time_difference_to_hours(difference);
-	// },
-	//
-	// biz_hours_till_end_of_day: function(date_object) {
-	// 	var end_of_day = 20;
-	// 	var hours = end_of_day - date_object.getHours()
-	// 	return hours;
-	// },
-	//
-	// biz_hours_from_beginning_of_day: function(date_object) {
-	// 	var start_of_day = 8;
-	// 	var hours = date_object.getHours() - start_of_day;
-	// 	return hours;
-	// },
-	//
-	// number_of_days: function(starting_date, end_date) {
-	// 	var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-	// 	var diffDays = Math.round(Math.abs((starting_date.getTime() - end_date.getTime())/(oneDay)));
-	// 	return diffDays;
-	// },
-
-	test_biz_hoursxx: function() {
-		// console.log(BizTime.showWorkingHours(this));
-		var ticket = this.ticket();
-		var hours = BizTime.get_work_hours();
-		// var sent_to_psl_date = ticket.customField("custom_field_40298267");
-		var sent_to_psl_date = new Date(ticket.customField("custom_field_40628208"));
-		// var sent_to_csa_date = ticket.customField("custom_field_40168628");
-		var sent_to_csa_date = new Date(ticket.customField("custom_field_40629348"));
-
-		var total_duration = BizTime.hours_difference(sent_to_psl_date, sent_to_csa_date);
-
-		var biz_hours_till_end_of_day = BizTime.biz_hours_till_end_of_day(sent_to_psl_date);
-		var biz_hours_from_beginning_of_day = BizTime.biz_hours_from_beginning_of_day(sent_to_csa_date);
-		var number_of_days = BizTime.number_of_days(sent_to_psl_date, sent_to_csa_date);
-		var night_hours = number_of_days * hours.night_hours; // 11 hours of biz, 11 at night
-		var spans_a_weekend = BizTime.spans_a_weekend(sent_to_psl_date, sent_to_csa_date);
-		// var spans_a_holiday = BizTime.spans_a_holiday(sent_to_psl_date, sent_to_csa_date);
-		var num_holidays = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
-		var subtotal_multiple_days =
-			total_duration - night_hours;
-			// total_duration - biz_hours_till_end_of_day - biz_hours_from_beginning_of_day - night_hours;
-		var total;
-		if (spans_a_weekend) {
-			total = subtotal_multiple_days - hours.weekend_hours; // 13 hr days * 2
-			// console.log(total+ " spans a weekend");
-		} else {
-			if (number_of_days > 0 ) {
-				// console.log(total+ " multiple days");
-				total = subtotal_multiple_days;
-			} else {
-				total = total_duration;
-			}
-		}
-		// console.log("sent_to_psl_during_biz_hours");
-		// console.log(biz_hours_from_beginning_of_day);
-		console.log(BizTime.sent_to_psl_during_biz_hours(sent_to_psl_date));
-
-		// console.log(total);
-		total = total - (hours.day_hours * num_holidays); // if 0 holidays, will subtract nothing.
-
-		console.log("count num biz hours");
-		console.log(BizTime.count_num_biz_hours(sent_to_psl_date, sent_to_csa_date));
-
-
-		// console.log("day_hours");
-		// console.log(hours.day_hours);
-
-		// console.log("sent_to_psl_date");
-		// console.log(sent_to_psl_date);
-		// // console.log(sent_to_psl_date.toTimeString());
-		// console.log("sent_to_csa_date");
-		// console.log(sent_to_csa_date);
-		// console.log("-----");
-		// console.log("Total duration of all hours");
-		// console.log(total_duration);
-		// //
-		// console.log("Biz hours till end of day");
-		// console.log(biz_hours_till_end_of_day);
-		// console.log("Biz hours from beginning of day");
-		// console.log(biz_hours_from_beginning_of_day);
-		// console.log("Number of days / difference between days");
-		// console.log(number_of_days);
-		// console.log("spans_a_weekend");
-		// console.log(spans_a_weekend);
-		// console.log("subtotal_with_weekends");
-		// console.log(subtotal_with_weekends);
-		// console.log("hours.day_hours * num_holidays");
-		// console.log(hours.day_hours * num_holidays);
-		// console.log("hours.day_hours");
-		// console.log(hours.day_hours);
-		// console.log("weekend_hours");
-		// console.log(hours.weekend_hours);
-		// console.log("night_hours");
-		// console.log(night_hours);
-
-		// console.log("total");
-		// console.log(total);
-
-		total = BizTime.count_num_biz_hours(sent_to_psl_date, sent_to_csa_date);
-		BizTime.check_priorities(total, ticket);
-		// var test_date = BizTime.check_holidays(sent_to_psl_date, sent_to_csa_date);
-		// console.log("num holidays");
-		// console.log(test_date);
-
-	},
-
-
-
-
-
-	// convert_time_difference_to_hours: function(time_in_milliseconds) {
-	// 	return time_in_milliseconds / 1000 / 60 / 60;
-	// },
-
-	test_set_date_fields: function() {
-		var ticket = this.ticket();
-
-		// Span a weekend and a holiday.
-		// var sent_to_psl_date = new Date(2016, 08, 01, 18, 00, 00, 00);
-		// var sent_to_csa_date = new Date(2016, 08, 06, 19, 00, 00, 00);
-
-		// Span 24 hrs. Aug 30 - Sep 1
-		// var sent_to_psl_date = new Date(2016, 07, 30, 10, 00, 00, 00);
-		// var sent_to_csa_date = new Date(2016, 08, 01, 12, 00, 00, 00);
-
-		// Span 1 hr
-		var sent_to_psl_date = new Date(2016, 07, 30, 10, 00, 00, 00);
-		var sent_to_csa_date = new Date(2016, 07, 30, 11, 00, 00, 00);
-
-		console.log("sent_to_psl_date");
-		console.log(sent_to_psl_date);
-		// console.log(sent_to_psl_date.toTimeString());
-		console.log("sent_to_csa_date");
-		console.log(sent_to_csa_date);
-		console.log("before -----");
-		// ticket.customField("custom_field_40298267", sent_to_psl_date);
-		ticket.customField("custom_field_40628208", sent_to_psl_date);
-		// ticket.customField("custom_field_40168628", sent_to_csa_date);
-		ticket.customField("custom_field_40629348", sent_to_csa_date);
-		console.log("sent_to_psl_date");
-		console.log(sent_to_psl_date);
-		// console.log(sent_to_psl_date.toTimeString());
-		console.log("sent_to_csa_date");
-		console.log(sent_to_csa_date);
-		console.log("after -----");
-	},
-
-	test_compare_dates: function() {
-		var ticket = this.ticket();
-
-		// var today = new Date();
-		var yesterday = new Date(2016, 08, 01, 19, 30, 00, 00);
-				var today = new Date(2016, 08, 02, 08, 30, 00, 00);
-
-		// console.log(today);
-		// var yesterday = new Date();
-		// yesterday.setDate(yesterday.getDate() - 1);
-
-
-		// var sent_to_psl_date = ticket.customField("custom_field_40298267");
-		var sent_to_psl_date = hr_ago;
-		// ticket.customField("custom_field_40298267", hr_ago);
-		console.log("sent_to_psl_date -----");
-		console.log(ticket.customField("custom_field_40298267"));
-
-		// var sent_to_psl_date = ;
-
-		// var date = new Date();
-		// ticket.customField("custom_field_40168628", date);
-
-		// var sent_to_csa_date = ticket.customField("custom_field_40168628");
-		var sent_to_csa_date = today;
-
-
-
-		console.log("sent_to_psl_date");
-		console.log(sent_to_psl_date);
-		// console.log(sent_to_psl_date.toTimeString());
-		console.log("-----");
-		console.log("sent_to_csa_date");
-		console.log(sent_to_csa_date);
-
-		console.log("-----");
-		// console.log(this.hours_difference(sent_to_psl_date, sent_to_csa_date));
-		// var difference = sent_to_csa_date - sent_to_psl_date;
-		// console.log(difference / 1000 / 60 / 60);
-		console.log("-----");
-		// console.log();
-
-	},
-
-
-
-	test_biz_hoursx2: function() {
-		// var sent_to_psl_date_field = ticket.customField("custom_field_40628208");
-		// var sent_to_csa_date_field = ticket.customField("custom_field_40629348");
-		// var sent_to_psl_date, sent_to_csa_date;
-		var ticket = this.ticket();
-
-		var sent_to_psl_date = this.get_textfield_to_date("custom_field_40628208");
-		var sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
-		// Only create a date if field is not empty
-		if (!sent_to_psl_date) {
-			console.log("!sent_to_psl_date");
-		} else {
-			console.log("field sent_to_psl_date not empty");
-		}
-		if (!sent_to_csa_date) {
-			console.log("!sent_to_csa_date");
-		} else {
-			console.log("field sent_to_csa_date not empty");
-		}
-		// if (!sent_to_csa_date_field) {
-		// } else {
-		// 	sent_to_csa_date = new Date(sent_to_csa_date_field);
-		// }
+	test_biz_hours: function() {
+		this.compare_psl_dates();
 	},
 
 
@@ -872,14 +650,14 @@
 		console.log("custom_field_id: " + custom_field_id);
 		if (!custom_field_id) {
 			// null or empty
-			return false
+			return false;
 		}
 		var ticket = this.ticket();
 		var date_field = ticket.customField(custom_field_id);
 		// Only create a date if field is not empty
 		if (!date_field) {
 			console.log('!date_field');
-			return false
+			return false;
 		} else {
 			console.log('date_field not empty');
 			return new Date(date_field);
@@ -887,19 +665,16 @@
 	},
 
 
-	test_biz_hours: function() {
-		this.compare_psl_dates();
-	},
-
 	compare_psl_dates: function() {
 		// 40628208 = sent to PSL date
 		// 40629348 = sent to CSA date
 		// 40302407 = PSL SLA met / not met
-		console.log("compare_PSL_dates");
+		// console.log("compare_PSL_dates");
 
 		var ticket = this.ticket();
 		var sent_to_psl_date = this.get_textfield_to_date("custom_field_40628208");
 		var sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
+		var total;
 		// Only create a date if field is not empty
 		if (!sent_to_csa_date) {
 			// empty
@@ -907,22 +682,22 @@
 			ticket.customField("custom_field_40629348", date);
 			sent_to_csa_date = date;
 		} else {
-			console.log("set csa date");
+			// console.log("set csa date");
 			sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
 		}
 		if (!sent_to_psl_date && !sent_to_csa_date) {
 		} else if (!sent_to_psl_date || !sent_to_psl_date) {
-			console.log("one of the dates is missing");
+			// console.log("one of the dates is missing");
 		}
 		else {
 			// sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
-			console.log("sent_to_psl_date && sent_to_csa_date true");
-			console.log(sent_to_psl_date);
-			console.log(sent_to_csa_date);
+			// console.log("sent_to_psl_date && sent_to_csa_date true");
+			// console.log(sent_to_psl_date);
+			// console.log(sent_to_csa_date);
 
 			total = BizTime.count_num_biz_hours(sent_to_psl_date, sent_to_csa_date);
-			console.log("total");
-			console.log(total);
+			// console.log("total");
+			// console.log(total);
 
 			BizTime.check_priorities(total, ticket);
 		}
