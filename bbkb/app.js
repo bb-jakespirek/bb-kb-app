@@ -194,10 +194,10 @@
 			{id: 21744040, name: 'product'},
 			{id: 32341678, name: 'product_sub_1'},
 			{id: 32363597, name: 'product_sub_2'},
-			// move these to hide when it's ready
-			// {id: 40628208, name: 'sent_to_psl_date_v2'},
-			// {id: 40629348, name: 'sent_to_csa_date_v2'},
-			// {id: 40302407, name: 'psl_sla_met'}
+			// move these to hide after a week of testing
+			{id: 40628208, name: 'sent_to_psl_date'},
+			{id: 40629348, name: 'sent_to_csa_date'},
+			{id: 40302407, name: 'psl_sla_met'}
 		];
 		var fields_to_hide = [
 			{id: 22472594, name: 'netsuite_link'},

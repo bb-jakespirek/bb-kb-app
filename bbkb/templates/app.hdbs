@@ -1,10 +1,8 @@
-<button type="button" target="_blank" id="bizhours" class="label label-warning">Biz Hours Test</button>
-<button type="button" target="_blank" id="set_dates" class="label label-danger">SET DATES</button>
+<!-- <button type="button" target="_blank" id="bizhours" class="label label-warning">Biz Hours Test</button> -->
+<!-- <button type="button" target="_blank" id="set_dates" class="label label-danger">SET DATES</button>
 
-<button type="button" target="_blank" id="create_test_ticket" class="label label-info">Create Test Ticket</button>
-
-
-<div style="clear:both; margin-top:20px;"></div>
+<button type="button" target="_blank" id="create_test_ticket" class="label label-info">Create Test Ticket</button> -->
+<!-- <div style="clear:both; margin-top:20px;"></div> -->
 
 <!-- <button id='set_pd_date_link' type='button' class='label label-warning' >Set PD SLA Date</button> -->
 <!-- Helpful Links button -->
@@ -462,8 +460,8 @@
 
 
 
-
+<!--
 <button type="button" target="_blank" id="test_button" class="label label-info">Test SLA DATE</button>
 <button type="button" target="_blank" id="test_button2" class="label label-info">Test</button>
 
-<button type="button" target="_blank" id="compare_dates" class="label label-warning">compare dates</button>
+<button type="button" target="_blank" id="compare_dates" class="label label-warning">compare dates</button> -->

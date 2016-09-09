@@ -212,6 +212,26 @@ module.exports = {
       console.log("sent_to_psl_before_hours");
     }
 
+    var sent_to_csa_after_hours, sent_to_csa_before_hours;
+    // Figure out if it was sent to CSA during biz hours
+    if (biz_hours_csa_date > this.get_work_hours().day_hours) {
+      // Sent to CSA before hours
+      sent_to_csa_before_hours = true;
+      if (number_of_days > 1) {
+        // If multi-day, take off the last day because an extra day got added because it was sent to CSA after hours
+        number_of_days -= 1;
+      }
+    }
+    else if (biz_hours_csa_date <= 0) {
+      // Sent to CSA after hours
+      sent_to_csa_after_hours = true;
+      if (number_of_days > 1) {
+        // If multi-day, take off the last day because an extra day got added because it was sent to CSA after hours
+        number_of_days -= 1;
+      }
+      console.log("sent_to_csa_after_hours");
+    }
+
 
     // if (sent_to_psl_after_hours) {
     //   //   // Sent after hours, skip the first day
@@ -288,7 +308,19 @@ module.exports = {
           console.log("Day 1: //" + total + "\n ------------");
         } else if (i === number_of_days) {
           // Last day, just add the actual biz hours
-          total += this.get_work_hours().day_hours - biz_hours_csa_date;
+          if (sent_to_csa_after_hours) {
+            // The last day, if it was sent to CSA after hours, it will think there's a whole other day
+            // Don't subtract anything
+            total += this.get_work_hours().day_hours ;
+            console.log("Sent to CSA after hours");
+          }
+          else if (sent_to_csa_before_hours) {
+            // if it's sent before hours on the day it's due
+            total += this.get_work_hours().day_hours ;
+          }
+          else {
+            total += this.get_work_hours().day_hours - biz_hours_csa_date;
+          }
           console.log("Adding: " + biz_hours_csa_date);
           console.log("Last Day, Day: " + i + " // " + total + "\n ------------");
         }
