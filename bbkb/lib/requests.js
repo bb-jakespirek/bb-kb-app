@@ -3,13 +3,13 @@ module.exports = {
 	/*global escape: true */
 
 
-	getHolidays: function() {
-		// console.log("fetchOrganization ran");
-		return {
-			url:  '/api/v2/business_hours/schedules.json',
-			type: 'GET'
-		};
-	},
+	// getHolidays: function() {
+	// 	// console.log("fetchOrganization ran");
+	// 	return {
+	// 		url:  '/api/v2/business_hours/schedules.json',
+	// 		type: 'GET'
+	// 	};
+	// },
 
 	fetchOrganization: function(org_id) {
 		// console.log("fetchOrganization ran");

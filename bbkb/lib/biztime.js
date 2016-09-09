@@ -41,7 +41,7 @@ module.exports = {
     // returns number of holidays in span of dates
 
     var num_days = this.number_of_days(start_date, end_date);
-    // var holidays = ['8/31/2016', '9/1/2016', '11/24/2016', '11/25/2016', '12/26/2016', '1/1/2017'];
+    // var holidays = ['8/31/2016', '9/1/2016', '11/24/2016', '11/25/2016', '12/26/2016', '1/1/2017']; // testing
     var holidays = ['9/5/2016', '11/24/2016', '11/25/2016', '12/26/2016', '1/1/2017'];
     var num_holidays = 0;
 
@@ -177,49 +177,130 @@ module.exports = {
 
     var biz_hours = this.sent_to_psl_during_biz_hours(sent_to_psl_date);
     var biz_hours_psl_date = this.biz_hours_from_beginning_of_day(sent_to_psl_date);
-    var biz_hours_csa_date = this.biz_hours_from_beginning_of_day(sent_to_csa_date);
+    console.log(biz_hours_psl_date + ": biz_hours_psl_date");
+    var biz_hours_csa_date = this.biz_hours_till_end_of_day(sent_to_csa_date);
+    console.log(biz_hours_csa_date + ": biz_hours_csa_date");
     var number_of_days = this.number_of_days(sent_to_psl_date, sent_to_csa_date);
     var num_holidays = this.check_holidays(sent_to_psl_date, sent_to_csa_date);
     console.log("number_of_days");
     console.log(number_of_days);
     var total = 0;
 
+    // var days = [];
+    //
+    // for (var i = 0; i < number_of_days; i++) {
+    //   console.log("---------- Day: " + (i + Number(1)));
+    //   var day = {start_time:};
+    //
+    //   days.push("lala");
+    // }
+    // console.log(days);
+
+// variations in sent to psl time (before or after work hours or during)
+// if same day, CSA time... after work hours?
+
+    var sent_to_psl_after_hours, sent_to_psl_before_hours;
+
+    // Figure out if it was sent to PSL during biz hours
     if (biz_hours_psl_date > this.get_work_hours().day_hours) {
-      // Sent after hours, skip the first day
-      console.log("skipping a day");
-      number_of_days -= 1;
+      // Sent after hours
+      sent_to_psl_after_hours = true;
+      console.log("sent_to_psl_after_hours");
     } else if (biz_hours_psl_date < 0) {
-      // Sent before biz hours, subtract the difference first
-      total += biz_hours_psl_date; // adding a negative number
-      total += this.get_work_hours().day_hours - biz_hours_psl_date;
-      console.log(total + " subtracted biz_hours_psl_date");
-    } else {
-      // was within biz hours, take out the difference
-      total += this.get_work_hours().day_hours - biz_hours_psl_date;
+      // Sent before biz hours
+      sent_to_psl_before_hours = true;
+      console.log("sent_to_psl_before_hours");
     }
 
+
+    // if (sent_to_psl_after_hours) {
+    //   //   // Sent after hours, skip the first day
+    //   console.log("skipping a day");
+    //   number_of_days -= 1;
+    // }
+
+
+    // if (biz_hours_psl_date > this.get_work_hours().day_hours) {
+    //   // Sent after hours, skip the first day
+    //   console.log("skipping a day");
+    //   sent_to_psl_after_hours = true;
+    //   number_of_days -= 1;
+    // } else if (biz_hours_psl_date < 0) {
+    //   // Sent before biz hours, subtract the difference first
+    //   sent_to_psl_before_hours = true;
+    //   total += biz_hours_psl_date; // adding a negative number
+    //   console.log(total + " adding a negative number");
+    //   total += this.get_work_hours().day_hours - biz_hours_psl_date;
+    //   console.log(total + " subtracted biz_hours_psl_date");
+    // } else {
+    //   // was within biz hours, take out the difference
+    //   console.log("was within biz hours, take out the difference");
+    //   total += this.get_work_hours().day_hours - biz_hours_psl_date - biz_hours_csa_date;
+    // }
+
+    // Account for holidays
     if (num_holidays > 0) {
-      console.log("num_holidays" + num_holidays);
+      // console.log("num_holidays" + num_holidays);
       number_of_days -= num_holidays;
     }
+
+    // Make sure we don't get a negative number of days
     if (number_of_days < 1) {
       number_of_days = 1;
     }
 
-    // Cycle through each day and add hours
-    for (var i = 1; i <= number_of_days; i++) {
-      // console.log("ran x: " + i );
-      if (i === number_of_days) {
-        // On the last day, just add the actual biz hours
-        total += biz_hours_csa_date;
-      } else if (i === 1) {
-        // we already added this above
-        total += 0;
+    // TODO:
+
+
+    // Figure out if we're dealing with 1 day or multiple
+    if (number_of_days === 1) {
+      // This is happening on the same day
+      console.log("This is happening on the same day");
+      if (sent_to_psl_before_hours) {
+        total += biz_hours_psl_date; // adding a negative number
+        console.log(biz_hours_psl_date);
       }
-      else {
-        total += this.get_work_hours().day_hours;
+      total += this.convert_time_difference_to_hours(sent_to_csa_date - sent_to_psl_date);
+      // total += biz_hours_csa_date;
+      console.log(total + " sent_to_csa_date - sent_to_psl_date");
+    } else {
+      // This spans multiple days
+      console.log("---------");
+      // Cycle through each day and add hours
+      for (var i = 1; i <= number_of_days; i++) {
+        // console.log("ran x: " + i );
+        if (i === 1) {
+          // Day One
+          if (sent_to_psl_before_hours) {
+            // Since this is multiple days, we'll count the full day since it was sent before hours
+            total += this.get_work_hours().day_hours; // adding a negative number
+            console.log("Adding: " + this.get_work_hours().day_hours + " // Sent before hours, multi-day");
+          }
+          else if (sent_to_psl_after_hours) {
+            // Sent after hours, skip the first day
+            console.log("Skipping first day");
+          }
+          else {
+            // Sent during the day
+            total += this.get_work_hours().day_hours - biz_hours_psl_date;
+            console.log("Adding: " + this.get_work_hours().day_hours - biz_hours_psl_date);
+          }
+          console.log("Day 1: //" + total + "\n ------------");
+        } else if (i === number_of_days) {
+          // Last day, just add the actual biz hours
+          total += this.get_work_hours().day_hours - biz_hours_csa_date;
+          console.log("Adding: " + biz_hours_csa_date);
+          console.log("Last Day, Day: " + i + " // " + total + "\n ------------");
+        }
+        else {
+          total += this.get_work_hours().day_hours;
+          console.log("Adding: " + this.get_work_hours().day_hours + " // Normal full day");
+          console.log("Day: " + i + " // " + total + "\n ------------");
+        }
       }
+      // this.cycle_through_days(total);
     }
+
 
 
     console.log("number_of_days");
@@ -233,6 +314,12 @@ module.exports = {
     console.log(total);
     return total;
   },
+
+  // cycle_through_days: function(total) {
+  //
+  //   return total
+  // },
+
 
 
 
