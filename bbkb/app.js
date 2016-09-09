@@ -1,8 +1,9 @@
 	(function() {
 
-	var KB =  require('kb.js');
-	var Info =  require('info.js');
-	var Consultants =  require('consultants.js');
+	var KB = require('kb.js');
+	var Info = require('info.js');
+	var Consultants = require('consultants.js');
+	var BizTime = require('biztime.js');
 
 	return {
 
@@ -21,11 +22,8 @@
   },
 
 	appConsultants: {
+		// empty, but needs to be set up... check on fetchOrganizationDone to see if we actually need this still
 	},
-
-
-
-
 
 	events: {
 
@@ -75,7 +73,14 @@
 		'assignConsultant.done': 'assignConsultantDone',
 
 
-		'click #test_button': 'testTicket',
+		'click #test_button': 'testDate',
+		'click #test_button2': 'testDate2',
+		'click #compare_dates': 'test_compare_dates',
+		'click #bizhours': 'test_biz_hours',
+		'click #set_dates': 'test_set_date_fields',
+
+
+		'click #create_test_ticket': 'testTicket',
 
 
 		'click #back': function(event) {
@@ -132,6 +137,7 @@
 
 		// temporary fix for a Zendesk bug 7/26/16
 		this.appProperties.ticket_info.bug_priority_changed = 0;
+		//
 		this.hideFields();
 		// Check if it's a new ticket or not
 		var ticket_new;
@@ -188,6 +194,10 @@
 			{id: 21744040, name: 'product'},
 			{id: 32341678, name: 'product_sub_1'},
 			{id: 32363597, name: 'product_sub_2'},
+			// move these to hide after a week of testing
+			{id: 40628208, name: 'sent_to_psl_date'},
+			{id: 40629348, name: 'sent_to_csa_date'},
+			{id: 40302407, name: 'psl_sla_met'}
 		];
 		var fields_to_hide = [
 			{id: 22472594, name: 'netsuite_link'},
@@ -370,7 +380,8 @@
 		// console.log("assignee changed");
 		var ticket = this.ticket();
 		if (ticket.requester()) {
-			this.check_psl_sending_to_support();
+			// this.check_psl_sending_to_support();
+			this.check_direction_of_ticket();
 		}
 	},
 
@@ -561,22 +572,22 @@
   },
 
 
-  update_zd_custom_field: function(field_id, value) {
-    return this.ticket().customField( helpers.fmt('custom_field_%@', field_id), value );
-  },
+	update_zd_custom_field: function(field_id, value) {
+		return this.ticket().customField( helpers.fmt('custom_field_%@', field_id), value );
+	},
 
 
-  kb_id_changed: function () {
+	kb_id_changed: function () {
 		this.generate_app_view();
 	},
 
 
-  help_topic_changed: function () {
+	help_topic_changed: function () {
 		this.generate_app_view();
 	},
 
 	set_initial_assignee: function() {
-		// console.log("initial assignee group");
+		console.log("initial assignee group");
 		// console.log(this.ticket().assignee().user().name());
 		// console.log(this.ticket().assignee().group().name());
 		var ticket_info = this.appProperties.ticket_info;
@@ -591,28 +602,151 @@
 		ticket_info.psl_to_support = false;
 	},
 
-
-	check_psl_sending_to_support: function() {
-		// console.log("check_psl_sending_to_support");
+	check_direction_of_ticket: function() {
+		console.log("check direction");
 		if (this.appProperties.ticket_info.starting_assignee) {
-			var starting_assignee = this.appProperties.ticket_info.starting_assignee;
-			var new_assignee = {};
-			new_assignee.group = this.ticket().assignee().group().name();
+			var group_direction = this.group_change_direction();
 
-			// console.log("starting assignee group:");
-			// console.log( starting_assignee.group);
-			// console.log("new assignee group:");
-			// console.log(new_assignee.group);
-
-			// starting_assignee.name;
-			if (starting_assignee.group == "Product Support Leads" && new_assignee.group == "Support") {
-				// console.log("Changed from PSL to Support");
+			if (group_direction == "psl_to_support") {
+				console.log("Changed from PSL to Support");
 				this.appProperties.ticket_info.psl_to_support = true;
+				this.compare_psl_dates();
 			}
-		} else {
+			else if (group_direction == "support_to_psl") {
+				console.log("Changed from Support to PSL");
+				this.sent_to_psl_queue();
+			}
+		}
+		else {
 			// console.log("check_psl_sending_to_support // starting_assignee not set");
 		}
 	},
+
+	group_change_direction: function (starting_group, new_group) {
+		console.log("group_change_direction");
+		var starting_assignee = this.appProperties.ticket_info.starting_assignee;
+		var new_assignee = {};
+		new_assignee.group = this.ticket().assignee().group().name();
+		starting_group = starting_assignee.group;
+		new_group = new_assignee.group;
+
+		if (starting_group == "Product Support Leads" && new_group == "Support") {
+			return "psl_to_support";
+		}
+		else if (starting_group == "Support" && new_group == "Product Support Leads") {
+			return "support_to_psl";
+		}
+	},
+
+
+	// ------------ PSL SLA ---------------- //
+
+	test_biz_hours: function() {
+		this.compare_psl_dates();
+	},
+
+
+	get_textfield_to_date: function(custom_field_id) {
+		console.log("custom_field_id: " + custom_field_id);
+		if (!custom_field_id) {
+			// null or empty
+			return false;
+		}
+		var ticket = this.ticket();
+		var date_field = ticket.customField(custom_field_id);
+		// Only create a date if field is not empty
+		if (!date_field) {
+			console.log('!date_field');
+			return false;
+		} else {
+			console.log('date_field not empty');
+			return new Date(date_field);
+		}
+	},
+
+
+	compare_psl_dates: function() {
+		// 40628208 = sent to PSL date
+		// 40629348 = sent to CSA date
+		// 40302407 = PSL SLA met / not met
+		// console.log("compare_PSL_dates");
+
+		var ticket = this.ticket();
+		var sent_to_psl_date = this.get_textfield_to_date("custom_field_40628208");
+		var sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
+		var total;
+		// Only create a date if field is not empty
+		if (!sent_to_csa_date) {
+			// empty
+			var date = new Date();
+			ticket.customField("custom_field_40629348", date);
+			sent_to_csa_date = date;
+		} else {
+			// console.log("set csa date");
+			sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
+		}
+		if (!sent_to_psl_date && !sent_to_csa_date) {
+		} else if (!sent_to_psl_date || !sent_to_psl_date) {
+			// console.log("one of the dates is missing");
+		}
+		else {
+			// sent_to_csa_date = this.get_textfield_to_date("custom_field_40629348");
+			// console.log("sent_to_psl_date && sent_to_csa_date true");
+			// console.log(sent_to_psl_date);
+			// console.log(sent_to_csa_date);
+
+			total = BizTime.count_num_biz_hours(sent_to_psl_date, sent_to_csa_date);
+			// console.log("total");
+			// console.log(total);
+
+			BizTime.check_priorities(total, ticket);
+		}
+
+
+		// var date = new Date();
+		// ticket.customField("custom_field_40629348", date);
+
+	},
+
+	// ------------ Send to PSL  ---------------- //
+
+	sent_to_psl_queue: function() {
+		console.log("sent_to_psl_queue");
+		var ticket = this.ticket();
+		var sent_to_psl_date = ticket.customField("custom_field_40628208");
+		if (!sent_to_psl_date) {
+			// sent_to_psl_date is null or empty
+			var date = new Date();
+			ticket.customField("custom_field_40628208", date);
+		} else {
+		}
+	},
+
+
+	// ------------ PSL Returning to CSA ---------------- //
+	// check_psl_sending_to_support: function() {
+	// 	// console.log("check_psl_sending_to_support");
+	// 	if (this.appProperties.ticket_info.starting_assignee) {
+	// 		var starting_assignee = this.appProperties.ticket_info.starting_assignee;
+	// 		var new_assignee = {};
+	// 		new_assignee.group = this.ticket().assignee().group().name();
+
+	// 		// console.log("starting assignee group:");
+	// 		// console.log( starting_assignee.group);
+	// 		// console.log("new assignee group:");
+	// 		// console.log(new_assignee.group);
+
+	// 		// starting_assignee.name;
+	// 		if (starting_assignee.group == "Product Support Leads" && new_assignee.group == "Support") {
+	// 			// console.log("Changed from PSL to Support");
+	// 			this.appProperties.ticket_info.psl_to_support = true;
+	// 			this.compare_PSL_dates();
+	// 		}
+	// 	} else {
+	// 		// console.log("check_psl_sending_to_support // starting_assignee not set");
+	// 	}
+	// },
+
 
 	check_return_to_csa_status: function() {
 		// console.log("check_return_to_csa_status");
@@ -631,7 +765,6 @@
 		else {
 			return true;
 		}
-
 	},
 
 	update_article_status: function () {
@@ -1048,9 +1181,34 @@
 	},
 
 // ------------ Test Functions ---------------- //
+
+testDate: function() {
+	// Insights Reports - Duration between two or more ticket events in minutes
+	// https://support.zendesk.com/hc/en-us/articles/205367047-Insights-Reports-Duration-between-two-or-more-ticket-events-in-minutes
+	var ticket = this.ticket();
+	var date_before = ticket.customField("custom_field_40298267");
+	var today = new Date();
+	console.log(today);
+	ticket.customField("custom_field_40298267", today);
+	// today.setDate(today.getDate() + 1);
+	// new_sla_date = this.format_date_object(today);
+
+},
+
+testDate2: function() {
+
+	var ticket = this.ticket();
+	var date_before = ticket.customField("custom_field_40298267");
+
+	console.log(date_before);
+
+
+},
+
 testTicket: function() {
 	console.log("TestTicket");
-	var promise1 = this.ajax('createChatTicketTest', this.ticket());
+	// var promise1 = this.ajax('createChatTicketTest', this.ticket());
+	var promise1 = this.ajax('createTestTicket', this.ticket());
 	var app = this;
 	this.when(promise1).then(
 		function(data1){

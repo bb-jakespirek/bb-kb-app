@@ -1,4 +1,396 @@
-	// 
+
+
+var minimatch = require("minimatch");
+
+module.exports = BusinessTime;
+
+function BusinessTime(moment, workingHours, holidays) {
+
+    //TODO: maybe load up some default
+    this._workingHours = workingHours;
+    //TODO: we just have so we can use it's normalizer....
+    this._moment = moment;
+
+    this._holidays = holidays || [];
+
+}
+
+/**
+ * class "internal methods"
+ */
+
+/**
+ *
+ * @param {string} operation  'add' or 'subtract'
+ * @param {[type]} days    number of days
+ * @param {[type]} date        the date to manipulate
+ */
+BusinessTime.prototype._addOrSubtractDays = function addOrSubtractDays(operation, days, date) {
+
+    date = date.clone();
+
+    while (days) {
+        date[operation](1, "day");
+        if (this.isWorkingDay(date)) {
+            days--;
+        }
+    }
+    return date;
+};
+
+// does not mutate date object, returns new date object
+BusinessTime.prototype._addUnit = function addUnit(date, duration, unit){
+
+    date = date.clone();
+
+    if (!this.isWorkingTime(date)) {
+        date = this.nextWorkingTime(date);
+    }
+
+    var then;
+    var next;
+    var diff;
+    var unitsOfDurationUntilClosingTime;
+    var jump;
+
+    while (duration > 0) {
+
+        unitsOfDurationUntilClosingTime = this.openingTimes(date)[1].diff(date, unit);
+
+        if( unitsOfDurationUntilClosingTime > duration ) {
+            jump = duration;
+        } else if (unitsOfDurationUntilClosingTime < 1) {
+            jump = 1;
+        } else {
+            jump = unitsOfDurationUntilClosingTime;
+        }
+
+        then = date.clone().add(jump, unit);
+        duration -= jump;
+
+        if (this.isWorkingTime(then)) {
+            date = date.add(jump, unit);
+        } else {
+            next = this.nextWorkingTime(then);
+            diff = then.diff(this.openingTimes(date)[1], unit, true);
+            date = next.add(diff, unit);
+        }
+    }
+    return date;
+
+};
+
+// does not mutate date object, returns new date object
+BusinessTime.prototype._subtractUnit = function subtractUnit(date, duration, unit) {
+
+    date = date.clone();
+
+    if (!this.isWorkingTime(date)) {
+        date = this.lastWorkingTime(date);
+    }
+
+    var then;
+    var next;
+    var diff;
+    var unitsOfDurationAfterOpeningTime;
+    var jump;
+
+    while (duration > 0) {
+
+        unitsOfDurationAfterOpeningTime = -this.openingTimes(date)[0].diff(date, unit);
+        if( unitsOfDurationAfterOpeningTime > duration ) {
+            jump = duration;
+        } else if (unitsOfDurationAfterOpeningTime < 1) {
+            jump = 1;
+        } else {
+            jump = unitsOfDurationAfterOpeningTime;
+        }
+
+
+        then = date.clone().subtract(jump, unit);
+        duration -= jump;
+
+        if (this.isWorkingTime(then)) {
+            date = date.subtract(jump, unit);
+        } else {
+            next = this.lastWorkingTime(then);
+            diff = then.diff(this.openingTimes(date)[0], unit, true);
+            date = next.add(diff, unit);
+        }
+    }
+    return date;
+};
+
+/**
+ * class "Public" functions
+ */
+
+// does not mutate date, returns new date instance
+BusinessTime.prototype.addWorkingTime = function add(date, duration, unit) {
+
+    if (typeof duration !== "number") {
+        throw new Error("duration must be defined");
+    }
+    if (typeof unit !== "string") {
+        throw new Error("unit must be defined");
+    }
+
+    var normalizedUnit = this._moment.normalizeUnits(unit);
+
+    if (normalizedUnit == null) {
+        throw new Error("moment.normalizeUnits failed to normalize the unit supplied");
+    }
+
+    date = date.clone();
+
+    if (normalizedUnit === "day") {
+        date = this._addOrSubtractDays("add", duration, date);
+    } else if (normalizedUnit) {
+        date = this._addUnit(date, duration, normalizedUnit);
+    }
+    return date;
+};
+
+// does not mutate date, returns new date instance
+BusinessTime.prototype.subtractWorkingTime = function subtract(date, duration, unit) {
+
+    if (typeof duration !== "number") {
+        throw new Error("duration must be defined");
+    }
+    if (typeof unit !== "string") {
+        throw new Error("unit must be defined");
+    }
+
+    var normalizedUnit = this._moment.normalizeUnits(unit);
+
+    if (normalizedUnit == null) {
+        throw new Error("moment.normalizeUnits failed to normalize the unit supplied");
+    }
+
+    date = date.clone();
+
+    if (normalizedUnit === "day") {
+        date = this._addOrSubtractDays("subtract", duration, date);
+    } else if (normalizedUnit) {
+        date = this._subtractUnit(date, duration, normalizedUnit);
+    }
+    return date;
+};
+
+// does not mutate date
+BusinessTime.prototype.isBusinessDay = function isWorkingDay(date){
+    //must have working hours for the day and not be a holiday
+    // "!!" converts a non-boolean to a boolean, then inverts it
+    return !!this._workingHours[date.day()] && !this.isHoliday(date);
+};
+
+BusinessTime.prototype.isWorkingDay = BusinessTime.prototype.isBusinessDay;
+
+// does not mutate date
+BusinessTime.prototype.isWorkingTime = function isWorkingTime(date){
+
+    var openingHours = this.openingTimes(date);
+
+    if (!openingHours) {
+        return false;
+    } else {
+        return date.isAfter(openingHours[0]) && date.isBefore(openingHours[1]);
+    }
+};
+
+BusinessTime.prototype.isHoliday = function isHoliday(date) {
+
+    var dayToCheck = date.format("YYYY-MM-DD");
+
+    return this._holidays.some(holidayTest);
+
+    function holidayTest(holiday){
+        return minimatch(dayToCheck, holiday);
+    }
+
+};
+
+// does not mutate date, returns new date object
+BusinessTime.prototype.nextWorkingDay = function nextWorkingDay(date){
+
+    date = date.clone();
+    date = date.add(1, "day");
+    while (!this.isWorkingDay(date)) {
+        date = date.add(1, "day");
+    }
+    return date;
+
+};
+
+// should probably be previous working day
+// does not mutate date object, returns new date object
+BusinessTime.prototype.lastWorkingDay = function(date) {
+
+    date = date.clone();
+    date = date.subtract(1, "day");
+    while (!this.isWorkingDay(date)) {
+        date = date.subtract(1, "day");
+    }
+    return date;
+
+};
+
+//Going forwards in time, start from `date`, when is the next working time
+// does not mutate date, returns new date object
+BusinessTime.prototype.nextWorkingTime = function nextWorkingTime(date){
+
+    var workingHoursForDate = this.openingTimes(date);
+
+    if (workingHoursForDate != null) {
+        //we have working hours for the current day, we are are a working day!
+        if (date.isBefore(workingHoursForDate[0])) {
+            // We are pre "working hours for the day"
+            return workingHoursForDate[0];
+        } else if (date.isAfter(workingHoursForDate[1])) {
+            // We are after the "working hours for the day"
+            return this.openingTimes(this.nextWorkingDay(date))[0];
+        } else {
+            // The current time is a working time.
+            return date.clone();
+        }
+    } else {
+        // today is not a working day
+        return this.openingTimes(this.nextWorkingDay(date))[0];
+    }
+
+};
+//should probably read as previousWorkingTime
+// going backwards in time, starting from `date` when is the next working time
+// does not mutate date, returns new date instance
+BusinessTime.prototype.lastWorkingTime = function(date) {
+
+    var workingHoursForDate = this.openingTimes(date);
+
+    if (this.isWorkingDay(date)) {
+        if (date.isAfter(workingHoursForDate[1])) {
+            return workingHoursForDate[1];
+        } else if (date.isBefore(workingHoursForDate[0])) {
+            return this.openingTimes(this.lastWorkingDay(date))[1];
+        } else {
+            return date.clone();
+        }
+    } else {
+        return this.openingTimes(this.lastWorkingDay(date))[1];
+    }
+
+
+};
+
+
+BusinessTime.prototype.workingDiff = function(date, comparator, unit, detail) {
+
+    unit = unit || "milliseconds";
+    unit = this._moment.normalizeUnits(unit);
+
+    if (["year", "month", "week"].indexOf(unit) > -1) {
+        return date.diff(comparator, unit, detail);
+    }
+
+    var from;
+    var to;
+    var diff = 0;
+    var multiplier = 1;
+
+    if (date.isAfter(comparator)) {
+        to = date.clone();
+        from = comparator.clone();
+        multiplier = -1;
+    } else {
+        to = comparator.clone();
+        from = date.clone();
+    }
+
+    if (!this.isWorkingTime(from)) {
+        from = this.nextWorkingTime(from);
+    }
+    if (!this.isWorkingTime(to)) {
+        to = this.lastWorkingTime(to);
+    }
+
+    while(from.format("L") !== to.format("L")) {
+        if (unit === "day") {
+            diff++;
+        } else {
+            diff += from.diff(this.openingTimes(from)[1], unit, true);
+        }
+        from = this.openingTimes(this.nextWorkingDay(from))[0];
+    }
+
+    if (unit === "day") {
+        diff++;
+    } else {
+        diff += from.diff(to, unit, true);
+    }
+
+    if(!detail) {
+        diff = diff < 0 ? Math.ceil(diff) : Math.floor(diff);
+    }
+
+    return multiplier * diff;
+
+};
+// does not mutate date, returns new date instances
+BusinessTime.prototype.openingTimes = function openingTimes(date){
+
+    if (!this.isWorkingDay(date)) {
+        return null;
+    }
+
+    return this._workingHours[date.day()].map(_mapWorkingHoursToMoments);
+
+    function _mapWorkingHoursToMoments(time){
+        var timeParts = time.split(":");
+        var _d = date.clone();
+        _d.hours(timeParts[0]);
+        _d.minutes(timeParts[1] || 0);
+        _d.seconds(timeParts[2] || 0);
+        _d.milliseconds(0);
+        return _d;
+    }
+
+};
+
+
+/**
+ * internal helpers / creators
+ */
+
+/*eslint-disable no-unused-vars */
+function copy(from, to) {
+    ["year", "month", "date", "hour", "minute", "second", "millisecond"].forEach(function (unit) {
+        to.set(unit, from.get(unit));
+    });
+    return to;
+}
+/*eslint-enable no-unused-vars */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//
 	// https://whipplehill.zendesk.com/agent/tickets/54637?zat=true
 
 	// Custom fields
@@ -56,9 +448,9 @@
     //      //  Need to figure out how to not have this hard-coded
     //      url: '/api/v2/tickets/' + '70525' + '/audits.json',
     //      type: 'GET',
-    //      dataType: 'json'        
+    //      dataType: 'json'
     //   }
-    // }, 
+    // },
 
 
 
@@ -94,7 +486,7 @@
 //         		console.log("Getting Source Audit");
 
 //     },
-//     showAuditData: function(audit_data) { 
+//     showAuditData: function(audit_data) {
 //       // console.log(audit_data.memes[0].name + " test");
 // 		// var ticket = this.ticket();
 // 		// this.ajax('SourceAudit');
@@ -168,7 +560,7 @@ https://support.zendesk.com/hc/en-us/community/posts/203461186-Ticket-Requester-
 
 
 
-// 
+//
     generateTicketView: function() { // Draw the 'Ticket' tab
       var ticket = this.ticket(),
           ccArray;
@@ -278,7 +670,7 @@ AJAX STUFF
 (function() {
 
   return {
-    
+
     appProperties: {
       // This is available globally in your functions via this.appProperties.org_data
       // We need to be very careful here though. When setting this, it might be possible previous data or unrelated data is served.
@@ -396,10 +788,10 @@ Not being used:
     // console.log(this.ticket().organization().id());
     var organization = this.ticket().organization();
     var org_object = {};
-    
+
     console.log("get_organization_info test");
     console.log(this.appProperties);
-    
+
     // Need to do a fresh grab of the info using the ID of the org. Will return organization object
 
 
@@ -421,14 +813,14 @@ Not being used:
 
     //          console.log("org_info");
    //                console.log(org_info);
-          
+
     //      // console.log(this.glob_var + " = app.glob_var1 ");
 
    //                // do something with the data
    //                done();     // ok to save the ticket
    //       //          done(function() {
     //        //     app.new_organization = data.organization;
-               
+
     //        //     console.log(app.glob_var + " = app.glob_var ");
     //        // });
    //            },
@@ -453,7 +845,7 @@ Not being used:
 
     //  // console.log("org_info.notes");
     //  // console.log(org_info.notes);
-      
+
     //  // app.set_org_info(org_info); // Usually you would call using this.appStart but in the context of the ajax .done() callback we reference the app variable we created
     // });
     // console.log("return");
@@ -468,7 +860,7 @@ Not being used:
     // this.requestOrganization(organization.id());
         // console.log(bob.notes());
 
-      
+
     // console.log(this.ticket().organization().notes());
     // this.ajax('fetchOrganizationFields', organization.id());
 
@@ -495,7 +887,7 @@ Not being used:
 // var organization = this.organization();
 // organization.customField("my_text_field", "text"); // type: text
 // organization.customField("my_checkbox_field", "yes"); // type: checkbox
-    
+
   },
 
 
@@ -549,14 +941,14 @@ Not being used:
     school_urls.app_url = org_fields['app_url'];
     school_urls.prog_url = org_fields['prog_url'];
     if (school_urls.prog_url) {
-      school_urls.prog_web = school_urls.prog_url.replace(/(\/app)(\/)?$/, '/page/'); 
+      school_urls.prog_web = school_urls.prog_url.replace(/(\/app)(\/)?$/, '/page/');
     }
     school_urls.school_id = org_fields['school_id'];
     school_urls.clarify_site_id = org_fields['clarify_site_id'];
     school_urls.database = org_fields['database'];
     // console.log("website replace: " + school_urls.prog_web);
 
-// get rid of these 
+// get rid of these
     // school_url = org_fields['hosted_url'];
     // app_url = org_fields['app_url'];
     // prog_url = org_fields['prog_url'];
@@ -572,11 +964,11 @@ Not being used:
 // console.log(status + " In support");
     var ae_name_raw = org_fields['account_manager'];
     if (ae_name_raw) {
-      ae_name = ae_name_raw.replace('_', ' '); 
+      ae_name = ae_name_raw.replace('_', ' ');
       ae_name = ae_name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
       ae_phone = org_fields['ae_phone_number'];
-      
-      ae_email = ae_name_raw.replace('_', '.'); 
+
+      ae_email = ae_name_raw.replace('_', '.');
       ae_email += "@blackbaud.com";
     }
 
@@ -590,7 +982,7 @@ Not being used:
       console.log(user_notes);
     }
 
-    
+
       // console.log("VIA = " + ticket.via);
     // Ticket Source info
     if (ticket.via) {
@@ -633,13 +1025,13 @@ Not being used:
         if (field.value !== ""){
           var test = ""+field.value+"";
           var isDate = "";
-          
+
           if (field.value !== undefined){
               isDate = test.match(this.dateRegExp);
           }
-          
+
           var value = "";
-          
+
           if (isDate !== "" && isDate !== null) {
               var date = new Date(field.value);
               var year = date.getFullYear();
